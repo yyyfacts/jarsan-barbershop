@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Barber;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class BarberController extends Controller
 {
@@ -12,32 +11,28 @@ class BarberController extends Controller
     public function index()
     {
         $barbers = Barber::all();
-        
-        // PERBAIKAN: Langsung tembak nama filenya 'barberman'
         return view('admin.barberman', compact('barbers'));
     }
 
-    // ADMIN: SIMPAN BARU
+    // ADMIN: SIMPAN BARU (UBAH JADI SIMPAN LINK)
     public function store(Request $request)
     {
         $data = $request->validate([
             'name' => 'required',
             'specialty' => 'nullable',
             'bio' => 'nullable',
-            'photo' => 'nullable|image|max:2048'
+            'photo' => 'nullable|string' // Ubah validasi jadi string biasa
         ]);
 
-        if ($request->hasFile('photo')) {
-            $data['photo_path'] = $request->file('photo')->store('barbers', 'public');
-        }
+        // LOGIC UPLOAD DIHAPUS, karena Vercel menolak file upload.
+        // Data 'photo' langsung tersimpan sebagai link dari input text.
 
         Barber::create($data);
         
-        // Redirect kembali ke index
         return redirect()->route('admin.barbers.index')->with('success', 'Barber berhasil ditambahkan');
     }
 
-    // ADMIN: UPDATE
+    // ADMIN: UPDATE (UBAH JADI UPDATE LINK)
     public function update(Request $request, $id)
     {
         $barber = Barber::findOrFail($id);
@@ -45,13 +40,10 @@ class BarberController extends Controller
             'name' => 'required',
             'specialty' => 'nullable',
             'bio' => 'nullable',
-            'photo' => 'nullable|image|max:2048'
+            'photo' => 'nullable|string'
         ]);
 
-        if ($request->hasFile('photo')) {
-            if ($barber->photo_path) Storage::disk('public')->delete($barber->photo_path);
-            $data['photo_path'] = $request->file('photo')->store('barbers', 'public');
-        }
+        // LOGIC HAPUS FILE LAMA DIHAPUS JUGA
 
         $barber->update($data);
         
@@ -62,7 +54,7 @@ class BarberController extends Controller
     public function destroy($id)
     {
         $barber = Barber::findOrFail($id);
-        if ($barber->photo_path) Storage::disk('public')->delete($barber->photo_path);
+        // Hapus logic Storage::delete karena kita cuma simpan link
         $barber->delete();
         
         return redirect()->back()->with('success', 'Barber dihapus');

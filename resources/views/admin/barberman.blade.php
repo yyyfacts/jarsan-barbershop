@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <h3 class="fw-bold mb-4">Daftar Barberman</h3>
 
-    {{-- TOMBOL TAMBAH (Memicu Modal Tambah) --}}
+    {{-- TOMBOL TAMBAH --}}
     <button type="button" class="btn btn-primary mb-3 fw-bold" data-bs-toggle="modal"
         data-bs-target="#modalTambahBarber">
         + Tambah Barber
@@ -29,9 +29,11 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>
-                            @if($barber->photo_path)
-                            <img src="{{ asset('storage/' . $barber->photo_path) }}" width="50" height="50"
-                                class="rounded-circle object-fit-cover">
+                            {{-- LOGIC GAMBAR DIPERBAIKI (BACA LINK) --}}
+                            @if($barber->photo)
+                            <img src="{{ $barber->photo }}" width="50" height="50"
+                                class="rounded-circle object-fit-cover"
+                                onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($barber->name) }}'">
                             @else
                             <img src="https://ui-avatars.com/api/?name={{ urlencode($barber->name) }}&background=random"
                                 width="50" height="50" class="rounded-circle">
@@ -42,13 +44,10 @@
                         <td><span class="badge bg-success">Aktif</span></td>
                         <td>
                             <div class="d-flex gap-2">
-                                {{-- TOMBOL EDIT (Memicu Modal Edit Unik) --}}
                                 <button type="button" class="btn btn-warning btn-sm fw-bold" data-bs-toggle="modal"
                                     data-bs-target="#modalEditBarber{{ $barber->id }}">
                                     Edit
                                 </button>
-
-                                {{-- FORM HAPUS --}}
                                 <form action="{{ route('admin.barbers.destroy', $barber->id) }}" method="POST"
                                     onsubmit="return confirm('Yakin hapus barber ini?')">
                                     @csrf @method('DELETE')
@@ -58,7 +57,7 @@
                         </td>
                     </tr>
 
-                    {{-- MODAL EDIT BARBER (Looping di dalam agar ID unik) --}}
+                    {{-- MODAL EDIT --}}
                     <div class="modal fade" id="modalEditBarber{{ $barber->id }}" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -66,8 +65,7 @@
                                     <h5 class="modal-title fw-bold">Edit Barber</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
-                                <form action="{{ route('admin.barbers.update', $barber->id) }}" method="POST"
-                                    enctype="multipart/form-data">
+                                <form action="{{ route('admin.barbers.update', $barber->id) }}" method="POST">
                                     @csrf @method('PUT')
                                     <div class="modal-body">
                                         <div class="mb-3">
@@ -85,9 +83,13 @@
                                             <textarea name="bio" class="form-control"
                                                 rows="3">{{ $barber->bio }}</textarea>
                                         </div>
+                                        {{-- INPUT LINK GAMBAR --}}
                                         <div class="mb-3">
-                                            <label class="form-label fw-bold">Ganti Foto</label>
-                                            <input type="file" name="photo" class="form-control">
+                                            <label class="form-label fw-bold">Link Foto (URL)</label>
+                                            <input type="text" name="photo" class="form-control"
+                                                value="{{ $barber->photo }}" placeholder="https://...">
+                                            <small class="text-muted">Upload foto ke imgur.com lalu copy link-nya
+                                                kesini.</small>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -110,7 +112,7 @@
     </div>
 </div>
 
-{{-- MODAL TAMBAH BARBER --}}
+{{-- MODAL TAMBAH --}}
 <div class="modal fade" id="modalTambahBarber" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -118,7 +120,7 @@
                 <h5 class="modal-title fw-bold">Tambah Barber Baru</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('admin.barbers.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.barbers.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -133,9 +135,11 @@
                         <label class="form-label fw-bold">Bio</label>
                         <textarea name="bio" class="form-control" rows="3"></textarea>
                     </div>
+                    {{-- INPUT LINK GAMBAR --}}
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Foto</label>
-                        <input type="file" name="photo" class="form-control">
+                        <label class="form-label fw-bold">Link Foto (URL)</label>
+                        <input type="text" name="photo" class="form-control" placeholder="https://...">
+                        <small class="text-muted">Upload foto ke imgur.com lalu copy link-nya kesini.</small>
                     </div>
                 </div>
                 <div class="modal-footer">
