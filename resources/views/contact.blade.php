@@ -1,87 +1,133 @@
 @extends('layouts.app')
 
-@section('title', 'Hubungi Kami')
+@section('title', 'Kontak')
 
 @section('content')
 <div class="container py-5">
     <div class="text-center mb-5">
-        <h5 class="text-uppercase text-primary fw-bold">Get In Touch</h5>
-        <h2 class="fw-bold display-5 font-playfair">Hubungi Kami</h2>
-        <p class="text-muted">Punya pertanyaan atau saran? Kami siap mendengar.</p>
+        <h2 class="fw-bold text-uppercase">Hubungi Kami</h2>
+        <p class="text-muted">Kami siap membantu Anda! Silakan hubungi kami melalui form atau kunjungi lokasi kami
+            langsung.</p>
     </div>
 
+    {{-- ✅ Pesan sukses --}}
+    @if(session('success'))
+    <div class="alert alert-success text-center fw-semibold">
+        {{ session('success') }}
+    </div>
+    @endif
+
+    {{-- ✅ Pesan error --}}
+    @if($errors->any())
+    <div class="alert alert-danger text-center fw-semibold">
+        Terdapat kesalahan dalam pengisian form. Silakan periksa kembali.
+    </div>
+    @endif
+
     <div class="row g-5">
-        <div class="col-lg-6">
-            <div class="card border-0 shadow-sm rounded-4 h-100 p-4">
-                <h4 class="fw-bold mb-4"><i class="bi bi-envelope-paper me-2"></i> Kirim Pesan</h4>
-                <form action="#" method="POST">
+        <!-- Form Kontak -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h4 class="fw-bold mb-4">Kirim Pesan</h4>
+                <form action="{{ route('contact.store') }}" method="POST">
                     @csrf
+
                     <div class="mb-3">
-                        <label class="form-label">Nama Anda</label>
-                        <input type="text" name="name" class="form-control" placeholder="Nama Lengkap" required>
+                        <label for="name" class="form-label">Nama Lengkap</label>
+                        <input type="text" id="name" name="name" value="{{ old('name') }}"
+                            class="form-control p-2 @error('name') is-invalid @enderror"
+                            placeholder="Masukkan nama Anda" required>
+                        @error('name')
+                        <small class="text-danger">{{ $message }}</small>
+                        @enderror
                     </div>
+
                     <div class="mb-3">
-                        <label class="form-label">Email / WhatsApp</label>
-                        <input type="text" name="contact" class="form-control" placeholder="Email atau No WA" required>
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" name="email" value="{{ old('email') }}"
+                            class="form-control p-2 @error('email') is-invalid @enderror"
+                            placeholder="Masukkan email Anda" required>
+                        @error('email')
+                        <small class="text-danger">{{ $message }}</small>
+                        @enderror
                     </div>
+
                     <div class="mb-3">
-                        <label class="form-label">Pesan</label>
-                        <textarea name="message" rows="5" class="form-control" placeholder="Tulis pesan Anda di sini..."
-                            required></textarea>
+                        <label for="message" class="form-label">Pesan</label>
+                        <textarea id="message" name="message" rows="4"
+                            class="form-control p-2 @error('message') is-invalid @enderror"
+                            placeholder="Tulis pesan Anda..." required>{{ old('message') }}</textarea>
+                        @error('message')
+                        <small class="text-danger">{{ $message }}</small>
+                        @enderror
                     </div>
-                    <button type="submit" class="btn btn-primary w-100 py-2 rounded-3 fw-bold">KIRIM PESAN</button>
+
+                    <button type="submit" class="btn btn-dark w-100 py-2 rounded-3 btn-kirim">Kirim Pesan</button>
                 </form>
             </div>
         </div>
 
-        <div class="col-lg-6">
-            <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
-                <div class="bg-dark text-white p-4">
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="bi bi-geo-alt fs-3 me-3 text-primary"></i>
-                        <div>
-                            <h6 class="fw-bold mb-0">Lokasi Studio</h6>
-                            <small>Jl. Raya Kampus No. 123, Purwokerto</small>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="bi bi-whatsapp fs-3 me-3 text-success"></i>
-                        <div>
-                            <h6 class="fw-bold mb-0">WhatsApp</h6>
-                            <small>0882-3256-0561</small>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-instagram fs-3 me-3 text-danger"></i>
-                        <div>
-                            <h6 class="fw-bold mb-0">Instagram</h6>
-                            <small>@jarsan.barbershop</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="map-container flex-grow-1">
+        <!-- Lokasi / Google Maps -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
+                <div class="card-body p-0">
                     <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3956.270928733238!2d109.247!3d-7.424!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMjUnMjYuNCJTIDEwOcKwMTQnNDkuMiJF!5e0!3m2!1sen!2sid!4v1620000000000!5m2!1sen!2sid"
-                        width="100%" height="100%" style="border:0; min-height: 350px;" allowfullscreen=""
-                        loading="lazy">
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4732.175253708479!2d109.19451492806346!3d-7.614514466033188!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e654152607c751f%3A0xd2db077bc1144cea!2sJarsan%20Barbershop!5e1!3m2!1sid!2sid!4v1761250591023!5m2!1sid!2sid"
+                        width="100%" height="475" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Informasi Kontak -->
+    <div class="text-center mt-5">
+        <h5 class="fw-bold mb-3">Informasi Kontak</h5>
+        <p class="text-muted mb-1">
+            <i class="fi fi-sr-phone-flip me-2"></i>
+            <a href="tel:+6288232560561" class="text-decoration-none text-dark">0882 3256 0561</a>
+        </p>
+        <p class="text-muted">
+            <i class="fi fi-sr-envelope me-2"></i>
+            <a href="mailto:jarsanbarbershop@gmail.com"
+                class="text-decoration-none text-dark">jarsanbarbershop@gmail.com</a>
+        </p>
     </div>
 </div>
 @endsection
 
 @push('styles')
 <style>
-.font-playfair {
-    font-family: 'Playfair Display', serif;
+/* Efek shadow hitam saat input fokus */
+.form-control:focus {
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+    border-color: #000;
+    outline: none;
+    transition: all 0.3s ease;
 }
 
-.form-control:focus {
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-    border-color: #0d6efd;
+iframe {
+    border-radius: 15px;
+}
+
+/* Tombol elegan dengan efek hover */
+.btn-kirim {
+    background-color: #000;
+    color: white;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-kirim:hover {
+    background-color: #ffffff;
+    color: #000;
+    border: 1px solid #000;
+    transform: scale(1.03);
+}
+
+.alert {
+    border-radius: 10px;
 }
 </style>
 @endpush

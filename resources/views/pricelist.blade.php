@@ -1,108 +1,185 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Harga')
+@section('title', 'Pricelist - Jarsan Barbershop')
 
 @section('content')
-<div class="container py-5">
-    <div class="text-center mb-5">
-        <h5 class="text-uppercase text-primary fw-bold">Best Value</h5>
-        <h2 class="fw-bold display-5 font-playfair">Daftar Harga Layanan</h2>
-        <p class="text-muted">Kualitas premium dengan harga yang bersahabat.</p>
+{{-- HERO / BANNER --}}
+<section class="hero-banner d-flex align-items-center text-center text-white position-relative w-100"
+    style="background: url('{{ asset('images/banner.webp') }}') center/cover no-repeat; height: 60vh;">
+
+    <div class="overlay position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.7); z-index: 1;">
     </div>
 
-    <div class="row g-4 justify-content-center">
-        <div class="col-lg-3 col-md-6">
-            <div class="card price-card h-100 shadow-sm border-0">
-                <div class="card-body text-center p-4">
-                    <div class="icon-box mb-3 text-primary">
-                        <i class="bi bi-scissors fs-1"></i>
-                    </div>
-                    <h5 class="fw-bold text-uppercase">Haircut Only</h5>
-                    <hr class="mx-auto" style="width: 50px; border-color: #333;">
-                    <p class="text-muted small">Potongan rambut presisi, finishing rapi, tanpa keramas.</p>
-                    <h3 class="fw-bold mt-4">Rp 20.000</h3>
-                </div>
-            </div>
-        </div>
+    <div class="position-relative z-2 w-100" style="z-index: 2;">
+        <h1 class="fw-bold display-5 mb-3 text-shadow">Daftar Harga Layanan</h1>
+        <p class="lead mb-0 text-shadow">Nikmati perawatan rambut terbaik dengan hasil profesional</p>
+    </div>
+</section>
 
-        <div class="col-lg-3 col-md-6">
-            <div class="card price-card h-100 shadow border-primary border-2 position-relative transform-scale">
-                <div class="position-absolute top-0 start-50 translate-middle">
-                    <span class="badge bg-primary rounded-pill px-3 py-2 shadow">BEST SELLER</span>
-                </div>
-                <div class="card-body text-center p-4 bg-light">
-                    <div class="icon-box mb-3 text-dark">
-                        <i class="bi bi-stars fs-1"></i>
-                    </div>
-                    <h5 class="fw-bold text-uppercase text-dark">Premium Cut</h5>
-                    <hr class="mx-auto" style="width: 50px; border-color: #333;">
-                    <p class="text-muted small">Haircut + Keramas + Pijat Kepala + Hair Tonic + Styling Pomade.</p>
-                    <h3 class="fw-bold mt-4 text-primary">Rp 25.000</h3>
-                </div>
-            </div>
-        </div>
+{{-- PRICELIST --}}
+<section class="py-5" style="background-color: #f5f5f5;">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-5 text-warning text-uppercase">Jarsan Barbershop Service</h2>
 
-        <div class="col-lg-3 col-md-6">
-            <div class="card price-card h-100 shadow-sm border-0">
-                <div class="card-body text-center p-4">
-                    <div class="icon-box mb-3 text-primary">
-                        <i class="bi bi-palette fs-1"></i>
-                    </div>
-                    <h5 class="fw-bold text-uppercase">Hair Coloring</h5>
-                    <hr class="mx-auto" style="width: 50px; border-color: #333;">
-                    <p class="text-muted small">Pewarnaan profesional (Basic Color / Bleaching / Highlight).</p>
-                    <h3 class="fw-bold mt-4">Rp 150.000+</h3>
-                </div>
-            </div>
-        </div>
+        <div class="row g-4 justify-content-center">
+            {{-- Loop data dinamis dari database --}}
+            @forelse ($services as $service)
+            <div class="col-md-6 col-lg-6 col-xl-3">
+                <div class="service-card position-relative rounded-4 overflow-hidden shadow-lg bg-white">
+                    {{-- Gambar --}}
+                    @if ($service->image_path)
+                    <img src="{{ asset('storage/' . $service->image_path) }}" alt="{{ $service->name }}"
+                        class="card-img">
+                    @else
+                    <img src="{{ asset('images/default-service.jpg') }}" alt="Default Image" class="card-img">
+                    @endif
 
-        <div class="col-lg-3 col-md-6">
-            <div class="card price-card h-100 shadow-sm border-0">
-                <div class="card-body text-center p-4">
-                    <div class="icon-box mb-3 text-primary">
-                        <i class="bi bi-house-door fs-1"></i>
+                    <div class="overlay-gradient"></div>
+                    <div class="content text-center">
+                        <h4 class="fw-bold text-uppercase text-dark">{{ $service->name }}</h4>
+                        <p class="small mb-2 text-secondary">
+                            {{ $service->description ?? 'Deskripsi belum tersedia.' }}
+                        </p>
+                        <p class="fw-semibold mb-1" style="color: #ffcc00;;">
+                            Durasi: {{ $service->duration_minutes ?? '-' }} menit
+                        </p>
+                        <h5 class="fw-bold" style="color: #ffcc00;">
+                            Rp {{ number_format($service->price, 0, ',', '.') }}
+                        </h5>
                     </div>
-                    <h5 class="fw-bold text-uppercase">Home Service</h5>
-                    <hr class="mx-auto" style="width: 50px; border-color: #333;">
-                    <p class="text-muted small">Malas keluar? Kami datang ke rumah Anda. (Sesuai jarak).</p>
-                    <h3 class="fw-bold mt-4">Rp 40.000+</h3>
                 </div>
             </div>
+            @empty
+            <p class="text-secondary">Belum ada layanan tersedia saat ini.</p>
+            @endforelse
         </div>
     </div>
+</section>
 
-    <div class="text-center mt-5">
-        <a href="{{ url('/reservasi') }}" class="btn btn-dark rounded-pill px-5 py-3 fw-bold">Booking Jadwal
-            Sekarang</a>
+{{--=========================
+   CTA SECTION
+========================= --}}
+<section class="py-5 bg-warning text-center text-dark">
+    <div class="container">
+        <h3 class="fw-bold mb-3">Ingin tampil lebih keren?</h3>
+        <p class="mb-4">Pesan jadwal cukurmu sekarang dan rasakan pengalaman berbeda di Jarsan Barbershop.</p>
+        <a href="{{ url('/reservasi') }}" class="btn btn-dark fw-semibold rounded-pill px-5 py-2 shadow-sm">
+            Reservasi Sekarang
+        </a>
     </div>
-</div>
+</section>
 @endsection
 
 @push('styles')
 <style>
-.font-playfair {
-    font-family: 'Playfair Display', serif;
+/* --- HERO BANNER --- */
+.hero-banner {
+    background-position: center;
+    background-size: cover;
+    transition: background-size 1s ease;
 }
 
-.price-card {
-    transition: all 0.3s;
-    border-radius: 15px;
+.hero-banner:hover {
+    background-size: 110%;
 }
 
-.price-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+.text-shadow {
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
 }
 
-.transform-scale {
+/* --- SERVICE CARD --- */
+.service-card {
+    height: 340px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.service-card .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.service-card:hover .card-img {
     transform: scale(1.05);
+    filter: brightness(1.05);
+}
+
+/* --- OVERLAY --- */
+.overlay-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 20%, rgba(0, 0, 0, 0.6) 100%);
+    z-index: 1;
+}
+
+/* --- CONTENT --- */
+.content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 10px;
     z-index: 2;
+    background: rgba(255, 255, 255, 0.85);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.content h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+}
+
+.content p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 0.3rem;
+}
+
+/* --- CTA SECTION --- */
+section.bg-black {
+    background: linear-gradient(135deg, #222, #111);
+}
+
+section.bg-black h3 {
+    color: #ffc107;
+}
+
+section.bg-black p {
+    color: #ddd;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-warning:hover {
+    background-color: #ffca2c;
+    transform: scale(1.05);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 992px) {
+    .service-card {
+        height: 300px;
+    }
 }
 
 @media (max-width: 768px) {
-    .transform-scale {
-        transform: scale(1);
-        margin-bottom: 20px;
+    .service-card {
+        height: 270px;
     }
 }
 </style>

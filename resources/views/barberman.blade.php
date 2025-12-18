@@ -1,183 +1,115 @@
 @extends('layouts.app')
 
-@section('title', 'Tim Kami')
+@section('title', 'Barberman - Jarsan Barbershop')
 
 @section('content')
-<section class="py-5 bg-light">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h5 class="text-primary text-uppercase fw-bold ls-2">The Team</h5>
-            <h2 class="fw-bold font-playfair display-5">Meet Our Masters</h2>
-            <p class="text-muted mt-2">Para ahli cukur yang siap mengubah penampilan Anda.</p>
+
+    {{-- ================= HERO SECTION ================= --}}
+    <section class="hero-barber text-center text-white d-flex align-items-center justify-content-center position-relative"
+        style="background: url('{{ asset('images/banner.webp') }}') center/cover no-repeat; height: 70vh;">
+        <div class="overlay position-absolute w-100 h-100" style="background: rgba(0,0,0,0.6);"></div>
+        <div class="position-relative z-2">
+            <h1 class="fw-bold display-5 mb-3 text-warning animate-fade">BARBERMAN JARSAN</h1>
+            <p class="lead text-light animate-fade-delay">
+                Kenali barber profesional jarsan yang siap memberikan hasil terbaik untuk Anda.
+            </p>
         </div>
+    </section>
 
-        <div class="row g-4 justify-content-center">
-            {{-- DATA BARBERS (PHP ARRAY) --}}
-            @php
-            $barbers = [
-            ['id' => 1, 'name' => 'Rizky', 'role' => 'Master Barber', 'img' => 'barber1.jpg', 'bio' => 'Rizky adalah
-            barber senior dengan spesialisasi fade dan taper modern. 6 tahun pengalaman menjamin kepuasan.'],
-            ['id' => 2, 'name' => 'Agus', 'role' => 'Classic Specialist', 'img' => 'barber2.jpg', 'bio' => 'Agus
-            memiliki tangan emas untuk potongan klasik seperti Pompadour dan Side Part. Favorit gentleman sejati.'],
-            ['id' => 3, 'name' => 'Fahri', 'role' => 'Color & Style Expert', 'img' => 'barber3.jpg', 'bio' => 'Fahri
-            adalah seniman warna. Ingin warna silver, ash grey, atau highlight? Fahri ahlinya.'],
-            ['id' => 4, 'name' => 'Rian', 'role' => 'Beard Groomer', 'img' => 'barber4.jpg', 'bio' => 'Spesialis janggut
-            dan kumis. Rian tahu cara membentuk framing wajah yang maskulin dan rapi.']
-            ];
-            @endphp
+    {{-- ================= TEAM SECTION ================= --}}
+    <section class="py-5" style="background-color: #f5f5f5;">
+        <div class="container">
+            <div class="text-center mb-5">
+                <p class="text-muted fs-6">
+                    Setiap barber di <strong>Jarsan Barbershop</strong> berpengalaman dan berkomitmen memberikan hasil
+                    terbaik.
+                </p>
+            </div>
 
-            @foreach ($barbers as $barber)
-            <div class="col-md-3 col-sm-6">
-                <div class="card barber-card border-0 shadow-sm h-100 text-center position-relative"
-                    onclick="showBio({{ $barber['id'] }})" role="button">
-                    <div class="card-img-wrapper overflow-hidden">
-                        {{-- Gunakan asset() untuk gambar --}}
-                        <img src="{{ asset('images/' . $barber['img']) }}" class="card-img-top"
-                            alt="{{ $barber['name'] }}">
-                        <div class="overlay-hover d-flex align-items-center justify-content-center">
-                            <span class="text-white fw-bold">Lihat Profil <i class="bi bi-eye"></i></span>
+            <div class="row g-4 justify-content-center">
+                @forelse ($barbers as $barber)
+                    @if ($barber->is_active)
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="barber-card shadow-sm bg-white rounded-4 overflow-hidden text-center hover-up h-100 p-3">
+                                {{-- Foto --}}
+                                <div class="barber-photo mb-3">
+                                    <img src="{{ $barber->photo_path ? asset('storage/' . $barber->photo_path) : asset('images/default-barber.jpg') }}"
+                                        class="rounded-4 shadow-sm" alt="{{ $barber->name }}"
+                                        style="width: 100%; max-width: 220px; height: 260px; object-fit: cover;">
+                                </div>
+
+                                {{-- Info --}}
+                                <h5 class="fw-bold text-dark mb-1">{{ $barber->name }}</h5>
+                                <p class="text-warning fw-semibold small mb-2">{{ $barber->specialty ?? 'Spesialis belum diisi' }}
+                                </p>
+
+                                @if ($barber->bio)
+                                    <p class="text-muted small mb-2">{{ Str::limit($barber->bio, 80) }}</p>
+                                @endif
+
+                                <span class="badge bg-success rounded-pill px-3 py-2 mt-2">Aktif</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <h4 class="fw-bold mb-1">{{ $barber['name'] }}</h4>
-                        <p class="text-primary small fw-bold mb-0">{{ $barber['role'] }}</p>
-                    </div>
-                </div>
+                    @endif
+                @empty
+                    <div class="text-center text-muted">Belum ada barber yang aktif.</div>
+                @endforelse
             </div>
-            @endforeach
         </div>
+    </section>
 
-        {{-- AREA BIODATA (HIDDEN BY DEFAULT) --}}
-        <div id="barberBio" class="barber-bio mt-5" style="display: none; opacity: 0; transition: opacity 0.5s ease;">
-            <div class="card border-0 shadow-lg p-5 mx-auto rounded-4" style="max-width: 800px; background: #fff;">
-                <div class="row align-items-center">
-                    <div class="col-md-4 text-center">
-                        <img id="bioImg" src="" alt="Foto Barber" class="rounded-circle shadow mb-3 mb-md-0" width="180"
-                            height="180" style="object-fit: cover; border: 5px solid #f8f9fa;">
-                    </div>
-                    <div class="col-md-8 text-center text-md-start">
-                        <h3 id="bioName" class="fw-bold font-playfair display-6 mb-1"></h3>
-                        <span id="bioRole" class="badge bg-dark text-uppercase mb-3 px-3 py-2"></span>
-                        <p id="bioDesc" class="text-muted fs-5 lh-lg"></p>
-                        <a href="{{ url('/reservasi') }}" class="btn btn-outline-dark rounded-pill mt-2 px-4">Booking
-                            <span id="btnName"></span></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+    {{-- ================= CUSTOM STYLES ================= --}}
+    <style>
+        /* Animations */
+        .animate-fade {
+            animation: fadeIn 1s ease-in-out forwards;
+            opacity: 0;
+        }
+
+        .animate-fade-delay {
+            animation: fadeIn 1.5s ease-in-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+
+        /* Hover Effect */
+        .hover-up {
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .hover-up:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Underline */
+        .underline {
+            width: 80px;
+            height: 4px;
+            background-color: #ffc107;
+            border-radius: 2px;
+        }
+
+        /* Photo styling */
+        .barber-photo img {
+            transition: all 0.4s ease;
+        }
+
+        .barber-photo img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+
 @endsection
-
-@push('styles')
-<style>
-.font-playfair {
-    font-family: 'Playfair Display', serif;
-}
-
-.ls-2 {
-    letter-spacing: 2px;
-}
-
-.barber-card {
-    border-radius: 12px;
-    overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.barber-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
-}
-
-.card-img-wrapper {
-    position: relative;
-}
-
-.overlay-hover {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    opacity: 0;
-    transition: 0.3s;
-}
-
-.barber-card:hover .overlay-hover {
-    opacity: 1;
-}
-
-.barber-card img {
-    height: 350px;
-    object-fit: cover;
-    transition: 0.5s;
-}
-
-.barber-card:hover img {
-    transform: scale(1.05);
-}
-</style>
-@endpush
-
-@push('scripts')
-<script>
-// Data barbers untuk JS (Harus sinkron dengan PHP di atas)
-const barbers = {
-    1: {
-        name: 'Rizky',
-        role: 'Master Barber',
-        img: '{{ asset("images/barber1.jpg") }}',
-        bio: 'Rizky adalah barber senior dengan spesialisasi fade dan taper modern. 6 tahun pengalaman menjamin kepuasan.'
-    },
-    2: {
-        name: 'Agus',
-        role: 'Classic Specialist',
-        img: '{{ asset("images/barber2.jpg") }}',
-        bio: 'Agus memiliki tangan emas untuk potongan klasik seperti Pompadour dan Side Part. Favorit gentleman sejati.'
-    },
-    3: {
-        name: 'Fahri',
-        role: 'Color & Style Expert',
-        img: '{{ asset("images/barber3.jpg") }}',
-        bio: 'Fahri adalah seniman warna. Ingin warna silver, ash grey, atau highlight? Fahri ahlinya.'
-    },
-    4: {
-        name: 'Rian',
-        role: 'Beard Groomer',
-        img: '{{ asset("images/barber4.jpg") }}',
-        bio: 'Spesialis janggut dan kumis. Rian tahu cara membentuk framing wajah yang maskulin dan rapi.'
-    }
-};
-
-function showBio(id) {
-    const barber = barbers[id];
-    const bioSection = document.getElementById('barberBio');
-
-    if (barber) {
-        // Efek fade out dulu jika sedang tampil
-        bioSection.style.opacity = '0';
-
-        setTimeout(() => {
-            document.getElementById('bioImg').src = barber.img;
-            document.getElementById('bioName').textContent = barber.name;
-            document.getElementById('bioRole').textContent = barber.role;
-            document.getElementById('bioDesc').textContent = barber.bio;
-            document.getElementById('btnName').textContent = barber.name;
-
-            bioSection.style.display = 'block';
-
-            // Fade in animation
-            setTimeout(() => {
-                bioSection.style.opacity = '1';
-                bioSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
-            }, 50);
-        }, 300);
-    }
-}
-</script>
-@endpush

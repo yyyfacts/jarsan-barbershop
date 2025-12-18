@@ -1,196 +1,81 @@
 @extends('layouts.app')
 
-@section('title', 'Reservasi Online')
+@section('title', 'Reservasi - Jarsan Barbershop')
 
 @section('content')
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
-                <div class="card-header bg-dark text-white text-center py-4">
-                    <h3 class="fw-bold mb-0 font-playfair">Formulir Reservasi</h3>
-                    <p class="mb-0 small text-white-50">Amankan jadwalmu dalam 30 detik</p>
-                </div>
-                <div class="card-body p-5 bg-light">
+<section class="py-5 bg-white">
+    <div class="container text-dark">
+        <h2 class="fw-bold text-center mb-4">Formulir Reservasi</h2>
+        <p class="text-center text-muted mb-5">
+            Isi data berikut untuk melakukan reservasi di Jarsan Barbershop
+        </p>
 
-                    <form id="reservasiForm" action="{{-- route('reservasi.store') --}}" method="POST">
-                        @csrf
-                        <div class="row g-4">
-                            {{-- Nama --}}
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Nama Lengkap</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-end-0"><i
-                                            class="bi bi-person"></i></span>
-                                    <input type="text" name="nama" class="form-control border-start-0 ps-0"
-                                        placeholder="Contoh: Budi Santoso" required>
-                                </div>
-                            </div>
+        {{-- Pesan sukses setelah reservasi berhasil --}}
+        @if(session('success'))
+        <div class="alert alert-success text-center fw-semibold shadow-sm rounded-3">
+            ✅ {{ session('success') }}
+        </div>
+        @endif
 
-                            {{-- No HP --}}
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Nomor WhatsApp</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-end-0"><i
-                                            class="bi bi-whatsapp"></i></span>
-                                    <input type="tel" name="telepon" class="form-control border-start-0 ps-0"
-                                        placeholder="0812xxxx" required>
-                                </div>
-                            </div>
-
-                            {{-- Tanggal --}}
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Tanggal Booking</label>
-                                <input type="date" name="tanggal" class="form-control" required
-                                    min="{{ date('Y-m-d') }}">
-                            </div>
-
-                            {{-- Layanan --}}
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Pilih Layanan</label>
-                                <select name="layanan" class="form-select" required>
-                                    <option value="" selected disabled>-- Pilih Paket --</option>
-                                    <option value="Haircut Only">Haircut Only - Rp 20.000</option>
-                                    <option value="Premium Cut">Premium Cut - Rp 25.000</option>
-                                    <option value="Coloring">Hair Coloring - Rp 150.000</option>
-                                    <option value="Home Service">Home Service</option>
-                                </select>
-                            </div>
-
-                            {{-- JAM BOOKING (Grid System) --}}
-                            <div class="col-12">
-                                <label class="form-label fw-bold d-block mb-2">Pilih Jam Kedatangan</label>
-                                <div class="time-grid">
-                                    @foreach (['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00',
-                                    '19:00', '20:00'] as $time)
-                                    <button type="button" class="time-slot" data-time="{{ $time }}">{{ $time }}</button>
-                                    @endforeach
-                                    {{-- Input tersembunyi untuk menyimpan jam yang dipilih ke Controller --}}
-                                    <input type="hidden" name="jam" id="jam" required>
-                                </div>
-                                <div id="jam-feedback" class="mt-2 text-primary fw-bold small" style="display: none;">
-                                    <i class="bi bi-check-circle-fill"></i> Jam dipilih: <span id="jam-text"></span>
-                                </div>
-                            </div>
-
-                            {{-- Catatan --}}
-                            <div class="col-12">
-                                <label class="form-label fw-bold">Catatan Khusus (Opsional)</label>
-                                <textarea name="catatan" class="form-control" rows="2"
-                                    placeholder="Contoh: Tolong jangan terlalu pendek sampingnya"></textarea>
-                            </div>
-
-                            {{-- Tombol --}}
-                            <div class="col-12 mt-4">
-                                <button type="submit"
-                                    class="btn btn-dark w-100 py-3 fw-bold rounded-pill shadow hover-up">
-                                    KIRIM RESERVASI <i class="bi bi-send-fill ms-2"></i>
-                                </button>
-                            </div>
+        <div class="d-flex justify-content-center">
+            <div class="card shadow-lg border-0 rounded-4 p-4" style="max-width: 650px; width: 100%;">
+                <form action="{{ url('/reservasi') }}" method="POST">
+                    @csrf
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label fw-semibold">Nama Lengkap</label>
+                            <input type="text" name="name" id="name" class="form-control"
+                                placeholder="Masukkan nama Anda" required>
                         </div>
-                    </form>
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label fw-semibold">Nomor Telepon</label>
+                            <input type="text" name="phone" id="phone" class="form-control" placeholder="08xxxxxxxxxx"
+                                required>
+                        </div>
 
-                </div>
+                        <div class="col-md-6">
+                            <label for="date" class="form-label fw-semibold">Tanggal Reservasi</label>
+                            <input type="date" name="date" id="date" class="form-control" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="time" class="form-label fw-semibold">Jam Reservasi</label>
+                            <select name="time" id="time" class="form-select" required>
+                                <option value="">-- Pilih Jam --</option>
+                                {{-- Buat jam dari 13:00 - 21:00 setiap 30 menit --}}
+                                @php
+                                $start = strtotime('13:00');
+                                $end = strtotime('21:00');
+                                for ($t = $start; $t <= $end; $t +=30 * 60) { $time=date('H:i', $t);
+                                    echo "<option value='$time'>$time</option>" ; } @endphp </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="service_id" class="form-label fw-semibold">Pilih Layanan</label>
+                            <select name="service_id" id="service_id" class="form-select" required>
+                                <option value="">-- Pilih Layanan --</option>
+                                @foreach($services as $service)
+                                <option value="{{ $service->id }}">{{ $service->name }} - Rp
+                                    {{ number_format($service->price, 0, ',', '.') }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="notes" class="form-label fw-semibold">Catatan Tambahan (Opsional)</label>
+                            <textarea name="notes" id="notes" class="form-control" rows="3"
+                                placeholder="Tulis permintaan khusus..."></textarea>
+                        </div>
+
+                        <div class="col-12 text-center mt-4">
+                            <button type="submit" class="btn btn-dark px-5 py-2 fw-semibold rounded-pill">
+                                Kirim Reservasi
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</div>
+</section>
 @endsection
-
-@push('styles')
-<style>
-.font-playfair {
-    font-family: 'Playfair Display', serif;
-}
-
-.form-control,
-.form-select {
-    padding: 0.75rem;
-    border-radius: 8px;
-}
-
-.input-group-text {
-    border-radius: 8px 0 0 8px;
-}
-
-.form-control:focus,
-.form-select:focus {
-    box-shadow: none;
-    border-color: #000;
-}
-
-/* Time Grid Styling */
-.time-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    gap: 10px;
-}
-
-.time-slot {
-    background: #fff;
-    border: 1px solid #ced4da;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 0.9rem;
-}
-
-.time-slot:hover {
-    border-color: #000;
-    background: #f8f9fa;
-}
-
-.time-slot.active {
-    background: #000;
-    color: #fff;
-    border-color: #000;
-    transform: scale(1.05);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.hover-up:hover {
-    transform: translateY(-3px);
-}
-</style>
-@endpush
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const timeSlots = document.querySelectorAll('.time-slot');
-    const jamInput = document.getElementById('jam');
-    const feedbackBox = document.getElementById('jam-feedback');
-    const feedbackText = document.getElementById('jam-text');
-
-    timeSlots.forEach(slot => {
-        slot.addEventListener('click', function() {
-            // Reset semua class active
-            timeSlots.forEach(s => s.classList.remove('active'));
-
-            // Tambahkan class active ke yang diklik
-            this.classList.add('active');
-
-            // Masukkan nilai ke input hidden
-            const val = this.getAttribute('data-time');
-            jamInput.value = val;
-
-            // Tampilkan feedback visual
-            feedbackBox.style.display = 'block';
-            feedbackText.textContent = val;
-        });
-    });
-
-    // Validasi Form sebelum submit
-    document.getElementById('reservasiForm').addEventListener('submit', function(e) {
-        if (!jamInput.value) {
-            e.preventDefault();
-            alert('Mohon pilih jam kedatangan terlebih dahulu!');
-            document.querySelector('.time-grid').scrollIntoView({
-                behavior: 'smooth'
-            });
-        }
-    });
-});
-</script>
-@endpush
