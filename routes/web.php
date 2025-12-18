@@ -2,13 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\PublicController;      // Mengatur Halaman Depan
-use App\Http\Controllers\ReservationController; // Mengatur Booking
-use App\Http\Controllers\ServiceController;     // Mengatur Pricelist
-use App\Http\Controllers\AdminController;       // Mengatur Dashboard Admin
-use App\Http\Controllers\ContactController;     // Mengatur Pesan Masuk
-use App\Http\Controllers\AboutController;       // Mengatur Tentang Kami
-use App\Http\Controllers\BarberController;      // Mengatur Tim Barber (PENTING!)
+use App\Http\Controllers\PublicController;      // Halaman Depan
+use App\Http\Controllers\ReservationController; // Booking
+use App\Http\Controllers\ServiceController;     // Pricelist
+use App\Http\Controllers\AdminController;       // Dashboard Admin
+use App\Http\Controllers\ContactController;     // Pesan Masuk
+use App\Http\Controllers\AboutController;       // Edit Tentang Kami
+use App\Http\Controllers\BarberController;      // Manajemen Barberman
 
 // ====================================================
 // 1. HALAMAN PUBLIK (BISA DIBUKA SIAPA SAJA)
@@ -68,12 +68,12 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
     // B. Manajemen Layanan (Pricelist)
-    Route::get('/services', [ServiceController::class, 'adminIndex'])->name('services');
-    Route::get('/services/create', [ServiceController::class, 'create'])->name('services.create');
-    Route::post('/services', [ServiceController::class, 'store'])->name('services.store');
-    Route::get('/services/{id}/edit', [ServiceController::class, 'edit'])->name('services.edit');
-    Route::put('/services/{id}', [ServiceController::class, 'update'])->name('services.update');
-    Route::delete('/services/{id}', [ServiceController::class, 'destroy'])->name('services.destroy');
+    Route::get('/services', [ServiceController::class, 'adminIndex'])->name('services'); // List
+    Route::get('/services/create', [ServiceController::class, 'create'])->name('services.create'); // Form Tambah
+    Route::post('/services', [ServiceController::class, 'store'])->name('services.store'); // Simpan
+    Route::get('/services/{id}/edit', [ServiceController::class, 'edit'])->name('services.edit'); // Form Edit
+    Route::put('/services/{id}', [ServiceController::class, 'update'])->name('services.update'); // Update
+    Route::delete('/services/{id}', [ServiceController::class, 'destroy'])->name('services.destroy'); // Hapus
 
     // C. Manajemen Barberman (Tim)
     Route::get('/barbers', [BarberController::class, 'index'])->name('barbers.index');
