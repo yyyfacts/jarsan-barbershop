@@ -80,8 +80,8 @@
         <div class="login-card row g-0">
             <div class="col-md-6 login-image d-none d-md-block">
                 <div class="login-logo">
-                    {{-- Pastikan ada gambar logo atau hapus tag img ini --}}
-                    <h2 class="text-white fw-bold">JARSAN</h2>
+                    {{-- Ganti logo di sini --}}
+                    <img src="{{ asset('images/logo jarsan.png') }}" alt="Logo Jarsan">
                 </div>
             </div>
             <div class="col-md-6 form-section d-flex flex-column justify-content-center">

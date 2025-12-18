@@ -4,9 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Jarsan Barbershop</title>
+    <title>Daftar Akun - Jarsan Barbershop</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <style>
     body {
         background-color: #f5f5f5;
@@ -25,111 +24,59 @@
         border-radius: 20px;
         overflow: hidden;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        max-width: 450px;
+        max-width: 500px;
         width: 100%;
-        padding: 3rem 2.5rem;
-    }
-
-    .register-card h3 {
-        font-weight: 700;
-        margin-bottom: 1.5rem;
-        color: #222;
+        padding: 2.5rem;
     }
 
     .btn-register {
         background-color: #000;
         color: white;
         border-radius: 10px;
-        transition: 0.3s;
     }
 
     .btn-register:hover {
-        background-color: #ffffff;
-        color: #000;
-        border: 1px solid #000;
-    }
-
-    .text-small {
-        font-size: 0.9rem;
-    }
-
-    /* Shadow hitam saat input di-fokus */
-    .form-control:focus {
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        border-color: #000;
-        outline: none;
-        transition: box-shadow 0.3s ease, border-color 0.3s ease;
-    }
-
-    .invalid-feedback {
-        font-size: 0.8rem;
+        background-color: #333;
+        color: white;
     }
     </style>
 </head>
 
 <body>
     <div class="register-container">
-        <div class="register-card" id="registerCard">
-            <h3 class="text-center mb-3">Daftar</h3>
-            <p class="text-center text-muted mb-4">Buat akun baru untuk reservasi di Jarsan Barbershop</p>
+        <div class="register-card">
+            <h3 class="text-center mb-3 fw-bold">Buat Akun Baru</h3>
+            <p class="text-center text-muted mb-4 small">Daftar untuk melakukan reservasi online</p>
 
             <form action="{{ route('register.process') }}" method="POST">
                 @csrf
-
                 <div class="mb-3">
-                    <label for="name" class="form-label">Nama Lengkap</label>
-                    <input type="text" class="form-control p-2 @error('name') is-invalid @enderror" id="name"
-                        name="name" placeholder="Masukkan nama lengkap" value="{{ old('name') }}" required>
-                    @error('name')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    <label class="form-label">Nama Lengkap</label>
+                    <input type="text" name="name" class="form-control p-2" placeholder="Nama Anda" required>
                 </div>
-
                 <div class="mb-3">
-                    <label for="email" class="form-label">Alamat Email</label>
-                    <input type="email" class="form-control p-2 @error('email') is-invalid @enderror" id="email"
-                        name="email" placeholder="contoh@email.com" value="{{ old('email') }}" required>
-                    @error('email')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control p-2" placeholder="contoh@email.com" required>
                 </div>
-
                 <div class="mb-3">
-                    <label for="password" class="form-label">Kata Sandi</label>
-                    <input type="password" class="form-control p-2 @error('password') is-invalid @enderror"
-                        id="password" name="password" placeholder="Minimal 6 karakter" required>
-                    @error('password')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    <label class="form-label">Kata Sandi</label>
+                    <input type="password" name="password" class="form-control p-2" placeholder="Minimal 6 karakter"
+                        required>
                 </div>
-
                 <div class="mb-3">
-                    <label for="password_confirmation" class="form-label">Konfirmasi Kata Sandi</label>
-                    <input type="password" class="form-control p-2" id="password_confirmation"
-                        name="password_confirmation" placeholder="Ulangi kata sandi" required>
+                    <label class="form-label">Konfirmasi Kata Sandi</label>
+                    <input type="password" name="password_confirmation" class="form-control p-2"
+                        placeholder="Ulangi kata sandi" required>
                 </div>
+                <button type="submit" class="btn btn-register w-100 py-2 fw-bold">Daftar</button>
 
-                <button type="submit" class="btn btn-register w-100 py-2">Daftar</button>
-
-                <p class="text-center mt-3 text-small">
-                    Sudah punya akun? <a href="{{ route('login') }}" class="text-decoration-none">Masuk di sini</a>
+                <p class="text-center text-muted mt-3 small">
+                    Sudah punya akun? <a href="{{ route('login') }}"
+                        class="text-decoration-none fw-bold text-dark">Login di sini</a>
                 </p>
             </form>
         </div>
     </div>
-
-    <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const card = document.getElementById("registerCard");
-        card.style.opacity = 0;
-        card.style.transform = "translateY(30px)";
-        setTimeout(() => {
-            card.style.transition = "all 0.6s ease";
-            card.style.opacity = 1;
-            card.style.transform = "translateY(0)";
-        }, 150);
-    });
-    </script>
 </body>
 
 </html>

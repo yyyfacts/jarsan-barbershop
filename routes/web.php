@@ -48,7 +48,6 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 
     // Halaman Reservasi (WAJIB LOGIN)
-    // Kalau belum login, otomatis dilempar ke halaman login oleh Laravel
     Route::get('/reservasi', function () {
         return view('reservasi');
     })->name('reservasi');
@@ -58,6 +57,7 @@ Route::middleware(['auth'])->group(function () {
 // ====================================================
 // 4. HALAMAN ADMIN (Harus Login & Email Admin)
 // ====================================================
+// Pastikan Middleware 'is_admin' sudah didaftarkan di bootstrap/app.php
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/dashboard', function () {

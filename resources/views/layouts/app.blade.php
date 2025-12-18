@@ -10,11 +10,16 @@
     <style>
     body {
         font-family: 'Poppins', sans-serif;
+        background-color: #f8f9fa;
     }
 
     .navbar-brand {
         font-weight: bold;
         letter-spacing: 1px;
+    }
+
+    .bg-black {
+        background-color: #000 !important;
     }
     </style>
     @stack('styles')

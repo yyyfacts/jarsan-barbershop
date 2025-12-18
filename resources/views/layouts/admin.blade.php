@@ -8,37 +8,37 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-        body {
-            background-color: #f8f9fa;
-        }
+    body {
+        background-color: #f8f9fa;
+    }
 
-        .admin-header {
-            background-color: #212529;
-            color: white;
-            padding: 15px 0;
-        }
+    .admin-header {
+        background-color: #212529;
+        color: white;
+        padding: 15px 0;
+    }
 
-        .nav-link {
-            color: #ccc;
-            font-weight: 500;
-            transition: 0.3s;
-        }
+    .nav-link {
+        color: #ccc;
+        font-weight: 500;
+        transition: 0.3s;
+    }
 
-        .nav-link:hover,
-        .nav-link.active {
-            color: #fff;
-        }
+    .nav-link:hover,
+    .nav-link.active {
+        color: #fff;
+    }
 
-        .btn-logout {
-            background-color: #ffc107;
-            color: #000;
-            font-weight: bold;
-            border: none;
-        }
+    .btn-logout {
+        background-color: #ffc107;
+        color: #000;
+        font-weight: bold;
+        border: none;
+    }
 
-        .btn-logout:hover {
-            background-color: #e0a800;
-        }
+    .btn-logout:hover {
+        background-color: #e0a800;
+    }
     </style>
 </head>
 
