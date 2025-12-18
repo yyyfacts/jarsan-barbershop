@@ -1,56 +1,68 @@
 @extends('layouts.app')
 
-@section('title', 'Barberman')
+@section('title', 'Tim Kami')
 
 @section('content')
 <section class="py-5 bg-light">
     <div class="container">
-        <h2 class="fw-bold text-center mb-5 text-uppercase">Tim Barber Profesional Kami</h2>
+        <div class="text-center mb-5">
+            <h5 class="text-primary text-uppercase fw-bold ls-2">The Team</h5>
+            <h2 class="fw-bold font-playfair display-5">Meet Our Masters</h2>
+            <p class="text-muted mt-2">Para ahli cukur yang siap mengubah penampilan Anda.</p>
+        </div>
 
         <div class="row g-4 justify-content-center">
-            {{-- Barber Cards --}}
+            {{-- DATA BARBERS (PHP ARRAY) --}}
             @php
-                $barbers = [
-                    ['id' => 1, 'name' => 'Rizky', 'role' => 'Ahli Fade & Modern Style', 'img' => 'barber1.jpg',
-                    'bio' => 'Rizky adalah barber berpengalaman dengan spesialisasi fade dan taper modern. Dengan 6 tahun pengalaman, ia memastikan potongan rapi dan detail sempurna.'],
-
-                    ['id' => 2, 'name' => 'Agus', 'role' => 'Specialist Classic Cut', 'img' => 'barber2.jpg',
-                    'bio' => 'Agus memiliki kemampuan unik dalam menciptakan potongan klasik elegan. Dengan ketelitian dan rasa seni tinggi, ia jadi favorit pelanggan senior.'],
-
-                    ['id' => 3, 'name' => 'Fahri', 'role' => 'Expert Styling & Coloring', 'img' => 'barber3.jpg',
-                    'bio' => 'Fahri unggul dalam pewarnaan rambut dan styling modern. Keahliannya membawa tren terkini ke setiap klien.'],
-
-                    ['id' => 4, 'name' => 'Rian', 'role' => 'Beard Specialist', 'img' => 'barber4.jpg',
-                    'bio' => 'Rian adalah spesialis janggut dan kumis. Ia tahu cara membentuk tampilan maskulin yang tetap rapi dan stylish.']
-                ];
+            $barbers = [
+            ['id' => 1, 'name' => 'Rizky', 'role' => 'Master Barber', 'img' => 'barber1.jpg', 'bio' => 'Rizky adalah
+            barber senior dengan spesialisasi fade dan taper modern. 6 tahun pengalaman menjamin kepuasan.'],
+            ['id' => 2, 'name' => 'Agus', 'role' => 'Classic Specialist', 'img' => 'barber2.jpg', 'bio' => 'Agus
+            memiliki tangan emas untuk potongan klasik seperti Pompadour dan Side Part. Favorit gentleman sejati.'],
+            ['id' => 3, 'name' => 'Fahri', 'role' => 'Color & Style Expert', 'img' => 'barber3.jpg', 'bio' => 'Fahri
+            adalah seniman warna. Ingin warna silver, ash grey, atau highlight? Fahri ahlinya.'],
+            ['id' => 4, 'name' => 'Rian', 'role' => 'Beard Groomer', 'img' => 'barber4.jpg', 'bio' => 'Spesialis janggut
+            dan kumis. Rian tahu cara membentuk framing wajah yang maskulin dan rapi.']
+            ];
             @endphp
 
             @foreach ($barbers as $barber)
             <div class="col-md-3 col-sm-6">
-                <div 
-                    class="card barber-card border-0 shadow text-center h-100"
-                    onclick="showBio({{ $barber['id'] }})"
-                    style="cursor: pointer;"
-                >
-                    <img src="{{ asset('images/' . $barber['img']) }}" class="card-img-top" alt="{{ $barber['name'] }}">
+                <div class="card barber-card border-0 shadow-sm h-100 text-center position-relative"
+                    onclick="showBio({{ $barber['id'] }})" role="button">
+                    <div class="card-img-wrapper overflow-hidden">
+                        {{-- Gunakan asset() untuk gambar --}}
+                        <img src="{{ asset('images/' . $barber['img']) }}" class="card-img-top"
+                            alt="{{ $barber['name'] }}">
+                        <div class="overlay-hover d-flex align-items-center justify-content-center">
+                            <span class="text-white fw-bold">Lihat Profil <i class="bi bi-eye"></i></span>
+                        </div>
+                    </div>
                     <div class="card-body">
-                        <h5 class="fw-bold mb-1">{{ $barber['name'] }}</h5>
-                        <p class="text-muted mb-2">{{ $barber['role'] }}</p>
-                        <i class="bi bi-chevron-down text-secondary arrow-down"></i>
+                        <h4 class="fw-bold mb-1">{{ $barber['name'] }}</h4>
+                        <p class="text-primary small fw-bold mb-0">{{ $barber['role'] }}</p>
                     </div>
                 </div>
             </div>
             @endforeach
         </div>
 
-        {{-- Biodata Section --}}
-        <div id="barberBio" class="barber-bio text-center mt-5" style="display: none;">
-            <div class="card border-0 shadow-lg p-4 mx-auto" style="max-width: 700px;">
-                <img id="bioImg" src="" alt="Foto Barber" class="rounded-circle mb-3" width="150" height="150" style="object-fit: cover;">
-                <h4 id="bioName" class="fw-bold mb-1"></h4>
-                <h6 id="bioRole" class="text-muted mb-3"></h6>
-                <p id="bioDesc" class="text-secondary px-3"></p>
-                <a href="#" class="btn btn-dark rounded-pill px-4 mt-2">Reservasi</a>
+        {{-- AREA BIODATA (HIDDEN BY DEFAULT) --}}
+        <div id="barberBio" class="barber-bio mt-5" style="display: none; opacity: 0; transition: opacity 0.5s ease;">
+            <div class="card border-0 shadow-lg p-5 mx-auto rounded-4" style="max-width: 800px; background: #fff;">
+                <div class="row align-items-center">
+                    <div class="col-md-4 text-center">
+                        <img id="bioImg" src="" alt="Foto Barber" class="rounded-circle shadow mb-3 mb-md-0" width="180"
+                            height="180" style="object-fit: cover; border: 5px solid #f8f9fa;">
+                    </div>
+                    <div class="col-md-8 text-center text-md-start">
+                        <h3 id="bioName" class="fw-bold font-playfair display-6 mb-1"></h3>
+                        <span id="bioRole" class="badge bg-dark text-uppercase mb-3 px-3 py-2"></span>
+                        <p id="bioDesc" class="text-muted fs-5 lh-lg"></p>
+                        <a href="{{ url('/reservasi') }}" class="btn btn-outline-dark rounded-pill mt-2 px-4">Booking
+                            <span id="btnName"></span></a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -59,88 +71,112 @@
 
 @push('styles')
 <style>
-/* Kartu barber */
+.font-playfair {
+    font-family: 'Playfair Display', serif;
+}
+
+.ls-2 {
+    letter-spacing: 2px;
+}
+
 .barber-card {
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
-    transition: all 0.3s ease;
-    background: #fff;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
 .barber-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
 }
+
+.card-img-wrapper {
+    position: relative;
+}
+
+.overlay-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.barber-card:hover .overlay-hover {
+    opacity: 1;
+}
+
 .barber-card img {
-    height: 300px;
+    height: 350px;
     object-fit: cover;
-    transition: transform 0.4s ease;
+    transition: 0.5s;
 }
+
 .barber-card:hover img {
     transform: scale(1.05);
-}
-
-/* Panah bawah */
-.arrow-down {
-    display: inline-block;
-    margin-top: 8px;
-    font-size: 1.2rem;
-    transition: transform 0.3s ease;
-}
-.barber-card:hover .arrow-down {
-    transform: translateY(4px);
-    color: #000;
-}
-
-/* Biodata */
-.barber-bio img {
-    border: 4px solid #222;
-    transition: all 0.4s ease;
-}
-.barber-bio .card {
-    background: #fff;
-    border-radius: 20px;
 }
 </style>
 @endpush
 
 @push('scripts')
 <script>
+// Data barbers untuk JS (Harus sinkron dengan PHP di atas)
 const barbers = {
     1: {
         name: 'Rizky',
-        role: 'Ahli Fade & Modern Style',
+        role: 'Master Barber',
         img: '{{ asset("images/barber1.jpg") }}',
-        bio: 'Rizky adalah barber berpengalaman dengan spesialisasi fade dan taper modern. Dengan 6 tahun pengalaman, ia memastikan potongan rapi dan detail sempurna.'
+        bio: 'Rizky adalah barber senior dengan spesialisasi fade dan taper modern. 6 tahun pengalaman menjamin kepuasan.'
     },
     2: {
         name: 'Agus',
-        role: 'Specialist Classic Cut',
+        role: 'Classic Specialist',
         img: '{{ asset("images/barber2.jpg") }}',
-        bio: 'Agus memiliki kemampuan unik dalam menciptakan potongan klasik elegan. Dengan ketelitian dan rasa seni tinggi, ia jadi favorit pelanggan senior.'
+        bio: 'Agus memiliki tangan emas untuk potongan klasik seperti Pompadour dan Side Part. Favorit gentleman sejati.'
     },
     3: {
         name: 'Fahri',
-        role: 'Expert Styling & Coloring',
+        role: 'Color & Style Expert',
         img: '{{ asset("images/barber3.jpg") }}',
-        bio: 'Fahri unggul dalam pewarnaan rambut dan styling modern. Keahliannya membawa tren terkini ke setiap klien.'
+        bio: 'Fahri adalah seniman warna. Ingin warna silver, ash grey, atau highlight? Fahri ahlinya.'
     },
     4: {
         name: 'Rian',
-        role: 'Beard Specialist',
+        role: 'Beard Groomer',
         img: '{{ asset("images/barber4.jpg") }}',
-        bio: 'Rian adalah spesialis janggut dan kumis. Ia tahu cara membentuk tampilan maskulin yang tetap rapi dan stylish.'
+        bio: 'Spesialis janggut dan kumis. Rian tahu cara membentuk framing wajah yang maskulin dan rapi.'
     }
 };
 
 function showBio(id) {
     const barber = barbers[id];
+    const bioSection = document.getElementById('barberBio');
+
     if (barber) {
-        document.getElementById('barberBio').style.display = 'block';
-        document.getElementById('bioImg').src = barber.img;
-        document.getElementById('bioName').textContent = barber.name;
-        document.getElementById('bioRole').textContent = barber.role;
-        document.getElementById('bioDesc').textContent = barber.bio;
-        document.getElementById('barberBio').scrollIntoView({ behavior: 'smooth' });
+        // Efek fade out dulu jika sedang tampil
+        bioSection.style.opacity = '0';
+
+        setTimeout(() => {
+            document.getElementById('bioImg').src = barber.img;
+            document.getElementById('bioName').textContent = barber.name;
+            document.getElementById('bioRole').textContent = barber.role;
+            document.getElementById('bioDesc').textContent = barber.bio;
+            document.getElementById('btnName').textContent = barber.name;
+
+            bioSection.style.display = 'block';
+
+            // Fade in animation
+            setTimeout(() => {
+                bioSection.style.opacity = '1';
+                bioSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }, 50);
+        }, 300);
     }
 }
 </script>

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ServiceController;
 
 Route::get('/', function () {
     return view('home');
@@ -38,3 +39,11 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 
 // Proses register
 Route::post('/register', [AuthController::class, 'register'])->name('register.process');
+
+// --- ROUTE KHUSUS UPLOAD LAYANAN (ADMIN) ---
+
+// 1. Buat menampilkan form upload (Halaman yang ada tombol "Pilih File")
+Route::get('/tambah-layanan', [ServiceController::class, 'create'])->name('service.create');
+
+// 2. Buat memproses foto saat tombol "Simpan" ditekan
+Route::post('/tambah-layanan', [ServiceController::class, 'store'])->name('service.store');
