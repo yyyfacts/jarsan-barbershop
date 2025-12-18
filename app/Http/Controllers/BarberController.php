@@ -12,7 +12,7 @@ class BarberController extends Controller
     public function index()
     {
         $barbers = Barber::all();
-        return view('admin.barbers.index', compact('barbers'));
+        return view('admin.barberman', compact('barbers'));
     }
 
     // ADMIN: FORM TAMBAH
@@ -36,7 +36,7 @@ class BarberController extends Controller
         }
 
         Barber::create($data);
-        return redirect()->route('admin.barbers.index')->with('success', 'Barber berhasil ditambahkan');
+        return redirect()->route('admin.barberman')->with('success', 'Barber berhasil ditambahkan');
     }
 
     // ADMIN: FORM EDIT
@@ -63,7 +63,7 @@ class BarberController extends Controller
         }
 
         $barber->update($data);
-        return redirect()->route('admin.barbers.index')->with('success', 'Data diperbarui');
+        return redirect()->route('admin.barberman')->with('success', 'Data diperbarui');
     }
 
     // ADMIN: HAPUS
