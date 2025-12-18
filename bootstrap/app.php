@@ -12,12 +12,13 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         
-        // --- BAGIAN INI WAJIB ADA DAN BENAR ---
+        // --- PERBAIKAN DI SINI ---
+        // Daftarkan alias 'is_admin' yang mengarah ke file Middleware kamu
         $middleware->alias([
-            'is_admin' => \App\Http\Middleware\IsAdmin::class,
+            'is_admin' => \App\Http\Middleware\IsAdmin::class, // Pastikan path ini benar
         ]);
-        // ---------------------------------------
-
+        
+        // Trust Proxies (Wajib untuk Vercel/Https)
         $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions) {
