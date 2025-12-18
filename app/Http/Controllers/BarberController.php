@@ -14,36 +14,33 @@ class BarberController extends Controller
         return view('admin.barberman', compact('barbers'));
     }
 
-    // ADMIN: SIMPAN BARU (UBAH JADI SIMPAN LINK)
+    // ADMIN: SIMPAN BARU (LINK)
     public function store(Request $request)
     {
+        // Validasi input
         $data = $request->validate([
             'name' => 'required',
             'specialty' => 'nullable',
             'bio' => 'nullable',
-            'photo' => 'nullable|string' // Ubah validasi jadi string biasa
+            'photo_path' => 'nullable|string' // GANTI JADI photo_path
         ]);
-
-        // LOGIC UPLOAD DIHAPUS, karena Vercel menolak file upload.
-        // Data 'photo' langsung tersimpan sebagai link dari input text.
 
         Barber::create($data);
         
         return redirect()->route('admin.barbers.index')->with('success', 'Barber berhasil ditambahkan');
     }
 
-    // ADMIN: UPDATE (UBAH JADI UPDATE LINK)
+    // ADMIN: UPDATE (LINK)
     public function update(Request $request, $id)
     {
         $barber = Barber::findOrFail($id);
+        
         $data = $request->validate([
             'name' => 'required',
             'specialty' => 'nullable',
             'bio' => 'nullable',
-            'photo' => 'nullable|string'
+            'photo_path' => 'nullable|string' // GANTI JADI photo_path
         ]);
-
-        // LOGIC HAPUS FILE LAMA DIHAPUS JUGA
 
         $barber->update($data);
         
@@ -54,7 +51,6 @@ class BarberController extends Controller
     public function destroy($id)
     {
         $barber = Barber::findOrFail($id);
-        // Hapus logic Storage::delete karena kita cuma simpan link
         $barber->delete();
         
         return redirect()->back()->with('success', 'Barber dihapus');

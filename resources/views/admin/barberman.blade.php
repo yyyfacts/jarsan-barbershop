@@ -29,9 +29,9 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>
-                            {{-- LOGIC GAMBAR DIPERBAIKI (BACA LINK) --}}
-                            @if($barber->photo)
-                            <img src="{{ $barber->photo }}" width="50" height="50"
+                            {{-- TAMPILKAN GAMBAR DARI LINK --}}
+                            @if($barber->photo_path)
+                            <img src="{{ $barber->photo_path }}" width="50" height="50"
                                 class="rounded-circle object-fit-cover"
                                 onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($barber->name) }}'">
                             @else
@@ -83,13 +83,13 @@
                                             <textarea name="bio" class="form-control"
                                                 rows="3">{{ $barber->bio }}</textarea>
                                         </div>
-                                        {{-- INPUT LINK GAMBAR --}}
+                                        {{-- INPUT LINK GAMBAR (UBAH NAME & VALUE JADI PHOTO_PATH) --}}
                                         <div class="mb-3">
                                             <label class="form-label fw-bold">Link Foto (URL)</label>
-                                            <input type="text" name="photo" class="form-control"
-                                                value="{{ $barber->photo }}" placeholder="https://...">
-                                            <small class="text-muted">Upload foto ke imgur.com lalu copy link-nya
-                                                kesini.</small>
+                                            <input type="text" name="photo_path" class="form-control"
+                                                value="{{ $barber->photo_path }}" placeholder="https://...">
+                                            <small class="text-muted">Upload foto ke postimages.org lalu copy 'Direct
+                                                Link' kesini.</small>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -135,11 +135,11 @@
                         <label class="form-label fw-bold">Bio</label>
                         <textarea name="bio" class="form-control" rows="3"></textarea>
                     </div>
-                    {{-- INPUT LINK GAMBAR --}}
+                    {{-- INPUT LINK GAMBAR (UBAH NAME JADI PHOTO_PATH) --}}
                     <div class="mb-3">
                         <label class="form-label fw-bold">Link Foto (URL)</label>
-                        <input type="text" name="photo" class="form-control" placeholder="https://...">
-                        <small class="text-muted">Upload foto ke imgur.com lalu copy link-nya kesini.</small>
+                        <input type="text" name="photo_path" class="form-control" placeholder="https://...">
+                        <small class="text-muted">Upload foto ke postimages.org lalu copy 'Direct Link' kesini.</small>
                     </div>
                 </div>
                 <div class="modal-footer">
