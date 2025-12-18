@@ -5,8 +5,8 @@
 @section('content')
 
 {{-- =========================
-   HERO / BANNER
-========================= --}}
+    HERO / BANNER
+    ========================= --}}
 <section class="hero-banner d-flex align-items-center text-center text-white position-relative w-100"
     style="background: url('{{ asset('images/banner-login.webp') }}') center/cover no-repeat; height: 60vh;">
 
@@ -20,8 +20,8 @@
 </section>
 
 {{-- =========================
-   SEJARAH KAMI
-========================= --}}
+    SEJARAH KAMI
+    ========================= --}}
 <section class="position-relative text-white d-flex align-items-center"
     style="background: url('{{ asset('images/banner.webp') }}') center/cover no-repeat; min-height: 70vh;">
 
@@ -42,8 +42,8 @@
 </section>
 
 {{-- =========================
-   MISI KAMI
-========================= --}}
+    MISI KAMI
+    ========================= --}}
 <section class="position-relative text-white d-flex align-items-center"
     style="background: url('{{ asset('images/banner-login.webp') }}') center/cover no-repeat; min-height: 60vh;">
 
@@ -65,8 +65,8 @@
 </section>
 
 {{-- =========================
-   KENAPA PILIH KAMI
-========================= --}}
+    KENAPA PILIH KAMI
+    ========================= --}}
 <section class="py-5 position-relative bg-dark">
     <div class="container position-relative z-2 text-center text-light">
         <h2 class="fw-bold mb-5 text-uppercase text-warning text-shadow">Kenapa Pilih Kami?</h2>
@@ -105,8 +105,8 @@
 </section>
 
 {{-- =========================
-   SUASANA BARBERSHOP
-========================= --}}
+    SUASANA BARBERSHOP
+    ========================= --}}
 <section class="py-5 position-relative bg-black">
     <div class="container position-relative z-2 text-center text-light">
         <h2 class="fw-bold mb-4 text-uppercase text-white">Suasana Barbershop</h2>
@@ -129,8 +129,8 @@
 </section>
 
 {{-- =========================
-   CTA SECTION
-========================= --}}
+    CTA SECTION
+    ========================= --}}
 <section class="py-5 bg-warning text-center text-dark">
     <div class="container">
         <h3 class="fw-bold mb-3">Ingin tampil lebih keren?</h3>
