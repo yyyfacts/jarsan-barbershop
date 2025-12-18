@@ -2,43 +2,104 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Service;
 use Illuminate\Http\Request;
-// use App\Models\Service; // <--- Nanti kalau sudah punya Model, aktifkan baris ini
+use Illuminate\Support\Facades\Storage;
 
 class ServiceController extends Controller
 {
-    // 1. Tampilkan Halaman Form Upload
-    public function create()
+    // ==========================================
+    // BAGIAN PUBLIK (DILIHAT USER/CUSTOMER)
+    // ==========================================
+    
+    public function index()
     {
-        // Pastikan kamu nanti bikin file: resources/views/upload.blade.php
-        return view('upload'); 
+        // Ambil semua data layanan dari database
+        $services = Service::all();
+        
+        // Kirim data $services ke view pricelist
+        return view('pricelist', compact('services'));
     }
 
-    // 2. Proses Simpan Foto ke Cloudinary
+    // ==========================================
+    // BAGIAN ADMIN (CRUD)
+    // ==========================================
+
+    // 1. Tampilkan Daftar Layanan di Admin
+    public function adminIndex()
+    {
+        $services = Service::all();
+        return view('admin.services.index', compact('services')); // Pastikan view ini ada nanti
+    }
+
+    // 2. Tampilkan Form Tambah
+    public function create()
+    {
+        return view('admin.services.create');
+    }
+
+    // 3. Proses Simpan Data Baru
     public function store(Request $request)
     {
-        // Validasi (Wajib ada file foto)
+        // Validasi input
         $request->validate([
-            'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'name' => 'required',
+            'price' => 'required|numeric',
+            'image' => 'image|mimes:jpeg,png,jpg,webp|max:2048'
         ]);
 
-        // --- INI BAGIAN AJAIBNYA ---
-        // Upload langsung ke Cloudinary ke folder 'jarsan_barbershop'
-        $upload = $request->file('foto')->storeOnCloudinary('jarsan_barbershop');
+        $data = $request->all();
+
+        // Upload Gambar jika ada
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('services', 'public');
+            $data['image_path'] = $path;
+        }
+
+        Service::create($data);
+
+        return redirect()->route('admin.services')->with('success', 'Layanan berhasil ditambahkan!');
+    }
+
+    // 4. Tampilkan Form Edit
+    public function edit($id)
+    {
+        $service = Service::findOrFail($id);
+        return view('admin.services.edit', compact('service'));
+    }
+
+    // 5. Proses Update Data
+    public function update(Request $request, $id)
+    {
+        $service = Service::findOrFail($id);
+        $data = $request->all();
+
+        // Cek jika ada gambar baru diupload
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama biar ga menuhin server
+            if ($service->image_path) {
+                Storage::disk('public')->delete($service->image_path);
+            }
+            $path = $request->file('image')->store('services', 'public');
+            $data['image_path'] = $path;
+        }
+
+        $service->update($data);
+
+        return redirect()->route('admin.services')->with('success', 'Layanan berhasil diperbarui!');
+    }
+
+    // 6. Hapus Data
+    public function destroy($id)
+    {
+        $service = Service::findOrFail($id);
         
-        // Ambil Link Gambar (https://...) buat disimpan di database
-        $linkGambar = $upload->getSecurePath();
+        if ($service->image_path) {
+            Storage::disk('public')->delete($service->image_path);
+        }
         
-        // Cek hasilnya di layar (Sementara)
-        return "Berhasil Upload! Link fotomu ada di: " . $linkGambar;
-        
-        // Nanti kalau database sudah siap, baris return di atas diganti jadi:
-        /*
-        Service::create([
-            'nama' => $request->nama,
-            'foto' => $linkGambar
-        ]);
-        return redirect()->back();
-        */
+        $service->delete();
+
+        return redirect()->route('admin.services')->with('success', 'Layanan dihapus!');
     }
 }
