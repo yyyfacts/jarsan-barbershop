@@ -8,15 +8,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f8f9fa;
-        }
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f8f9fa;
+    }
 
-        .navbar-brand {
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
+    .navbar-brand {
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
     </style>
     @stack('styles')
 </head>
