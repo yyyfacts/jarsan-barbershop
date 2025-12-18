@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\AdminController; // Pastikan buat controller ini nanti
+// use App\Http\Controllers\AdminController; // Pastikan buat controller ini nanti jika dibutuhkan
 
 // ====================================================
 // 1. HALAMAN PUBLIK (Tamu / Belum Login)
@@ -11,7 +11,7 @@ use App\Http\Controllers\AdminController; // Pastikan buat controller ini nanti
 
 // Landing Page Utama
 Route::get('/', function () {
-    return view('welcome'); // Halaman pilihan (Login / Tamu)
+    return view('welcome'); 
 })->name('welcome');
 
 // Halaman Home Website
@@ -46,33 +46,27 @@ Route::middleware(['auth'])->group(function () {
     
     // Dashboard User
     Route::get('/dashboard', function () {
-        // Cek jika admin nyasar ke sini, lempar ke admin
+        // Cek manual: jika admin nyasar ke sini, lempar ke admin dashboard
         if(auth()->user()->email == 'admin@jarsan.com') {
             return redirect()->route('admin.dashboard');
         }
         return view('user.dashboard');
     })->name('dashboard');
 
-    // Halaman Reservasi (Hanya user login yang bisa booking)
+    // Halaman Reservasi
     Route::get('/reservasi', function () {
         return view('reservasi');
     })->name('reservasi');
     
-    // Proses Kirim Reservasi (Nanti buat controller ini)
-    // Route::post('/reservasi', [ReservationController::class, 'store'])->name('reservasi.store');
 });
 
 
 // ====================================================
 // 4. HALAMAN ADMIN (Harus Login sebagai Admin)
 // ====================================================
-// Kita gunakan middleware closure sederhana untuk cek email admin
-Route::middleware(['auth', function ($request, $next) {
-    if (auth()->user()->email !== 'admin@jarsan.com') {
-        return redirect('/dashboard'); // Tendang user biasa balik ke dashboard mereka
-    }
-    return $next($request);
-}])->prefix('admin')->name('admin.')->group(function () {
+
+// PERBAIKAN DI SINI: Kita panggil 'is_admin' (bukan function closure lagi)
+Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
 
     // Dashboard Admin
     Route::get('/dashboard', function () {
