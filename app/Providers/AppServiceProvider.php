@@ -19,10 +19,9 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
-    {
-        // PAKSA HTTPS DI VERCEL
-        if($this->app->environment('production')) {
-            URL::forceScheme('https');
-        }
+{
+    if($this->app->environment('production')) {
+        \Illuminate\Support\Facades\URL::forceScheme('https');
     }
+}
 }
