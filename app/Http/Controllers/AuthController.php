@@ -9,13 +9,11 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // Tampilkan Form Login
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    // PROSES LOGIN (LOGIC PEMBEDA ADMIN/USER)
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -26,13 +24,12 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
 
-            // CEK APAKAH INI ADMIN?
+            // Cek Role: Admin atau User
             if (Auth::user()->email === 'admin@jarsan.com') {
-                return redirect()->route('admin.dashboard'); // Lempar ke Admin
+                return redirect()->route('admin.dashboard');
             }
 
-            // JIKA BUKAN ADMIN
-            return redirect()->intended('/dashboard'); // Lempar ke User
+            return redirect()->route('dashboard');
         }
 
         return back()->withErrors([
@@ -40,13 +37,11 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    // Tampilkan Form Register
     public function showRegisterForm()
     {
         return view('auth.register');
     }
 
-    // Proses Register
     public function register(Request $request)
     {
         $validated = $request->validate([
@@ -61,17 +56,18 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        Auth::login($user);
+        Auth::login($user); // Langsung login setelah daftar
 
-        return redirect('/dashboard');
+        return redirect()->route('dashboard');
     }
 
-    // Logout
     public function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login');
+        
+        // Redirect balik ke halaman login
+        return redirect()->route('login');
     }
 }
