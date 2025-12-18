@@ -9,13 +9,13 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // Tampilkan form login
+    // Tampilkan Form Login
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    // Proses login
+    // PROSES LOGIN (LOGIC PEMBEDA ADMIN/USER)
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -25,7 +25,14 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended('/'); // arahkan ke dashboard / home
+
+            // CEK APAKAH INI ADMIN?
+            if (Auth::user()->email === 'admin@jarsan.com') {
+                return redirect()->route('admin.dashboard'); // Lempar ke Admin
+            }
+
+            // JIKA BUKAN ADMIN
+            return redirect()->intended('/dashboard'); // Lempar ke User
         }
 
         return back()->withErrors([
@@ -33,19 +40,13 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    // Logout
-    public function logout(Request $request)
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect('/login');
-    }
+    // Tampilkan Form Register
     public function showRegisterForm()
     {
         return view('auth.register');
     }
 
+    // Proses Register
     public function register(Request $request)
     {
         $validated = $request->validate([
@@ -62,7 +63,15 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect('/')->with('success', 'Registrasi berhasil! Selamat datang, ' . $user->name);
+        return redirect('/dashboard');
+    }
+
+    // Logout
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/login');
     }
 }
-
