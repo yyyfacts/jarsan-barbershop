@@ -8,88 +8,86 @@ use Illuminate\Support\Facades\Storage;
 
 class ServiceController extends Controller
 {
-    // ==========================================
-    // BAGIAN PUBLIK (DILIHAT USER/CUSTOMER)
-    // ==========================================
-    
+    // === BAGIAN USER (FRONTEND) ===
     public function index()
     {
-        // Ambil semua data layanan dari database
         $services = Service::all();
-        
-        // Kirim data $services ke view pricelist
+        // Ini view untuk user (tampilan depan)
         return view('pricelist', compact('services'));
     }
 
-    // ==========================================
-    // BAGIAN ADMIN (CRUD)
-    // ==========================================
-
-    // 1. Tampilkan Daftar Layanan di Admin
+    // === BAGIAN ADMIN (BACKEND) ===
+    
+    // 1. Menampilkan Daftar Layanan di Admin
     public function adminIndex()
     {
         $services = Service::all();
-        return view('admin.services.index', compact('services')); // Pastikan view ini ada nanti
+        // PENTING: Mengarah ke file 'resources/views/admin/pricelist.blade.php'
+        return view('admin.pricelist', compact('services'));
     }
 
-    // 2. Tampilkan Form Tambah
+    // 2. Menampilkan Form Tambah (Kita pakai modal/halaman terpisah jika ada)
     public function create()
     {
-        return view('admin.services.create');
+        return view('admin.services_create'); // Pastikan file ini ada jika mau pakai halaman terpisah
     }
 
-    // 3. Proses Simpan Data Baru
+    // 3. Simpan Layanan Baru
     public function store(Request $request)
     {
-        // Validasi input
-        $request->validate([
-            'name' => 'required',
+        $data = $request->validate([
+            'name' => 'required|string',
             'price' => 'required|numeric',
-            'image' => 'image|mimes:jpeg,png,jpg,webp|max:2048'
+            'duration' => 'nullable|integer',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|max:2048'
         ]);
 
-        $data = $request->all();
-
-        // Upload Gambar jika ada
+        // Upload Gambar
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('services', 'public');
-            $data['image_path'] = $path;
+            $data['image_path'] = $request->file('image')->store('services', 'public');
         }
 
         Service::create($data);
 
-        return redirect()->route('admin.services')->with('success', 'Layanan berhasil ditambahkan!');
+        return redirect()->route('services')->with('success', 'Layanan berhasil ditambahkan!');
     }
 
-    // 4. Tampilkan Form Edit
+    // 4. Form Edit
     public function edit($id)
     {
         $service = Service::findOrFail($id);
-        return view('admin.services.edit', compact('service'));
+        // Pastikan kamu punya file 'resources/views/admin/services_edit.blade.php'
+        return view('admin.services_edit', compact('service'));
     }
 
-    // 5. Proses Update Data
+    // 5. Update Layanan
     public function update(Request $request, $id)
     {
         $service = Service::findOrFail($id);
-        $data = $request->all();
+        
+        $data = $request->validate([
+            'name' => 'required|string',
+            'price' => 'required|numeric',
+            'duration' => 'nullable|integer',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|max:2048'
+        ]);
 
-        // Cek jika ada gambar baru diupload
         if ($request->hasFile('image')) {
-            // Hapus gambar lama biar ga menuhin server
+            // Hapus gambar lama
             if ($service->image_path) {
                 Storage::disk('public')->delete($service->image_path);
             }
-            $path = $request->file('image')->store('services', 'public');
-            $data['image_path'] = $path;
+            $data['image_path'] = $request->file('image')->store('services', 'public');
         }
 
         $service->update($data);
 
-        return redirect()->route('admin.services')->with('success', 'Layanan berhasil diperbarui!');
+        return redirect()->route('services')->with('success', 'Layanan berhasil diperbarui!');
     }
 
-    // 6. Hapus Data
+    // 6. Hapus Layanan
     public function destroy($id)
     {
         $service = Service::findOrFail($id);
@@ -100,6 +98,6 @@ class ServiceController extends Controller
         
         $service->delete();
 
-        return redirect()->route('admin.services')->with('success', 'Layanan dihapus!');
+        return redirect()->route('services')->with('success', 'Layanan berhasil dihapus!');
     }
 }

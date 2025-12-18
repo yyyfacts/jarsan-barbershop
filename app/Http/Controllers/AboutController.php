@@ -8,27 +8,27 @@ use Illuminate\Support\Facades\Storage;
 
 class AboutController extends Controller
 {
-    // DILIHAT USER (FRONTEND)
+    // User melihat halaman About
     public function index()
     {
-        // Ambil data pertama, jika kosong buat object baru biar gak error
-        $about = About::first() ?? new About(); 
+        $about = About::first();
         return view('about', compact('about'));
     }
 
-    // HALAMAN EDIT (ADMIN)
+    // Admin melihat halaman Edit About
     public function edit()
     {
+        // Ambil data pertama, jika tidak ada buat instance kosong
         $about = About::first() ?? new About();
-        return view('admin.about.edit', compact('about'));
+
+        // PENTING: Mengarah ke 'resources/views/admin/tentangkami.blade.php'
+        return view('admin.tentangkami', compact('about'));
     }
 
-    // PROSES UPDATE (ADMIN)
+    // Admin Update Data About
     public function update(Request $request)
     {
-        // Ambil data lama atau buat baru
-        $about = About::firstOrNew();
-
+        // Validasi
         $data = $request->validate([
             'history' => 'nullable|string',
             'mission' => 'nullable|string',
@@ -36,19 +36,22 @@ class AboutController extends Controller
             'mission_image' => 'nullable|image|max:2048',
         ]);
 
-        // Upload Foto Sejarah
+        // Ambil data lama atau buat baru
+        $about = About::firstOrNew();
+
+        // Upload Gambar Sejarah
         if ($request->hasFile('history_image')) {
             if ($about->history_image) Storage::disk('public')->delete($about->history_image);
             $data['history_image'] = $request->file('history_image')->store('about', 'public');
         }
 
-        // Upload Foto Misi
+        // Upload Gambar Misi
         if ($request->hasFile('mission_image')) {
             if ($about->mission_image) Storage::disk('public')->delete($about->mission_image);
             $data['mission_image'] = $request->file('mission_image')->store('about', 'public');
         }
 
-        // Simpan ke database (Update jika ada ID, Create jika belum)
+        // Simpan
         $about->fill($data)->save();
 
         return redirect()->back()->with('success', 'Halaman Tentang Kami berhasil diperbarui!');

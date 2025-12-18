@@ -7,30 +7,35 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-    // USER KIRIM PESAN
+    // Simpan Pesan dari User (Frontend)
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required',
+            'name' => 'required|string',
             'email' => 'required|email',
-            'message' => 'required'
+            'message' => 'required|string'
         ]);
 
         Contact::create($data);
+
         return redirect()->back()->with('success', 'Pesan Anda telah terkirim!');
     }
 
-    // ADMIN LIHAT PESAN
+    // Tampilkan Pesan di Admin
     public function index()
     {
         $contacts = Contact::latest()->get();
-        return view('admin.contacts.index', compact('contacts'));
+        
+        // PENTING: Mengarah ke 'resources/views/admin/hubungikami.blade.php'
+        return view('admin.hubungikami', compact('contacts'));
     }
 
-    // ADMIN HAPUS PESAN
+    // Hapus Pesan
     public function destroy($id)
     {
-        Contact::findOrFail($id)->delete();
-        return redirect()->back()->with('success', 'Pesan dihapus.');
+        $contact = Contact::findOrFail($id);
+        $contact->delete();
+
+        return redirect()->back()->with('success', 'Pesan berhasil dihapus.');
     }
 }
