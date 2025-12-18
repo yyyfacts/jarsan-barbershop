@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-    // Simpan Pesan dari User (Frontend)
+    // USER KIRIM PESAN
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -21,21 +21,21 @@ class ContactController extends Controller
         return redirect()->back()->with('success', 'Pesan Anda telah terkirim!');
     }
 
-    // Tampilkan Pesan di Admin
+    // ADMIN LIHAT PESAN
     public function index()
     {
         $contacts = Contact::latest()->get();
         
-        // PENTING: Mengarah ke 'resources/views/admin/hubungikami.blade.php'
+        // PERBAIKAN: Langsung ke file 'admin/hubungikami.blade.php'
         return view('admin.hubungikami', compact('contacts'));
     }
 
-    // Hapus Pesan
+    // ADMIN HAPUS PESAN
     public function destroy($id)
     {
         $contact = Contact::findOrFail($id);
         $contact->delete();
 
-        return redirect()->back()->with('success', 'Pesan berhasil dihapus.');
+        return redirect()->back()->with('success', 'Pesan dihapus.');
     }
 }

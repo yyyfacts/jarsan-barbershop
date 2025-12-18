@@ -11,28 +11,22 @@ class ServiceController extends Controller
     // === BAGIAN USER (FRONTEND) ===
     public function index()
     {
+        // Ini view buat Pengunjung (bukan admin)
         $services = Service::all();
-        // Ini view untuk user (tampilan depan)
         return view('pricelist', compact('services'));
     }
 
     // === BAGIAN ADMIN (BACKEND) ===
     
-    // 1. Menampilkan Daftar Layanan di Admin
+    // 1. ADMIN: LIST LAYANAN
     public function adminIndex()
     {
         $services = Service::all();
-        // PENTING: Mengarah ke file 'resources/views/admin/pricelist.blade.php'
+        // PERBAIKAN: Langsung ke file 'admin/pricelist.blade.php'
         return view('admin.pricelist', compact('services'));
     }
 
-    // 2. Menampilkan Form Tambah (Kita pakai modal/halaman terpisah jika ada)
-    public function create()
-    {
-        return view('admin.services_create'); // Pastikan file ini ada jika mau pakai halaman terpisah
-    }
-
-    // 3. Simpan Layanan Baru
+    // 2. ADMIN: SIMPAN BARU
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -43,25 +37,17 @@ class ServiceController extends Controller
             'image' => 'nullable|image|max:2048'
         ]);
 
-        // Upload Gambar
         if ($request->hasFile('image')) {
             $data['image_path'] = $request->file('image')->store('services', 'public');
         }
 
         Service::create($data);
 
-        return redirect()->route('services')->with('success', 'Layanan berhasil ditambahkan!');
+        // Redirect balik ke list admin
+        return redirect()->route('admin.services')->with('success', 'Layanan berhasil ditambahkan!');
     }
 
-    // 4. Form Edit
-    public function edit($id)
-    {
-        $service = Service::findOrFail($id);
-        // Pastikan kamu punya file 'resources/views/admin/services_edit.blade.php'
-        return view('admin.services_edit', compact('service'));
-    }
-
-    // 5. Update Layanan
+    // 3. ADMIN: UPDATE
     public function update(Request $request, $id)
     {
         $service = Service::findOrFail($id);
@@ -75,7 +61,6 @@ class ServiceController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            // Hapus gambar lama
             if ($service->image_path) {
                 Storage::disk('public')->delete($service->image_path);
             }
@@ -84,20 +69,18 @@ class ServiceController extends Controller
 
         $service->update($data);
 
-        return redirect()->route('services')->with('success', 'Layanan berhasil diperbarui!');
+        return redirect()->route('admin.services')->with('success', 'Layanan berhasil diperbarui!');
     }
 
-    // 6. Hapus Layanan
+    // 4. ADMIN: HAPUS
     public function destroy($id)
     {
         $service = Service::findOrFail($id);
-        
         if ($service->image_path) {
             Storage::disk('public')->delete($service->image_path);
         }
-        
         $service->delete();
 
-        return redirect()->route('services')->with('success', 'Layanan berhasil dihapus!');
+        return redirect()->route('admin.services')->with('success', 'Layanan dihapus!');
     }
 }

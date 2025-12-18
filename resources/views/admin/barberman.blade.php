@@ -1,64 +1,149 @@
 @extends('layouts.admin')
 
 @section('content')
-<h3 class="fw-bold mb-4">Daftar Barberman</h3>
+<div class="container-fluid">
+    <h3 class="fw-bold mb-4">Daftar Barberman</h3>
 
-{{-- Tombol Tambah --}}
-<a href="{{ route('admin.barbers.create') }}" class="btn btn-primary mb-3 fw-bold">+ Tambah Barber</a>
+    {{-- TOMBOL TAMBAH (Memicu Modal Tambah) --}}
+    <button type="button" class="btn btn-primary mb-3 fw-bold" data-bs-toggle="modal"
+        data-bs-target="#modalTambahBarber">
+        + Tambah Barber
+    </button>
 
-<div class="card border-0 shadow-sm">
-    <div class="card-body p-0">
-        <table class="table table-striped mb-0">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Foto</th>
-                    <th>Nama</th>
-                    <th>Spesialis</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($barbers as $barber)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>
-                        @if($barber->photo_path)
-                        <img src="{{ asset('storage/' . $barber->photo_path) }}" width="50" height="50"
-                            class="rounded-circle object-fit-cover">
-                        @else
-                        {{-- Placeholder jika tidak ada foto --}}
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode($barber->name) }}&background=random"
-                            width="50" height="50" class="rounded-circle">
-                        @endif
-                    </td>
-                    <td class="text-start ps-4 fw-bold">{{ $barber->name }}</td>
-                    <td>{{ $barber->specialty ?? '-' }}</td>
-                    <td>
-                        <span class="badge bg-success">Aktif</span>
-                    </td>
-                    <td>
-                        {{-- Tombol Edit --}}
-                        <a href="{{ route('admin.barbers.edit', $barber->id) }}"
-                            class="btn btn-warning btn-sm fw-bold">Edit</a>
+    {{-- TABEL DATA --}}
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0 align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>No</th>
+                        <th>Foto</th>
+                        <th>Nama</th>
+                        <th>Spesialis</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($barbers as $barber)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>
+                            @if($barber->photo_path)
+                            <img src="{{ asset('storage/' . $barber->photo_path) }}" width="50" height="50"
+                                class="rounded-circle object-fit-cover">
+                            @else
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($barber->name) }}&background=random"
+                                width="50" height="50" class="rounded-circle">
+                            @endif
+                        </td>
+                        <td class="fw-bold">{{ $barber->name }}</td>
+                        <td>{{ $barber->specialty ?? '-' }}</td>
+                        <td><span class="badge bg-success">Aktif</span></td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                {{-- TOMBOL EDIT (Memicu Modal Edit Unik) --}}
+                                <button type="button" class="btn btn-warning btn-sm fw-bold" data-bs-toggle="modal"
+                                    data-bs-target="#modalEditBarber{{ $barber->id }}">
+                                    Edit
+                                </button>
 
-                        {{-- Tombol Hapus --}}
-                        <form action="{{ route('admin.barbers.destroy', $barber->id) }}" method="POST" class="d-inline"
-                            onsubmit="return confirm('Yakin ingin menghapus barber ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger btn-sm">Hapus</button>
-                        </form>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="6" class="text-muted py-4 text-center">Belum ada data barberman.</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
+                                {{-- FORM HAPUS --}}
+                                <form action="{{ route('admin.barbers.destroy', $barber->id) }}" method="POST"
+                                    onsubmit="return confirm('Yakin hapus barber ini?')">
+                                    @csrf @method('DELETE')
+                                    <button class="btn btn-danger btn-sm">Hapus</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+
+                    {{-- MODAL EDIT BARBER (Looping di dalam agar ID unik) --}}
+                    <div class="modal fade" id="modalEditBarber{{ $barber->id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title fw-bold">Edit Barber</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <form action="{{ route('admin.barbers.update', $barber->id) }}" method="POST"
+                                    enctype="multipart/form-data">
+                                    @csrf @method('PUT')
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Nama</label>
+                                            <input type="text" name="name" class="form-control"
+                                                value="{{ $barber->name }}" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Spesialisasi</label>
+                                            <input type="text" name="specialty" class="form-control"
+                                                value="{{ $barber->specialty }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Bio</label>
+                                            <textarea name="bio" class="form-control"
+                                                rows="3">{{ $barber->bio }}</textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Ganti Foto</label>
+                                            <input type="file" name="photo" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Batal</button>
+                                        <button type="submit" class="btn btn-success fw-bold">Simpan</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-muted">Belum ada data barber.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{{-- MODAL TAMBAH BARBER --}}
+<div class="modal fade" id="modalTambahBarber" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">Tambah Barber Baru</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ route('admin.barbers.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nama</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Spesialisasi</label>
+                        <input type="text" name="specialty" class="form-control" placeholder="Contoh: Hair Tattoo">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Bio</label>
+                        <textarea name="bio" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Foto</label>
+                        <input type="file" name="photo" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary fw-bold">Simpan</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 @endsection

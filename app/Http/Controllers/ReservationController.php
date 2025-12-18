@@ -8,14 +8,15 @@ use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
-    // FORM USER (Tampilkan Form)
+    // USER: FORM BOOKING
     public function create()
     {
-        $services = Service::all(); // Ambil layanan buat dropdown
+        $services = Service::all();
+        // View User Frontend
         return view('reservasi', compact('services'));
     }
 
-    // PROSES USER (Kirim Data)
+    // USER: KIRIM DATA
     public function store(Request $request)
     {
         $request->validate([
@@ -26,7 +27,6 @@ class ReservationController extends Controller
             'service_id' => 'required',
         ]);
 
-        // Cari nama layanan berdasarkan ID
         $service = Service::find($request->service_id);
 
         Reservation::create([
@@ -34,30 +34,30 @@ class ReservationController extends Controller
             'phone' => $request->phone,
             'date' => $request->date,
             'time' => $request->time,
-            'service_name' => $service->name, // Simpan namanya saja
+            'service_name' => $service->name,
             'notes' => $request->notes,
             'status' => 'pending'
         ]);
 
-        return redirect()->back()->with('success', 'Reservasi berhasil dikirim! Tunggu konfirmasi admin.');
+        return redirect()->back()->with('success', 'Reservasi berhasil dikirim!');
     }
 
-    // ADMIN: LIHAT DAFTAR
+    // ADMIN: LIHAT DATA
     public function index()
     {
         $reservations = Reservation::latest()->get();
-        return view('admin.reservations.index', compact('reservations'));
+        // PERBAIKAN: Langsung ke file 'admin/reservations.blade.php'
+        return view('admin.reservations', compact('reservations'));
     }
 
-    // ADMIN: UPDATE STATUS (Pending -> Done)
+    // ADMIN: GANTI STATUS
     public function updateStatus($id)
     {
         $reservation = Reservation::findOrFail($id);
-        // Toggle status (kalau pending jadi done, kalau done jadi pending)
         $reservation->status = $reservation->status == 'pending' ? 'done' : 'pending';
         $reservation->save();
 
-        return redirect()->back()->with('success', 'Status reservasi diperbarui.');
+        return redirect()->back()->with('success', 'Status diperbarui.');
     }
 
     // ADMIN: HAPUS

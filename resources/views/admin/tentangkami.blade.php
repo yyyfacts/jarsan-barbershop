@@ -1,11 +1,10 @@
 @extends('layouts.admin')
 
 @section('content')
-<h3 class="fw-bold mb-4">Edit Tentang Kami</h3>
+<h3 class="fw-bold mb-4">Edit Halaman Tentang Kami</h3>
 
 <form action="{{ route('admin.about.update') }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    @method('PUT')
+    @csrf @method('PUT')
 
     <div class="row g-4">
         <div class="col-md-6">

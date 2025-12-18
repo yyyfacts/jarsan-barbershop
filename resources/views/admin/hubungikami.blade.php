@@ -5,14 +5,14 @@
 
 <div class="card border-0 shadow-sm">
     <div class="card-body p-0">
-        <table class="table table-striped mb-0">
-            <thead>
+        <table class="table table-striped mb-0 align-middle">
+            <thead class="table-dark">
                 <tr>
                     <th>No</th>
                     <th>Nama</th>
                     <th>Email</th>
                     <th>Pesan</th>
-                    <th>Dikirim</th>
+                    <th>Waktu</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -20,9 +20,9 @@
                 @forelse($contacts as $contact)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $contact->name }}</td>
+                    <td class="fw-bold">{{ $contact->name }}</td>
                     <td>{{ $contact->email }}</td>
-                    <td class="text-start">{{ Str::limit($contact->message, 50) }}</td>
+                    <td class="text-start">{{ Str::limit($contact->message, 60) }}</td>
                     <td>{{ $contact->created_at->format('d M Y, H:i') }}</td>
                     <td>
                         <form action="{{ route('admin.contacts.destroy', $contact->id) }}" method="POST"
@@ -34,7 +34,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="6" class="text-muted py-4">Tidak ada pesan masuk.</td>
+                    <td colspan="6" class="text-center py-4 text-muted">Tidak ada pesan masuk.</td>
                 </tr>
                 @endforelse
             </tbody>

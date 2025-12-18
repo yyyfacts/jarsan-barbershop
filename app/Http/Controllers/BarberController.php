@@ -12,13 +12,9 @@ class BarberController extends Controller
     public function index()
     {
         $barbers = Barber::all();
+        
+        // PERBAIKAN: Langsung tembak nama filenya 'barberman'
         return view('admin.barberman', compact('barbers'));
-    }
-
-    // ADMIN: FORM TAMBAH
-    public function create()
-    {
-        return view('admin.barbers.create');
     }
 
     // ADMIN: SIMPAN BARU
@@ -36,14 +32,9 @@ class BarberController extends Controller
         }
 
         Barber::create($data);
-        return redirect()->route('admin.barberman')->with('success', 'Barber berhasil ditambahkan');
-    }
-
-    // ADMIN: FORM EDIT
-    public function edit($id)
-    {
-        $barber = Barber::findOrFail($id);
-        return view('admin.barbers.edit', compact('barber'));
+        
+        // Redirect kembali ke index
+        return redirect()->route('admin.barbers.index')->with('success', 'Barber berhasil ditambahkan');
     }
 
     // ADMIN: UPDATE
@@ -63,7 +54,8 @@ class BarberController extends Controller
         }
 
         $barber->update($data);
-        return redirect()->route('admin.barberman')->with('success', 'Data diperbarui');
+        
+        return redirect()->route('admin.barbers.index')->with('success', 'Data diperbarui');
     }
 
     // ADMIN: HAPUS
@@ -72,6 +64,7 @@ class BarberController extends Controller
         $barber = Barber::findOrFail($id);
         if ($barber->photo_path) Storage::disk('public')->delete($barber->photo_path);
         $barber->delete();
+        
         return redirect()->back()->with('success', 'Barber dihapus');
     }
 }
