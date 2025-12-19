@@ -1,39 +1,23 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="id">
 
-@section('title', 'Dashboard Saya')
+<head>
+    <title>Dashboard User</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
 
-@section('content')
-<div class="container py-5">
-    <div class="row align-items-center mb-5">
-        <div class="col-md-8">
-            <h5 class="text-muted">Selamat Datang,</h5>
-            <h2 class="fw-bold display-5">{{ Auth::user()->name }} 👋</h2>
-            <p class="text-muted">Kelola jadwal potong rambutmu di sini.</p>
-        </div>
-        <div class="col-md-4 text-md-end">
-            <a href="{{ route('reservasi') }}" class="btn btn-dark rounded-pill px-4 py-3 fw-bold shadow">
-                + Buat Reservasi Baru
-            </a>
-        </div>
+<body>
+    <div class="container mt-5">
+        <h1>Selamat Datang, {{ auth()->user()->name }}!</h1>
+        <p>Anda berhasil login sebagai User Biasa.</p>
+
+        <a href="{{ route('reservasi') }}" class="btn btn-primary">Booking Sekarang</a>
+
+        <form action="{{ route('logout') }}" method="POST" class="mt-3">
+            @csrf
+            <button class="btn btn-danger">Logout</button>
+        </form>
     </div>
+</body>
 
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-4 bg-primary text-white h-100">
-                <div class="card-body p-4">
-                    <h2 class="fw-bold">0</h2>
-                    <small>Total Booking</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-8">
-            <div class="card border-0 shadow-sm rounded-4 h-100">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold mb-3">Riwayat Terakhir</h5>
-                    <p class="text-muted small">Belum ada riwayat reservasi.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
+</html>
