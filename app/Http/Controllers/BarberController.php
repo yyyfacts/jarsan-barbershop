@@ -7,30 +7,32 @@ use Illuminate\Http\Request;
 
 class BarberController extends Controller
 {
-    // USER: LIHAT DAFTAR BARBER (FRONTEND)
+    // === BAGIAN ADMIN (BACKEND) ===
+    
+    // 1. ADMIN: LIST BARBER
     public function index()
     {
-        $barbers = Barber::where('is_active', 1)->get();
-        return view('barberman', compact('barbers')); 
+        // Ambil semua data barber
+        $barbers = Barber::all();
+        
+        // PERBAIKAN DISINI: 
+        // Arahkan ke folder 'admin', file 'barberman.blade.php'
+        return view('admin.barberman', compact('barbers'));
     }
 
-    // ADMIN: LIST BARBER
-    // (Jika kamu punya method index admin terpisah, sesuaikan saja)
-    
-    // ADMIN: SIMPAN BARU
+    // 2. ADMIN: SIMPAN BARU
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required',
             'specialty' => 'nullable',
             'bio' => 'nullable',
-            // Validasi gambar max 1MB (biar database ga berat)
-            'photo' => 'nullable|image|max:1024' 
+            'photo' => 'nullable|image|max:1024' // Validasi gambar max 1MB
         ]);
 
         $photoBase64 = null;
         if ($request->hasFile('photo')) {
-            // MAGIC NYA DISINI: Ubah file jadi teks kode
+            // Ubah gambar jadi teks kode (Base64) agar bisa disimpan di database
             $path = $request->file('photo')->getRealPath();
             $image = file_get_contents($path);
             $base64 = base64_encode($image);
@@ -41,14 +43,14 @@ class BarberController extends Controller
             'name' => $request->name,
             'specialty' => $request->specialty,
             'bio' => $request->bio,
-            'photo_path' => $photoBase64, // Simpan teks panjang ini ke DB
+            'photo_path' => $photoBase64, // Simpan kodenya ke DB
             'is_active' => 1
         ]);
 
         return redirect()->back()->with('success', 'Barber berhasil ditambahkan');
     }
 
-    // ADMIN: UPDATE
+    // 3. ADMIN: UPDATE
     public function update(Request $request, $id)
     {
         $barber = Barber::findOrFail($id);
@@ -67,7 +69,7 @@ class BarberController extends Controller
         ];
 
         if ($request->hasFile('photo')) {
-            // MAGIC UPDATE: Ubah foto baru jadi teks
+            // Ubah foto baru jadi teks Base64
             $path = $request->file('photo')->getRealPath();
             $image = file_get_contents($path);
             $base64 = base64_encode($image);
@@ -79,10 +81,9 @@ class BarberController extends Controller
         return redirect()->back()->with('success', 'Data diperbarui');
     }
 
-    // ADMIN: HAPUS
+    // 4. ADMIN: HAPUS
     public function destroy($id)
     {
-        // Gak perlu hapus file di storage, cukup hapus baris di DB
         $barber = Barber::findOrFail($id);
         $barber->delete();
 
