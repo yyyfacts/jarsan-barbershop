@@ -2,68 +2,74 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Reservation;
 use App\Models\Service;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
-    // USER: FORM BOOKING
+    // 1. TAMPILKAN FORM RESERVASI
     public function create()
     {
-        $services = Service::all();
-        // View User Frontend
-        return view('reservasi', compact('services'));
+        // Ambil semua layanan yang aktif untuk ditampilkan di dropdown
+        $services = Service::where('is_active', 1)->get();
+        return view('user.reservasi', compact('services'));
     }
 
-    // USER: KIRIM DATA
+    // 2. TAMPILKAN DAFTAR RESERVASI (ADMIN)
+    public function index()
+    {
+        // Ambil data reservasi urutkan dari yang terbaru
+        $reservations = Reservation::with('service')->latest()->get();
+        return view('admin.reservations.index', compact('reservations'));
+    }
+
+    // 3. PROSES SIMPAN RESERVASI (USER)
     public function store(Request $request)
     {
+        // Validasi input
         $request->validate([
-            'name' => 'required',
-            'phone' => 'required',
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
             'date' => 'required|date',
             'time' => 'required',
-            'service_id' => 'required',
+            'service_id' => 'required|exists:services,id', // Pastikan ID layanan valid
+            'notes' => 'nullable|string',
         ]);
 
-        $service = Service::find($request->service_id);
-
+        // Simpan ke Database
         Reservation::create([
+            'user_id' => Auth::id(),        // Ambil ID user yang sedang login
             'name' => $request->name,
             'phone' => $request->phone,
             'date' => $request->date,
             'time' => $request->time,
-            'service_name' => $service->name,
+            'service_id' => $request->service_id, // PERBAIKAN: Gunakan service_id, bukan service_name
             'notes' => $request->notes,
-            'status' => 'pending'
+            'status' => 'Pending',          // Default status pending
         ]);
 
-        return redirect()->back()->with('success', 'Reservasi berhasil dikirim!');
+        return redirect()->route('dashboard')->with('success', 'Reservasi berhasil dibuat! Menunggu konfirmasi admin.');
     }
 
-    // ADMIN: LIHAT DATA
-    public function index()
-    {
-        $reservations = Reservation::latest()->get();
-        // PERBAIKAN: Langsung ke file 'admin/reservations.blade.php'
-        return view('admin.reservations', compact('reservations'));
-    }
-
-    // ADMIN: GANTI STATUS
-    public function updateStatus($id)
+    // 4. UPDATE STATUS RESERVASI (ADMIN)
+    public function updateStatus(Request $request, $id)
     {
         $reservation = Reservation::findOrFail($id);
-        $reservation->status = $reservation->status == 'pending' ? 'done' : 'pending';
-        $reservation->save();
+        $reservation->update([
+            'status' => $request->status
+        ]);
 
-        return redirect()->back()->with('success', 'Status diperbarui.');
+        return back()->with('success', 'Status reservasi diperbarui.');
     }
 
-    // ADMIN: HAPUS
+    // 5. HAPUS RESERVASI (ADMIN)
     public function destroy($id)
     {
-        Reservation::findOrFail($id)->delete();
-        return redirect()->back()->with('success', 'Data dihapus.');
+        $reservation = Reservation::findOrFail($id);
+        $reservation->delete();
+
+        return back()->with('success', 'Data reservasi dihapus.');
     }
 }
