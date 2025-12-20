@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth; // Tambahkan ini untuk Auth::user()
+use Illuminate\Support\Facades\Auth;
 
 // Import Semua Controller
 use App\Http\Controllers\AuthController;

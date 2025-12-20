@@ -9,12 +9,13 @@ class Service extends Model
 {
     use HasFactory;
 
-    // Izinkan kolom ini diisi
+    // PERBAIKAN: Ganti 'duration' menjadi 'duration_minutes'
     protected $fillable = [
         'name',
         'price',
-        'duration',
+        'duration_minutes', // INI YANG BENAR
         'description',
         'image_path',
+        'is_active'
     ];
 }

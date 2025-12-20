@@ -5,7 +5,6 @@
     <h3 class="fw-bold">Daftar Reservasi Pelanggan</h3>
 </div>
 
-{{-- ALERT SUKSES --}}
 @if(session('success'))
 <div class="alert alert-success alert-dismissible fade show" role="alert">
     {{ session('success') }}
@@ -21,7 +20,7 @@
                     <th>No</th>
                     <th>Nama</th>
                     <th>Telepon</th>
-                    <th>Layanan</th> {{-- Kolom Layanan --}}
+                    <th>Layanan</th>
                     <th>Jadwal</th>
                     <th>Status</th>
                     <th>Aksi</th>
@@ -33,8 +32,6 @@
                     <td class="text-center">{{ $loop->iteration }}</td>
                     <td>{{ $res->name }}</td>
                     <td>{{ $res->phone }}</td>
-
-                    {{-- PERBAIKAN DISINI: Panggil relasi service --}}
                     <td>
                         @if($res->service)
                         <span class="fw-bold">{{ $res->service->name }}</span>
@@ -42,13 +39,13 @@
                         <span class="text-danger small fst-italic">Layanan Dihapus</span>
                         @endif
                     </td>
-
                     <td class="text-center">
                         {{ \Carbon\Carbon::parse($res->date)->format('d M Y') }} <br>
                         <small class="text-muted">{{ $res->time }}</small>
                     </td>
                     <td class="text-center">
-                        @if($res->status == 'Pending' || $res->status == 'pending')
+                        {{-- Cek Status dengan strtolower agar tidak sensitif huruf besar/kecil --}}
+                        @if(strtolower($res->status) == 'pending')
                         <span class="badge bg-warning text-dark">Pending</span>
                         @else
                         <span class="badge bg-success">Done</span>
@@ -56,17 +53,24 @@
                     </td>
                     <td class="text-center">
                         <div class="d-flex justify-content-center gap-2">
-                            {{-- Ubah Status --}}
+
+                            {{-- FORM GANTI STATUS --}}
                             <form action="{{ route('admin.reservations.status', $res->id) }}" method="POST">
                                 @csrf @method('PUT')
+
+                                {{-- LOGIKA TOMBOL: Kirim status yang berlawanan --}}
                                 @if(strtolower($res->status) == 'pending')
+                                {{-- Jika Pending, tombolnya kirim 'done' --}}
+                                <input type="hidden" name="status" value="done">
                                 <button class="btn btn-sm btn-success" title="Tandai Selesai">✔ Done</button>
                                 @else
+                                {{-- Jika Done, tombolnya kirim 'pending' --}}
+                                <input type="hidden" name="status" value="pending">
                                 <button class="btn btn-sm btn-secondary" title="Kembalikan ke Pending">↺ Undo</button>
                                 @endif
                             </form>
 
-                            {{-- Hapus --}}
+                            {{-- FORM HAPUS --}}
                             <form action="{{ route('admin.reservations.destroy', $res->id) }}" method="POST"
                                 onsubmit="return confirm('Hapus reservasi ini?')">
                                 @csrf @method('DELETE')

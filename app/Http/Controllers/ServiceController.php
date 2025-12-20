@@ -8,29 +8,26 @@ use Illuminate\Support\Facades\Storage;
 
 class ServiceController extends Controller
 {
-    // === BAGIAN USER (FRONTEND) ===
+    // === USER ===
     public function index()
     {
-        $services = Service::all();
+        $services = Service::where('is_active', 1)->get();
         return view('pricelist', compact('services'));
     }
 
-    // === BAGIAN ADMIN (BACKEND) ===
-    
-    // 1. ADMIN: LIST LAYANAN
+    // === ADMIN ===
     public function adminIndex()
     {
         $services = Service::all();
         return view('admin.pricelist', compact('services'));
     }
 
-    // 2. ADMIN: SIMPAN BARU
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string',
             'price' => 'required|numeric',
-            'duration' => 'nullable|integer',
+            'duration' => 'nullable|integer', // Nama di form html
             'description' => 'nullable|string',
             'image' => 'nullable|image|max:2048'
         ]);
@@ -40,11 +37,11 @@ class ServiceController extends Controller
             $imagePath = $request->file('image')->store('services', 'public');
         }
 
-        // PERBAIKAN DISINI: Mapping 'duration' ke 'duration_minutes'
+        // SIMPAN KE DATABASE
         Service::create([
             'name' => $request->name,
             'price' => $request->price,
-            'duration_minutes' => $request->duration, // INI KUNCINYA
+            'duration_minutes' => $request->duration, // Mapping: input 'duration' -> kolom 'duration_minutes'
             'description' => $request->description,
             'image_path' => $imagePath,
             'is_active' => 1
@@ -53,7 +50,6 @@ class ServiceController extends Controller
         return redirect()->route('admin.services')->with('success', 'Layanan berhasil ditambahkan!');
     }
 
-    // 3. ADMIN: UPDATE
     public function update(Request $request, $id)
     {
         $service = Service::findOrFail($id);
@@ -85,7 +81,6 @@ class ServiceController extends Controller
         return redirect()->route('admin.services')->with('success', 'Layanan berhasil diperbarui!');
     }
 
-    // 4. ADMIN: HAPUS
     public function destroy($id)
     {
         $service = Service::findOrFail($id);
