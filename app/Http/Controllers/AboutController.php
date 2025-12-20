@@ -4,50 +4,58 @@ namespace App\Http\Controllers;
 
 use App\Models\About;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class AboutController extends Controller
 {
-    // USER LIHAT
+    // USER LIHAT (FRONTEND)
     public function index()
     {
         $about = About::first();
-        // View User Frontend
         return view('about', compact('about'));
     }
 
-    // ADMIN EDIT
+    // ADMIN EDIT (FORM)
     public function edit()
     {
+        // Ambil data pertama, atau buat objek baru jika kosong
         $about = About::first() ?? new About();
-        // PERBAIKAN: Langsung ke file 'admin/tentangkami.blade.php'
         return view('admin.tentangkami', compact('about'));
     }
 
-    // ADMIN UPDATE
+    // ADMIN UPDATE (SIMPAN)
     public function update(Request $request)
     {
-        $data = $request->validate([
+        $request->validate([
             'history' => 'nullable|string',
             'mission' => 'nullable|string',
-            'history_image' => 'nullable|image|max:2048',
-            'mission_image' => 'nullable|image|max:2048',
+            'history_image' => 'nullable|image|max:1024', // Max 1MB
+            'mission_image' => 'nullable|image|max:1024', // Max 1MB
         ]);
 
         $about = About::firstOrNew();
 
+        // 1. UPDATE DATA TEKS
+        $about->history = $request->history;
+        $about->mission = $request->mission;
+
+        // 2. PROSES GAMBAR SEJARAH (BASE64)
         if ($request->hasFile('history_image')) {
-            if ($about->history_image) Storage::disk('public')->delete($about->history_image);
-            $data['history_image'] = $request->file('history_image')->store('about', 'public');
+            $path = $request->file('history_image')->getRealPath();
+            $image = file_get_contents($path);
+            $base64 = base64_encode($image);
+            $about->history_image = 'data:image/' . $request->file('history_image')->extension() . ';base64,' . $base64;
         }
 
+        // 3. PROSES GAMBAR MISI (BASE64)
         if ($request->hasFile('mission_image')) {
-            if ($about->mission_image) Storage::disk('public')->delete($about->mission_image);
-            $data['mission_image'] = $request->file('mission_image')->store('about', 'public');
+            $path = $request->file('mission_image')->getRealPath();
+            $image = file_get_contents($path);
+            $base64 = base64_encode($image);
+            $about->mission_image = 'data:image/' . $request->file('mission_image')->extension() . ';base64,' . $base64;
         }
 
-        $about->fill($data)->save();
+        $about->save();
 
-        return redirect()->back()->with('success', 'Tentang Kami diperbarui!');
+        return redirect()->back()->with('success', 'Halaman Tentang Kami diperbarui!');
     }
 }

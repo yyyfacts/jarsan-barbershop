@@ -20,10 +20,15 @@
 </section>
 
 {{-- =========================
-   SEJARAH KAMI
+   SEJARAH KAMI (DINAMIS)
 ========================= --}}
+@php
+// Logika Background: Jika ada di DB pakai DB, jika tidak pakai Default
+$bgHistory = $about->history_image ?? asset('images/banner.webp');
+@endphp
+
 <section class="position-relative text-white d-flex align-items-center"
-    style="background: url('{{ asset('images/banner.webp') }}') center/cover no-repeat; min-height: 70vh;">
+    style="background: url('{{ $bgHistory }}') center/cover no-repeat; min-height: 70vh;">
 
     <div class="overlay position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.8);"></div>
 
@@ -32,9 +37,8 @@
             <div class="col-lg-8">
                 <h2 class="fw-bold text-warning mb-4">Sejarah Kami</h2>
                 <p class="lead text-light fs-5 lh-lg">
-                    Jarsan Barbershop berawal dari satu kursi dan sebuah cermin kecil di sudut kota.
-                    Dengan visi untuk menghadirkan pengalaman potong rambut yang nyaman, presisi, dan modern,
-                    kami tumbuh menjadi barbershop pilihan utama bagi pria yang ingin tampil rapi dan percaya diri.
+                    {{-- KONTEN DINAMIS --}}
+                    {{ $about->history ?? 'Sejarah belum ditambahkan oleh admin.' }}
                 </p>
             </div>
         </div>
@@ -42,10 +46,14 @@
 </section>
 
 {{-- =========================
-   MISI KAMI
+   MISI KAMI (DINAMIS)
 ========================= --}}
+@php
+$bgMission = $about->mission_image ?? asset('images/banner-login.webp');
+@endphp
+
 <section class="position-relative text-white d-flex align-items-center"
-    style="background: url('{{ asset('images/banner-login.webp') }}') center/cover no-repeat; min-height: 60vh;">
+    style="background: url('{{ $bgMission }}') center/cover no-repeat; min-height: 60vh;">
 
     <div class="overlay position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.8);"></div>
 
@@ -54,10 +62,8 @@
             <div class="col-lg-8">
                 <h2 class="fw-bold text-warning mb-4">Misi Kami</h2>
                 <p class="lead text-light fs-5 lh-lg">
-                    Kami percaya bahwa setiap potongan rambut mencerminkan kepribadian seseorang.
-                    Dengan dedikasi tinggi dan keterampilan para barber profesional, kami berkomitmen memberikan
-                    layanan personal yang membuat setiap pelanggan merasa istimewa, tampil maksimal, nyaman,
-                    dan percaya diri setiap saat.
+                    {{-- KONTEN DINAMIS --}}
+                    {{ $about->mission ?? 'Misi belum ditambahkan oleh admin.' }}
                 </p>
             </div>
         </div>
@@ -65,7 +71,7 @@
 </section>
 
 {{-- =========================
-   KENAPA PILIH KAMI
+   KENAPA PILIH KAMI (STATIC)
 ========================= --}}
 <section class="py-5 position-relative bg-dark">
     <div class="container position-relative z-2 text-center text-light">
@@ -105,29 +111,6 @@
 </section>
 
 {{-- =========================
-   SUASANA BARBERSHOP
-========================= --}}
-<section class="py-5 position-relative bg-black">
-    <div class="container position-relative z-2 text-center text-light">
-        <h2 class="fw-bold mb-4 text-uppercase text-white">Suasana Barbershop</h2>
-        <div class="row g-3">
-            <div class="col-md-4">
-                <img src="{{ asset('images/banner-login.webp') }}" class="img-fluid rounded shadow-lg hover-scale"
-                    alt="Barbershop 1">
-            </div>
-            <div class="col-md-4">
-                <img src="{{ asset('images/banner.webp') }}" class="img-fluid rounded shadow-lg hover-scale"
-                    alt="Barbershop 2">
-            </div>
-            <div class="col-md-4">
-                <img src="{{ asset('images/banner-login.webp') }}" class="img-fluid rounded shadow-lg hover-scale"
-                    alt="Barbershop 3">
-            </div>
-        </div>
-    </div>
-</section>
-
-{{-- =========================
    CTA SECTION
 ========================= --}}
 <section class="py-5 bg-warning text-center text-dark">
@@ -159,14 +142,6 @@
 
 .overlay {
     background: rgba(0, 0, 0, 0.6);
-}
-
-.hover-scale {
-    transition: transform 0.3s ease;
-}
-
-.hover-scale:hover {
-    transform: scale(1.03);
 }
 </style>
 @endpush
