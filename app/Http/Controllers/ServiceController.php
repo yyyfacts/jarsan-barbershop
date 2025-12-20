@@ -11,7 +11,6 @@ class ServiceController extends Controller
     // === BAGIAN USER (FRONTEND) ===
     public function index()
     {
-        // Ini view buat Pengunjung (bukan admin)
         $services = Service::all();
         return view('pricelist', compact('services'));
     }
@@ -22,14 +21,13 @@ class ServiceController extends Controller
     public function adminIndex()
     {
         $services = Service::all();
-        // PERBAIKAN: Langsung ke file 'admin/pricelist.blade.php'
         return view('admin.pricelist', compact('services'));
     }
 
     // 2. ADMIN: SIMPAN BARU
     public function store(Request $request)
     {
-        $data = $request->validate([
+        $request->validate([
             'name' => 'required|string',
             'price' => 'required|numeric',
             'duration' => 'nullable|integer',
@@ -37,13 +35,21 @@ class ServiceController extends Controller
             'image' => 'nullable|image|max:2048'
         ]);
 
+        $imagePath = null;
         if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('services', 'public');
+            $imagePath = $request->file('image')->store('services', 'public');
         }
 
-        Service::create($data);
+        // PERBAIKAN DISINI: Mapping 'duration' ke 'duration_minutes'
+        Service::create([
+            'name' => $request->name,
+            'price' => $request->price,
+            'duration_minutes' => $request->duration, // INI KUNCINYA
+            'description' => $request->description,
+            'image_path' => $imagePath,
+            'is_active' => 1
+        ]);
 
-        // Redirect balik ke list admin
         return redirect()->route('admin.services')->with('success', 'Layanan berhasil ditambahkan!');
     }
 
@@ -52,7 +58,7 @@ class ServiceController extends Controller
     {
         $service = Service::findOrFail($id);
         
-        $data = $request->validate([
+        $request->validate([
             'name' => 'required|string',
             'price' => 'required|numeric',
             'duration' => 'nullable|integer',
@@ -60,14 +66,21 @@ class ServiceController extends Controller
             'image' => 'nullable|image|max:2048'
         ]);
 
+        $updateData = [
+            'name' => $request->name,
+            'price' => $request->price,
+            'duration_minutes' => $request->duration, // UPDATE JUGA DISINI
+            'description' => $request->description,
+        ];
+
         if ($request->hasFile('image')) {
             if ($service->image_path) {
                 Storage::disk('public')->delete($service->image_path);
             }
-            $data['image_path'] = $request->file('image')->store('services', 'public');
+            $updateData['image_path'] = $request->file('image')->store('services', 'public');
         }
 
-        $service->update($data);
+        $service->update($updateData);
 
         return redirect()->route('admin.services')->with('success', 'Layanan berhasil diperbarui!');
     }

@@ -9,17 +9,14 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    // Izinkan semua kolom diisi (mass assignment)
     protected $guarded = ['id'];
 
-    // PERBAIKAN 2: Tambahkan Relasi ke Service
-    // Agar perintah Reservation::with('service') di controller bisa jalan
+    // PERBAIKAN: Fungsi ini WAJIB ada agar tidak error "Relation Not Found"
     public function service()
     {
-        return $this->belongsTo(Service::class);
+        return $this->belongsTo(Service::class, 'service_id');
     }
 
-    // Relasi ke User (Opsional, buat jaga-jaga)
     public function user()
     {
         return $this->belongsTo(User::class);
