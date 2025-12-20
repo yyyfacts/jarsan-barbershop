@@ -2,33 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Reservation;
 use App\Models\Service;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; // Tambahkan ini untuk ambil ID User
 
 class ReservationController extends Controller
 {
-    // 1. TAMPILKAN FORM RESERVASI
+    // USER: FORM BOOKING
     public function create()
     {
-        // Ambil semua layanan yang aktif untuk ditampilkan di dropdown
+        // Ambil data service yang aktif saja
         $services = Service::where('is_active', 1)->get();
-        return view('user.reservasi', compact('services'));
+        
+        // Pastikan nama view sesuai dengan file blade kamu (user.reservasi atau reservasi)
+        // Berdasarkan kode blade kamu di atas, sepertinya file view-nya ada di root views
+        return view('user.reservasi', compact('services')); 
     }
 
-    // 2. TAMPILKAN DAFTAR RESERVASI (ADMIN)
-    public function index()
-    {
-        // Ambil data reservasi urutkan dari yang terbaru
-        $reservations = Reservation::with('service')->latest()->get();
-        return view('admin.reservations.index', compact('reservations'));
-    }
-
-    // 3. PROSES SIMPAN RESERVASI (USER)
+    // USER: KIRIM DATA
     public function store(Request $request)
     {
-        // Validasi input
         $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
@@ -40,36 +34,50 @@ class ReservationController extends Controller
 
         // Simpan ke Database
         Reservation::create([
-            'user_id' => Auth::id(),        // Ambil ID user yang sedang login
+            'user_id' => Auth::id(),        // Simpan ID user yang sedang login
             'name' => $request->name,
             'phone' => $request->phone,
             'date' => $request->date,
             'time' => $request->time,
-            'service_id' => $request->service_id, // PERBAIKAN: Gunakan service_id, bukan service_name
+            'service_id' => $request->service_id, // PERBAIKAN UTAMA: Pakai service_id, BUKAN service_name
             'notes' => $request->notes,
-            'status' => 'Pending',          // Default status pending
+            'status' => 'Pending'           // Default status huruf besar awal biar rapi
         ]);
 
-        return redirect()->route('dashboard')->with('success', 'Reservasi berhasil dibuat! Menunggu konfirmasi admin.');
+        return redirect()->back()->with('success', 'Reservasi berhasil dikirim! Menunggu konfirmasi admin.');
     }
 
-    // 4. UPDATE STATUS RESERVASI (ADMIN)
+    // ADMIN: LIHAT DATA
+    public function index()
+    {
+        // Menggunakan with('service') agar nama layanan bisa muncul di tabel admin
+        $reservations = Reservation::with('service')->latest()->get();
+        return view('admin.reservations.index', compact('reservations'));
+    }
+
+    // ADMIN: GANTI STATUS
     public function updateStatus(Request $request, $id)
     {
         $reservation = Reservation::findOrFail($id);
-        $reservation->update([
-            'status' => $request->status
-        ]);
+        
+        // Update status sesuai input dari tombol/form di admin
+        // Jika request status kosong, lakukan toggle sederhana
+        if ($request->has('status')) {
+            $reservation->update(['status' => $request->status]);
+        } else {
+            $reservation->status = $reservation->status == 'pending' ? 'done' : 'pending';
+            $reservation->save();
+        }
 
-        return back()->with('success', 'Status reservasi diperbarui.');
+        return redirect()->back()->with('success', 'Status diperbarui.');
     }
 
-    // 5. HAPUS RESERVASI (ADMIN)
+    // ADMIN: HAPUS
     public function destroy($id)
     {
         $reservation = Reservation::findOrFail($id);
         $reservation->delete();
-
-        return back()->with('success', 'Data reservasi dihapus.');
+        
+        return redirect()->back()->with('success', 'Data reservasi dihapus.');
     }
 }
