@@ -2,15 +2,20 @@
 
 @section('content')
 <div class="container-fluid">
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show fw-bold" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    @endif
+
     <h3 class="fw-bold mb-4">Daftar Barberman</h3>
 
-    {{-- TOMBOL TAMBAH --}}
     <button type="button" class="btn btn-primary mb-3 fw-bold" data-bs-toggle="modal"
         data-bs-target="#modalTambahBarber">
         + Tambah Barber
     </button>
 
-    {{-- TABEL DATA --}}
     <div class="card border-0 shadow-sm">
         <div class="card-body p-0">
             <table class="table table-striped mb-0 align-middle">
@@ -29,11 +34,10 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>
-                            {{-- TAMPILKAN GAMBAR DARI LINK --}}
+                            {{-- TAMPILKAN BASE64 LANGSUNG --}}
                             @if($barber->photo_path)
                             <img src="{{ $barber->photo_path }}" width="50" height="50"
-                                class="rounded-circle object-fit-cover"
-                                onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($barber->name) }}'">
+                                class="rounded-circle object-fit-cover">
                             @else
                             <img src="https://ui-avatars.com/api/?name={{ urlencode($barber->name) }}&background=random"
                                 width="50" height="50" class="rounded-circle">
@@ -65,7 +69,9 @@
                                     <h5 class="modal-title fw-bold">Edit Barber</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
-                                <form action="{{ route('admin.barbers.update', $barber->id) }}" method="POST">
+                                {{-- WAJIB PAKAI ENCTYPE MULTIPART --}}
+                                <form action="{{ route('admin.barbers.update', $barber->id) }}" method="POST"
+                                    enctype="multipart/form-data">
                                     @csrf @method('PUT')
                                     <div class="modal-body">
                                         <div class="mb-3">
@@ -83,13 +89,9 @@
                                             <textarea name="bio" class="form-control"
                                                 rows="3">{{ $barber->bio }}</textarea>
                                         </div>
-                                        {{-- INPUT LINK GAMBAR (UBAH NAME & VALUE JADI PHOTO_PATH) --}}
                                         <div class="mb-3">
-                                            <label class="form-label fw-bold">Link Foto (URL)</label>
-                                            <input type="text" name="photo_path" class="form-control"
-                                                value="{{ $barber->photo_path }}" placeholder="https://...">
-                                            <small class="text-muted">Upload foto ke postimages.org lalu copy 'Direct
-                                                Link' kesini.</small>
+                                            <label class="form-label fw-bold">Ganti Foto (Max 1MB)</label>
+                                            <input type="file" name="photo" class="form-control" accept="image/*">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -120,7 +122,7 @@
                 <h5 class="modal-title fw-bold">Tambah Barber Baru</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('admin.barbers.store') }}" method="POST">
+            <form action="{{ route('admin.barbers.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -135,11 +137,9 @@
                         <label class="form-label fw-bold">Bio</label>
                         <textarea name="bio" class="form-control" rows="3"></textarea>
                     </div>
-                    {{-- INPUT LINK GAMBAR (UBAH NAME JADI PHOTO_PATH) --}}
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Link Foto (URL)</label>
-                        <input type="text" name="photo_path" class="form-control" placeholder="https://...">
-                        <small class="text-muted">Upload foto ke postimages.org lalu copy 'Direct Link' kesini.</small>
+                        <label class="form-label fw-bold">Upload Foto (Max 1MB)</label>
+                        <input type="file" name="photo" class="form-control" accept="image/*">
                     </div>
                 </div>
                 <div class="modal-footer">

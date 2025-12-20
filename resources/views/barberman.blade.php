@@ -15,14 +15,21 @@
 <section class="py-5 bg-light">
     <div class="container">
         <div class="row g-4 justify-content-center">
-            {{-- LOOOPING DATA BARBER DARI DATABASE --}}
             @forelse($barbers as $barber)
             <div class="col-lg-3 col-md-6">
                 <div class="card border-0 shadow-sm h-100 text-center p-3">
                     <div class="card-img-top overflow-hidden rounded-circle mx-auto mt-3"
                         style="width: 150px; height: 150px;">
-                        <img src="{{ $barber->photo_path ? asset('storage/' . $barber->photo_path) : asset('images/default-barber.jpg') }}"
-                            class="w-100 h-100 object-fit-cover" alt="{{ $barber->name }}">
+
+                        {{-- TAMPILKAN GAMBAR DARI BASE64 --}}
+                        @if($barber->photo_path)
+                        <img src="{{ $barber->photo_path }}" class="w-100 h-100 object-fit-cover"
+                            alt="{{ $barber->name }}">
+                        @else
+                        <img src="{{ asset('images/default-barber.jpg') }}" class="w-100 h-100 object-fit-cover"
+                            alt="Default">
+                        @endif
+
                     </div>
                     <div class="card-body">
                         <h5 class="fw-bold">{{ $barber->name }}</h5>
@@ -33,7 +40,6 @@
                 </div>
             </div>
             @empty
-            {{-- TAMPILAN JIKA BELUM ADA DATA DI DATABASE --}}
             <div class="col-12 text-center py-5">
                 <p class="text-muted fs-5">Belum ada data barberman yang ditambahkan.</p>
             </div>
