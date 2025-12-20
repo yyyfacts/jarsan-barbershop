@@ -35,18 +35,29 @@
                     <img src="https://via.placeholder.com/400x300?text=No+Image" alt="Default Image" class="card-img">
                     @endif
 
+                    {{-- Gradient Overlay (Agar teks judul terbaca jelas saat content di bawah) --}}
                     <div class="overlay-gradient"></div>
+
+                    {{-- KONTEN TEKS (JUDUL, DESKRIPSI, HARGA) --}}
                     <div class="content text-center">
-                        <h4 class="fw-bold text-uppercase text-dark">{{ $service->name }}</h4>
-                        <p class="small mb-2 text-secondary">
-                            {{ $service->description ?? 'Deskripsi belum tersedia.' }}
-                        </p>
-                        <p class="fw-semibold mb-1" style="color: #ffcc00;">
-                            Durasi: {{ $service->duration_minutes ?? '-' }} menit
-                        </p>
-                        <h5 class="fw-bold" style="color: #ffcc00;">
-                            Rp {{ number_format($service->price, 0, ',', '.') }}
-                        </h5>
+                        {{-- Ikon Garis Kecil (Pemanis) --}}
+                        <div class="slide-indicator mb-2"></div>
+
+                        <h4 class="fw-bold text-uppercase text-dark mb-3">{{ $service->name }}</h4>
+
+                        {{-- Bagian ini akan tersembunyi awalnya, dan muncul saat hover --}}
+                        <div class="details">
+                            <p class="small mb-2 text-secondary px-2">
+                                {{ $service->description ?? 'Deskripsi belum tersedia.' }}
+                            </p>
+                            <div class="my-3 border-top w-50 mx-auto"></div>
+                            <p class="fw-semibold mb-1 text-muted small">
+                                Durasi: <span class="text-dark">{{ $service->duration_minutes ?? '-' }} menit</span>
+                            </p>
+                            <h5 class="fw-bold text-warning mt-2 fs-4">
+                                Rp {{ number_format($service->price, 0, ',', '.') }}
+                            </h5>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -88,73 +99,87 @@
 
 /* --- SERVICE CARD --- */
 .service-card {
-    height: 340px;
+    height: 380px;
+    /* Sedikit dipertinggi agar proporsional */
     position: relative;
     overflow: hidden;
     border-radius: 18px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.4s ease, box-shadow 0.4s ease;
+    cursor: pointer;
 }
 
 .service-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
 }
 
+/* --- GAMBAR --- */
 .service-card .card-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
-    transition: transform 0.4s ease, filter 0.4s ease;
+    object-position: top center;
+    /* Fokus ke bagian atas gambar (wajah) */
+    transition: transform 0.6s ease;
 }
 
+/* Efek Zoom Gambar saat Hover */
 .service-card:hover .card-img {
-    transform: scale(1.05);
-    filter: brightness(1.05);
+    transform: scale(1.1);
 }
 
-/* --- OVERLAY --- */
+/* --- OVERLAY GRADIENT (Agar tulisan bawah terbaca) --- */
 .overlay-gradient {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 20%, rgba(0, 0, 0, 0.6) 100%);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 50%);
     z-index: 1;
+    pointer-events: none;
 }
 
-/* --- CONTENT --- */
+/* --- CONTENT BOX (ANIMASI UTAMA) --- */
 .content {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    padding: 20px 10px;
+    padding: 20px 15px;
     z-index: 2;
     background: rgba(255, 255, 255, 0.95);
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+
+    /* LOGIKA ANIMASI: */
+    /* Geser ke bawah sejauh 100% dikurangi tinggi judul (~70px) */
+    /* Jadi awalnya cuma Judul yang kelihatan di bawah */
+    transform: translateY(calc(100% - 75px));
+    transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.content h4 {
-    font-size: 1.1rem;
-    margin-bottom: 0.3rem;
+/* Saat Card di-Hover -> Content Geser ke Atas (Posisi 0) */
+.service-card:hover .content {
+    transform: translateY(0);
 }
 
-.content p {
-    font-size: 0.9rem;
-    line-height: 1.4;
-    margin-bottom: 0.3rem;
+/* Indikator Garis Kecil di atas Judul */
+.slide-indicator {
+    width: 40px;
+    height: 4px;
+    background-color: #ddd;
+    margin: 0 auto;
+    border-radius: 2px;
+}
+
+.service-card:hover .slide-indicator {
+    background-color: #ffc107;
+    /* Berubah kuning saat hover */
 }
 
 /* --- RESPONSIVE --- */
 @media (max-width: 992px) {
     .service-card {
-        height: 300px;
-    }
-}
-
-@media (max-width: 768px) {
-    .service-card {
-        height: 270px;
+        height: 320px;
     }
 }
 </style>
