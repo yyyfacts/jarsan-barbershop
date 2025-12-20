@@ -84,12 +84,25 @@
                     <img src="{{ asset('images/logo jarsan.png') }}" alt="Logo Jarsan">
                 </div>
             </div>
+
             <div class="col-md-6 form-section d-flex flex-column justify-content-center">
                 <h3 class="text-center mb-4 fw-bold">Selamat Datang</h3>
 
+                @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show small" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
+
                 @if($errors->any())
-                <div class="alert alert-danger small">
-                    @foreach($errors->all() as $error) <div>{{ $error }}</div> @endforeach
+                <div class="alert alert-danger alert-dismissible fade show small" role="alert">
+                    <ul class="mb-0 ps-3">
+                        @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 @endif
 
@@ -98,7 +111,7 @@
                     <div class="mb-3">
                         <label class="form-label">Email</label>
                         <input type="email" name="email" class="form-control p-2" placeholder="contoh@email.com"
-                            required>
+                            value="{{ old('email') }}" required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Kata Sandi</label>
@@ -118,6 +131,8 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
