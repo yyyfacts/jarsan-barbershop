@@ -2,6 +2,14 @@
 
 @section('content')
 <div class="container-fluid">
+    {{-- ALERT SUKSES --}}
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show fw-bold" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    @endif
+
     <h3 class="fw-bold mb-4">Daftar Layanan (Pricelist)</h3>
 
     {{-- TOMBOL TAMBAH --}}
@@ -18,7 +26,7 @@
                     <tr>
                         <th>No</th>
                         <th>Nama</th>
-                        <th>Durasi</th>
+                        <th>Durasi</th> {{-- PERBAIKAN TAMPILAN --}}
                         <th>Harga</th>
                         <th>Gambar</th>
                         <th>Aksi</th>
@@ -29,7 +37,10 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td class="fw-bold">{{ $service->name }}</td>
-                        <td>{{ $service->duration ?? '-' }} menit</td>
+
+                        {{-- PERBAIKAN 1: Panggil duration_minutes, BUKAN duration --}}
+                        <td>{{ $service->duration_minutes ?? 0 }} menit</td>
+
                         <td>Rp {{ number_format($service->price, 0, ',', '.') }}</td>
                         <td>
                             @if($service->image_path)
@@ -82,8 +93,9 @@
                                             </div>
                                             <div class="col-6 mb-3">
                                                 <label class="form-label fw-bold">Durasi (Menit)</label>
+                                                {{-- PERBAIKAN 2: Value Edit mengambil duration_minutes --}}
                                                 <input type="number" name="duration" class="form-control"
-                                                    value="{{ $service->duration }}">
+                                                    value="{{ $service->duration_minutes }}">
                                             </div>
                                         </div>
                                         <div class="mb-3">
