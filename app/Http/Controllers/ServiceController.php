@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Service;
 use Illuminate\Http\Request;
-// use Illuminate\Support\Facades\Storage; // Hapus ini karena tidak dipakai lagi
 
 class ServiceController extends Controller
 {
@@ -29,16 +28,26 @@ class ServiceController extends Controller
             'price' => 'required|numeric',
             'duration' => 'nullable|integer',
             'description' => 'nullable|string',
-            'image' => 'nullable|string' // Ganti validasi jadi string (URL)
+            // Wajib gambar, max 1MB biar database ga keberatan
+            'image' => 'nullable|image|max:1024' 
         ]);
 
-        // LANGSUNG SIMPAN URL (Tidak perlu logic upload file)
+        $imageBase64 = null;
+        if ($request->hasFile('image')) {
+            // UBAH GAMBAR JADI TEKS BASE64
+            $path = $request->file('image')->getRealPath();
+            $logo = file_get_contents($path);
+            $base64 = base64_encode($logo);
+            // Tambahkan header agar browser tahu ini gambar
+            $imageBase64 = 'data:image/' . $request->file('image')->extension() . ';base64,' . $base64;
+        }
+
         Service::create([
             'name' => $request->name,
             'price' => $request->price,
             'duration_minutes' => $request->duration,
             'description' => $request->description,
-            'image_path' => $request->image, // Simpan Link URL-nya
+            'image_path' => $imageBase64, // Simpan kodenya ke DB
             'is_active' => 1
         ]);
 
@@ -54,7 +63,7 @@ class ServiceController extends Controller
             'price' => 'required|numeric',
             'duration' => 'nullable|integer',
             'description' => 'nullable|string',
-            'image' => 'nullable|string' // Ganti jadi string
+            'image' => 'nullable|image|max:1024'
         ]);
 
         $updateData = [
@@ -64,9 +73,12 @@ class ServiceController extends Controller
             'description' => $request->description,
         ];
 
-        // Jika ada input link baru, update link-nya
-        if ($request->filled('image')) {
-            $updateData['image_path'] = $request->image;
+        if ($request->hasFile('image')) {
+            // UBAH GAMBAR JADI TEKS BASE64
+            $path = $request->file('image')->getRealPath();
+            $logo = file_get_contents($path);
+            $base64 = base64_encode($logo);
+            $updateData['image_path'] = 'data:image/' . $request->file('image')->extension() . ';base64,' . $base64;
         }
 
         $service->update($updateData);
@@ -76,10 +88,8 @@ class ServiceController extends Controller
 
     public function destroy($id)
     {
-        $service = Service::findOrFail($id);
-        // Hapus logika Storage::delete karena kita cuma simpan text URL
-        $service->delete();
-
+        // Tinggal hapus row saja, karena gambar nempel di database
+        Service::findOrFail($id)->delete();
         return redirect()->route('admin.services')->with('success', 'Layanan dihapus!');
     }
 }

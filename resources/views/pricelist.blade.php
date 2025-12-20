@@ -26,7 +26,8 @@
             @forelse ($services as $service)
             <div class="col-md-6 col-lg-6 col-xl-3">
                 <div class="service-card position-relative rounded-4 overflow-hidden shadow-lg bg-white">
-                    {{-- PERBAIKAN: Tampilkan Gambar dari URL --}}
+
+                    {{-- TAMPILKAN GAMBAR BASE64 --}}
                     @if ($service->image_path)
                     <img src="{{ $service->image_path }}" alt="{{ $service->name }}" class="card-img"
                         onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
@@ -129,7 +130,6 @@
     padding: 20px 10px;
     z-index: 2;
     background: rgba(255, 255, 255, 0.95);
-    /* Sedikit lebih solid agar teks terbaca */
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
 }
