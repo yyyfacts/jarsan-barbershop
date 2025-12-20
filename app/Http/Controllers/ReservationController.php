@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Reservation;
 use App\Models\Service;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // Tambahkan ini untuk ambil ID User
+use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
@@ -15,9 +15,9 @@ class ReservationController extends Controller
         // Ambil data service yang aktif saja
         $services = Service::where('is_active', 1)->get();
         
-        // Pastikan nama view sesuai dengan file blade kamu (user.reservasi atau reservasi)
-        // Berdasarkan kode blade kamu di atas, sepertinya file view-nya ada di root views
-        return view('user.reservasi', compact('services')); 
+        // PERBAIKAN DI SINI:
+        // Hapus 'user.' karena file view kamu ada di folder utama views
+        return view('reservasi', compact('services')); 
     }
 
     // USER: KIRIM DATA
@@ -28,20 +28,20 @@ class ReservationController extends Controller
             'phone' => 'required|string|max:20',
             'date' => 'required|date',
             'time' => 'required',
-            'service_id' => 'required|exists:services,id', // Pastikan ID layanan valid
+            'service_id' => 'required|exists:services,id', 
             'notes' => 'nullable|string',
         ]);
 
         // Simpan ke Database
         Reservation::create([
-            'user_id' => Auth::id(),        // Simpan ID user yang sedang login
+            'user_id' => Auth::id(),        
             'name' => $request->name,
             'phone' => $request->phone,
             'date' => $request->date,
             'time' => $request->time,
-            'service_id' => $request->service_id, // PERBAIKAN UTAMA: Pakai service_id, BUKAN service_name
+            'service_id' => $request->service_id, 
             'notes' => $request->notes,
-            'status' => 'Pending'           // Default status huruf besar awal biar rapi
+            'status' => 'Pending'           
         ]);
 
         return redirect()->back()->with('success', 'Reservasi berhasil dikirim! Menunggu konfirmasi admin.');
@@ -50,8 +50,10 @@ class ReservationController extends Controller
     // ADMIN: LIHAT DATA
     public function index()
     {
-        // Menggunakan with('service') agar nama layanan bisa muncul di tabel admin
         $reservations = Reservation::with('service')->latest()->get();
+        
+        // Pastikan view admin juga benar path-nya
+        // Jika file kamu ada di resources/views/admin/reservations.blade.php maka ini sudah benar
         return view('admin.reservations.index', compact('reservations'));
     }
 
@@ -60,8 +62,6 @@ class ReservationController extends Controller
     {
         $reservation = Reservation::findOrFail($id);
         
-        // Update status sesuai input dari tombol/form di admin
-        // Jika request status kosong, lakukan toggle sederhana
         if ($request->has('status')) {
             $reservation->update(['status' => $request->status]);
         } else {
