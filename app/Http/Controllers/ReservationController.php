@@ -9,18 +9,17 @@ use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
-    // USER: FORM BOOKING
+    // --- USER: FORM BOOKING ---
     public function create()
     {
-        // Ambil data service yang aktif saja
+        // Ambil layanan yang aktif
         $services = Service::where('is_active', 1)->get();
         
-        // PERBAIKAN DI SINI:
-        // Hapus 'user.' karena file view kamu ada di folder utama views
+        // PERBAIKAN 1: Hapus 'user.' jika file ada di resources/views/reservasi.blade.php
         return view('reservasi', compact('services')); 
     }
 
-    // USER: KIRIM DATA
+    // --- USER: KIRIM DATA ---
     public function store(Request $request)
     {
         $request->validate([
@@ -32,7 +31,6 @@ class ReservationController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        // Simpan ke Database
         Reservation::create([
             'user_id' => Auth::id(),        
             'name' => $request->name,
@@ -47,17 +45,18 @@ class ReservationController extends Controller
         return redirect()->back()->with('success', 'Reservasi berhasil dikirim! Menunggu konfirmasi admin.');
     }
 
-    // ADMIN: LIHAT DATA
+    // --- ADMIN: LIHAT DATA ---
     public function index()
     {
+        // Ini butuh relasi 'service' di Model Reservation (Lihat langkah 2 di bawah)
         $reservations = Reservation::with('service')->latest()->get();
         
-        // Pastikan view admin juga benar path-nya
-        // Jika file kamu ada di resources/views/admin/reservations.blade.php maka ini sudah benar
-        return view('admin.reservations.index', compact('reservations'));
+        // Pastikan Anda punya file: resources/views/admin/reservations.blade.php
+        // Jika error view not found lagi, coba ganti jadi: view('admin.reservations')
+        return view('admin.reservations', compact('reservations'));
     }
 
-    // ADMIN: GANTI STATUS
+    // --- ADMIN: GANTI STATUS ---
     public function updateStatus(Request $request, $id)
     {
         $reservation = Reservation::findOrFail($id);
@@ -65,6 +64,7 @@ class ReservationController extends Controller
         if ($request->has('status')) {
             $reservation->update(['status' => $request->status]);
         } else {
+            // Toggle manual jika tidak ada input status
             $reservation->status = $reservation->status == 'pending' ? 'done' : 'pending';
             $reservation->save();
         }
@@ -72,7 +72,7 @@ class ReservationController extends Controller
         return redirect()->back()->with('success', 'Status diperbarui.');
     }
 
-    // ADMIN: HAPUS
+    // --- ADMIN: HAPUS ---
     public function destroy($id)
     {
         $reservation = Reservation::findOrFail($id);
