@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Service;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+// use Illuminate\Support\Facades\Storage; // Hapus ini karena tidak dipakai lagi
 
 class ServiceController extends Controller
 {
@@ -27,23 +27,18 @@ class ServiceController extends Controller
         $request->validate([
             'name' => 'required|string',
             'price' => 'required|numeric',
-            'duration' => 'nullable|integer', // Nama di form html
+            'duration' => 'nullable|integer',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|max:2048'
+            'image' => 'nullable|string' // Ganti validasi jadi string (URL)
         ]);
 
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('services', 'public');
-        }
-
-        // SIMPAN KE DATABASE
+        // LANGSUNG SIMPAN URL (Tidak perlu logic upload file)
         Service::create([
             'name' => $request->name,
             'price' => $request->price,
-            'duration_minutes' => $request->duration, // Mapping: input 'duration' -> kolom 'duration_minutes'
+            'duration_minutes' => $request->duration,
             'description' => $request->description,
-            'image_path' => $imagePath,
+            'image_path' => $request->image, // Simpan Link URL-nya
             'is_active' => 1
         ]);
 
@@ -59,21 +54,19 @@ class ServiceController extends Controller
             'price' => 'required|numeric',
             'duration' => 'nullable|integer',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|max:2048'
+            'image' => 'nullable|string' // Ganti jadi string
         ]);
 
         $updateData = [
             'name' => $request->name,
             'price' => $request->price,
-            'duration_minutes' => $request->duration, // UPDATE JUGA DISINI
+            'duration_minutes' => $request->duration,
             'description' => $request->description,
         ];
 
-        if ($request->hasFile('image')) {
-            if ($service->image_path) {
-                Storage::disk('public')->delete($service->image_path);
-            }
-            $updateData['image_path'] = $request->file('image')->store('services', 'public');
+        // Jika ada input link baru, update link-nya
+        if ($request->filled('image')) {
+            $updateData['image_path'] = $request->image;
         }
 
         $service->update($updateData);
@@ -84,9 +77,7 @@ class ServiceController extends Controller
     public function destroy($id)
     {
         $service = Service::findOrFail($id);
-        if ($service->image_path) {
-            Storage::disk('public')->delete($service->image_path);
-        }
+        // Hapus logika Storage::delete karena kita cuma simpan text URL
         $service->delete();
 
         return redirect()->route('admin.services')->with('success', 'Layanan dihapus!');

@@ -26,12 +26,12 @@
             @forelse ($services as $service)
             <div class="col-md-6 col-lg-6 col-xl-3">
                 <div class="service-card position-relative rounded-4 overflow-hidden shadow-lg bg-white">
-                    {{-- Gambar --}}
+                    {{-- PERBAIKAN: Tampilkan Gambar dari URL --}}
                     @if ($service->image_path)
-                    <img src="{{ asset('storage/' . $service->image_path) }}" alt="{{ $service->name }}"
-                        class="card-img">
+                    <img src="{{ $service->image_path }}" alt="{{ $service->name }}" class="card-img"
+                        onerror="this.src='https://via.placeholder.com/400x300?text=No+Image'">
                     @else
-                    <img src="{{ asset('images/default-service.jpg') }}" alt="Default Image" class="card-img">
+                    <img src="https://via.placeholder.com/400x300?text=No+Image" alt="Default Image" class="card-img">
                     @endif
 
                     <div class="overlay-gradient"></div>
@@ -40,7 +40,7 @@
                         <p class="small mb-2 text-secondary">
                             {{ $service->description ?? 'Deskripsi belum tersedia.' }}
                         </p>
-                        <p class="fw-semibold mb-1" style="color: #ffcc00;;">
+                        <p class="fw-semibold mb-1" style="color: #ffcc00;">
                             Durasi: {{ $service->duration_minutes ?? '-' }} menit
                         </p>
                         <h5 class="fw-bold" style="color: #ffcc00;">
@@ -56,9 +56,7 @@
     </div>
 </section>
 
-{{--=========================
-   CTA SECTION
-========================= --}}
+{{-- CTA SECTION --}}
 <section class="py-5 bg-warning text-center text-dark">
     <div class="container">
         <h3 class="fw-bold mb-3">Ingin tampil lebih keren?</h3>
@@ -130,7 +128,8 @@
     width: 100%;
     padding: 20px 10px;
     z-index: 2;
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.95);
+    /* Sedikit lebih solid agar teks terbaca */
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
 }
@@ -144,30 +143,6 @@
     font-size: 0.9rem;
     line-height: 1.4;
     margin-bottom: 0.3rem;
-}
-
-/* --- CTA SECTION --- */
-section.bg-black {
-    background: linear-gradient(135deg, #222, #111);
-}
-
-section.bg-black h3 {
-    color: #ffc107;
-}
-
-section.bg-black p {
-    color: #ddd;
-}
-
-.btn-warning {
-    background-color: #ffc107;
-    border: none;
-    transition: all 0.3s ease;
-}
-
-.btn-warning:hover {
-    background-color: #ffca2c;
-    transform: scale(1.05);
 }
 
 /* --- RESPONSIVE --- */

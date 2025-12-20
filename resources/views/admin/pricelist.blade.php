@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container-fluid">
-    {{-- ALERT SUKSES --}}
     @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show fw-bold" role="alert">
         {{ session('success') }}
@@ -12,13 +11,11 @@
 
     <h3 class="fw-bold mb-4">Daftar Layanan (Pricelist)</h3>
 
-    {{-- TOMBOL TAMBAH --}}
     <button type="button" class="btn btn-primary mb-3 fw-bold" data-bs-toggle="modal"
         data-bs-target="#modalTambahService">
         + Tambah Layanan
     </button>
 
-    {{-- TABEL DATA --}}
     <div class="card border-0 shadow-sm">
         <div class="card-body p-0">
             <table class="table table-striped mb-0 align-middle">
@@ -26,7 +23,7 @@
                     <tr>
                         <th>No</th>
                         <th>Nama</th>
-                        <th>Durasi</th> {{-- PERBAIKAN TAMPILAN --}}
+                        <th>Durasi</th>
                         <th>Harga</th>
                         <th>Gambar</th>
                         <th>Aksi</th>
@@ -37,28 +34,23 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td class="fw-bold">{{ $service->name }}</td>
-
-                        {{-- PERBAIKAN 1: Panggil duration_minutes, BUKAN duration --}}
                         <td>{{ $service->duration_minutes ?? 0 }} menit</td>
-
                         <td>Rp {{ number_format($service->price, 0, ',', '.') }}</td>
                         <td>
                             @if($service->image_path)
-                            <img src="{{ asset('storage/' . $service->image_path) }}" width="50" height="50"
-                                class="rounded object-fit-cover">
+                            {{-- PERBAIKAN: Langsung panggil URL, jangan pakai asset/storage --}}
+                            <img src="{{ $service->image_path }}" width="50" height="50"
+                                class="rounded object-fit-cover" onerror="this.src='https://via.placeholder.com/50'">
                             @else
                             <span class="text-muted small">No Img</span>
                             @endif
                         </td>
                         <td>
                             <div class="d-flex gap-2">
-                                {{-- TOMBOL EDIT --}}
                                 <button type="button" class="btn btn-warning btn-sm fw-bold" data-bs-toggle="modal"
                                     data-bs-target="#modalEditService{{ $service->id }}">
                                     Edit
                                 </button>
-
-                                {{-- FORM HAPUS --}}
                                 <form action="{{ route('admin.services.destroy', $service->id) }}" method="POST"
                                     onsubmit="return confirm('Hapus layanan ini?')">
                                     @csrf @method('DELETE')
@@ -68,7 +60,7 @@
                         </td>
                     </tr>
 
-                    {{-- MODAL EDIT SERVICE --}}
+                    {{-- MODAL EDIT --}}
                     <div class="modal fade" id="modalEditService{{ $service->id }}" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -76,8 +68,7 @@
                                     <h5 class="modal-title fw-bold">Edit Layanan</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
-                                <form action="{{ route('admin.services.update', $service->id) }}" method="POST"
-                                    enctype="multipart/form-data">
+                                <form action="{{ route('admin.services.update', $service->id) }}" method="POST">
                                     @csrf @method('PUT')
                                     <div class="modal-body">
                                         <div class="mb-3">
@@ -93,7 +84,6 @@
                                             </div>
                                             <div class="col-6 mb-3">
                                                 <label class="form-label fw-bold">Durasi (Menit)</label>
-                                                {{-- PERBAIKAN 2: Value Edit mengambil duration_minutes --}}
                                                 <input type="number" name="duration" class="form-control"
                                                     value="{{ $service->duration_minutes }}">
                                             </div>
@@ -103,9 +93,14 @@
                                             <textarea name="description" class="form-control"
                                                 rows="3">{{ $service->description }}</textarea>
                                         </div>
+
+                                        {{-- INPUT LINK GAMBAR --}}
                                         <div class="mb-3">
-                                            <label class="form-label fw-bold">Ganti Gambar</label>
-                                            <input type="file" name="image" class="form-control">
+                                            <label class="form-label fw-bold">Link Gambar (URL)</label>
+                                            <input type="text" name="image" class="form-control"
+                                                value="{{ $service->image_path }}" placeholder="https://...">
+                                            <small class="text-muted">Copy link gambar dari internet dan paste
+                                                disini.</small>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -128,7 +123,7 @@
     </div>
 </div>
 
-{{-- MODAL TAMBAH SERVICE --}}
+{{-- MODAL TAMBAH --}}
 <div class="modal fade" id="modalTambahService" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -136,7 +131,7 @@
                 <h5 class="modal-title fw-bold">Tambah Layanan Baru</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('admin.services.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.services.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -157,9 +152,12 @@
                         <label class="form-label fw-bold">Deskripsi</label>
                         <textarea name="description" class="form-control" rows="3"></textarea>
                     </div>
+
+                    {{-- INPUT LINK GAMBAR --}}
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Gambar</label>
-                        <input type="file" name="image" class="form-control">
+                        <label class="form-label fw-bold">Link Gambar (URL)</label>
+                        <input type="text" name="image" class="form-control" placeholder="https://...">
+                        <small class="text-muted">Copy link gambar dari internet dan paste disini.</small>
                     </div>
                 </div>
                 <div class="modal-footer">
