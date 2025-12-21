@@ -72,6 +72,24 @@
         background-color: #333;
         color: white;
     }
+
+    /* Tombol Google */
+    .btn-google {
+        background-color: white;
+        border: 1px solid #ddd;
+        color: #333;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: 0.3s;
+    }
+
+    .btn-google:hover {
+        background-color: #f8f9fa;
+        border-color: #ccc;
+    }
     </style>
 </head>
 
@@ -80,7 +98,6 @@
         <div class="login-card row g-0">
             <div class="col-md-6 login-image d-none d-md-block">
                 <div class="login-logo">
-                    {{-- Ganti logo di sini --}}
                     <img src="{{ asset('images/logo jarsan.png') }}" alt="Logo Jarsan">
                 </div>
             </div>
@@ -91,10 +108,9 @@
                 @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show small" role="alert">
                     {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
                 @endif
-
                 @if($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show small" role="alert">
                     <ul class="mb-0 ps-3">
@@ -102,7 +118,7 @@
                         <li>{{ $error }}</li>
                         @endforeach
                     </ul>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
                 @endif
 
@@ -121,7 +137,20 @@
                         <input type="checkbox" class="form-check-input" id="remember" name="remember">
                         <label class="form-check-label small" for="remember">Ingat Saya</label>
                     </div>
-                    <button type="submit" class="btn btn-login w-100 py-2 fw-bold">Masuk</button>
+                    <button type="submit" class="btn btn-login w-100 py-2 fw-bold mb-3">Masuk</button>
+
+                    {{-- TOMBOL LOGIN GOOGLE --}}
+                    <div class="text-center position-relative mb-3">
+                        <hr class="text-muted">
+                        <span
+                            class="position-absolute top-50 start-50 translate-middle bg-white px-2 text-muted small">ATAU</span>
+                    </div>
+
+                    <a href="{{ route('google.login') }}"
+                        class="btn btn-google w-100 py-2 fw-semibold text-decoration-none">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" alt="Google">
+                        Masuk dengan Google
+                    </a>
 
                     <p class="text-center text-muted mt-4 small">
                         Belum punya akun? <a href="{{ route('register') }}"
@@ -131,7 +160,6 @@
             </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

@@ -39,6 +39,24 @@
         background-color: #333;
         color: white;
     }
+
+    /* Tombol Google */
+    .btn-google {
+        background-color: white;
+        border: 1px solid #ddd;
+        color: #333;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: 0.3s;
+    }
+
+    .btn-google:hover {
+        background-color: #f8f9fa;
+        border-color: #ccc;
+    }
     </style>
 </head>
 
@@ -68,7 +86,20 @@
                     <input type="password" name="password_confirmation" class="form-control p-2"
                         placeholder="Ulangi kata sandi" required>
                 </div>
-                <button type="submit" class="btn btn-register w-100 py-2 fw-bold">Daftar</button>
+                <button type="submit" class="btn btn-register w-100 py-2 fw-bold mb-3">Daftar</button>
+
+                {{-- TOMBOL GOOGLE --}}
+                <div class="text-center position-relative mb-3">
+                    <hr class="text-muted">
+                    <span
+                        class="position-absolute top-50 start-50 translate-middle bg-white px-2 text-muted small">ATAU</span>
+                </div>
+
+                <a href="{{ route('google.login') }}"
+                    class="btn btn-google w-100 py-2 fw-semibold text-decoration-none">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" alt="Google">
+                    Daftar dengan Google
+                </a>
 
                 <p class="text-center text-muted mt-3 small">
                     Sudah punya akun? <a href="{{ route('login') }}"
