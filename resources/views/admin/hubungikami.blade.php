@@ -11,8 +11,8 @@
                     <tr>
                         <th class="text-center">NO</th>
                         <th>SENDER</th>
-                        <th>MESSAGE CONTENT</th>
-                        <th>DATE RECEIVED</th>
+                        <th>MESSAGE</th>
+                        <th>DATE</th>
                         <th class="text-center">ACTION</th>
                     </tr>
                 </thead>
@@ -24,23 +24,21 @@
                             <div class="fw-bold text-white">{{ $contact->name }}</div>
                             <div class="small text-muted">{{ $contact->email }}</div>
                         </td>
-                        <td class="text-muted" style="min-width: 300px; white-space: normal;">
-                            {{ Str::limit($contact->message, 80) }}
+                        <td class="text-muted" style="min-width: 250px; white-space: normal;">
+                            {{ Str::limit($contact->message, 100) }}
                         </td>
-                        <td class="small text-muted">
-                            {{ $contact->created_at->format('d M Y, H:i') }}
-                        </td>
+                        <td class="small text-muted">{{ $contact->created_at->format('d M Y, H:i') }}</td>
                         <td class="text-center">
                             <form action="{{ route('admin.contacts.destroy', $contact->id) }}" method="POST"
-                                onsubmit="return confirm('Delete message?')">
+                                onsubmit="return confirm('Delete?')">
                                 @csrf @method('DELETE')
-                                <button class="btn btn-sm btn-outline-danger rounded-0">DELETE</button>
+                                <button class="btn btn-sm btn-outline-danger rounded-0">DEL</button>
                             </form>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="text-center py-5 text-muted">No messages in inbox.</td>
+                        <td colspan="5" class="text-center py-5 text-muted">No messages.</td>
                     </tr>
                     @endforelse
                 </tbody>

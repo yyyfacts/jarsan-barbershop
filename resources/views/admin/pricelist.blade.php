@@ -12,7 +12,7 @@
 @if(session('success'))
 <div class="alert alert-dark border-0 shadow-sm text-center mb-4"
     style="border-left: 4px solid var(--gold-accent) !important;">
-    <span style="color: var(--gold-accent);">{{ session('success') }}</span>
+    <span class="text-gold">{{ session('success') }}</span>
 </div>
 @endif
 

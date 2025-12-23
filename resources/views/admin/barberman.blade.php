@@ -12,7 +12,7 @@
 @if(session('success'))
 <div class="alert alert-dark border-0 shadow-sm text-center mb-4"
     style="border-left: 4px solid var(--gold-accent) !important;">
-    <span style="color: var(--gold-accent);">{{ session('success') }}</span>
+    <span class="text-gold">{{ session('success') }}</span>
 </div>
 @endif
 
@@ -60,8 +60,8 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Edit Barber</h5><button class="btn-close"
-                                        data-bs-dismiss="modal"></button>
+                                    <h5 class="modal-title">Edit Barber</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <form action="{{ route('admin.barbers.update', $barber->id) }}" method="POST"
                                     enctype="multipart/form-data">
@@ -80,8 +80,9 @@
                                         <div class="mb-3"><label class="form-label text-muted small">PHOTO</label><input
                                                 type="file" name="photo" class="form-control"></div>
                                     </div>
-                                    <div class="modal-footer border-0"><button type="submit"
-                                            class="btn btn-gold">Save</button></div>
+                                    <div class="modal-footer border-0">
+                                        <button type="submit" class="btn btn-gold">Save</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -101,7 +102,8 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Barber</h5><button class="btn-close" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title">Add Barber</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="{{ route('admin.barbers.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -115,7 +117,9 @@
                     <div class="mb-3"><label class="form-label text-muted small">PHOTO</label><input type="file"
                             name="photo" class="form-control"></div>
                 </div>
-                <div class="modal-footer border-0"><button type="submit" class="btn btn-gold">Create</button></div>
+                <div class="modal-footer border-0">
+                    <button type="submit" class="btn btn-gold">Create</button>
+                </div>
             </form>
         </div>
     </div>
