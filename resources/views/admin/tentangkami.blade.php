@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="mb-4">
-    <h3 class="fw-bold">Edit Halaman Tentang Kami</h3>
+<div class="mb-5">
+    <h3 class="fw-bold text-white">Edit "About Us" Content</h3>
 </div>
 
 @if(session('success'))
-<div class="alert alert-success alert-dismissible fade show fw-bold shadow-sm" role="alert">
-    {{ session('success') }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+<div class="alert alert-dark border-0 shadow-sm text-center mb-4" role="alert"
+    style="border-left: 4px solid var(--gold-accent) !important;">
+    <span style="color: var(--gold-accent);">{{ session('success') }}</span>
 </div>
 @endif
 
@@ -16,60 +16,65 @@
     @csrf @method('PUT')
 
     <div class="row g-4">
-        {{-- KOLOM SEJARAH --}}
-        <div class="col-12 col-md-6">
-            <div class="card p-4 border-0 shadow-sm h-100">
-                <div class="d-flex align-items-center mb-3 text-primary">
-                    <i class="bi bi-clock-history fs-4 me-2"></i>
-                    <h5 class="fw-bold m-0">Bagian Sejarah</h5>
+        {{-- HISTORY SECTION --}}
+        <div class="col-12 col-lg-6">
+            <div class="card h-100 p-4">
+                <div class="d-flex align-items-center mb-4 pb-2 border-bottom border-secondary">
+                    <h5 class="fw-bold m-0" style="color: var(--gold-accent);">01. HISTORY SECTION</h5>
                 </div>
 
-                <label class="form-label fw-bold">Konten Sejarah</label>
-                <textarea name="history" rows="8" class="form-control mb-3"
-                    placeholder="Tulis sejarah barbershop...">{{ $about->history ?? '' }}</textarea>
+                <div class="mb-3">
+                    <label class="form-label text-muted small">HISTORY TEXT</label>
+                    <textarea name="history" rows="8" class="form-control"
+                        placeholder="Write the barbershop history...">{{ $about->history ?? '' }}</textarea>
+                </div>
 
-                <label class="form-label fw-bold">Gambar Background Sejarah</label>
-                <input type="file" name="history_image" class="form-control mb-3" accept="image/*">
+                <div class="mb-3">
+                    <label class="form-label text-muted small">BACKGROUND IMAGE</label>
+                    <input type="file" name="history_image" class="form-control">
+                </div>
 
                 @if($about->history_image)
-                <div class="mt-2 p-2 border rounded">
-                    <small class="d-block text-muted mb-1">Gambar Saat Ini:</small>
-                    <img src="{{ $about->history_image }}" class="img-fluid rounded"
-                        style="max-height: 200px; width: 100%; object-fit: cover;">
+                <div class="mt-3">
+                    <small class="text-muted d-block mb-2">Current Image:</small>
+                    <img src="{{ $about->history_image }}" class="img-fluid rounded border border-secondary"
+                        style="height: 150px; width: 100%; object-fit: cover;">
                 </div>
                 @endif
             </div>
         </div>
 
-        {{-- KOLOM MISI --}}
-        <div class="col-12 col-md-6">
-            <div class="card p-4 border-0 shadow-sm h-100">
-                <div class="d-flex align-items-center mb-3 text-warning">
-                    <i class="bi bi-bullseye fs-4 me-2"></i>
-                    <h5 class="fw-bold m-0">Bagian Misi</h5>
+        {{-- MISSION SECTION --}}
+        <div class="col-12 col-lg-6">
+            <div class="card h-100 p-4">
+                <div class="d-flex align-items-center mb-4 pb-2 border-bottom border-secondary">
+                    <h5 class="fw-bold m-0" style="color: var(--gold-accent);">02. MISSION SECTION</h5>
                 </div>
 
-                <label class="form-label fw-bold">Konten Misi</label>
-                <textarea name="mission" rows="8" class="form-control mb-3"
-                    placeholder="Tulis misi barbershop...">{{ $about->mission ?? '' }}</textarea>
+                <div class="mb-3">
+                    <label class="form-label text-muted small">MISSION TEXT</label>
+                    <textarea name="mission" rows="8" class="form-control"
+                        placeholder="Write the mission statement...">{{ $about->mission ?? '' }}</textarea>
+                </div>
 
-                <label class="form-label fw-bold">Gambar Background Misi</label>
-                <input type="file" name="mission_image" class="form-control mb-3" accept="image/*">
+                <div class="mb-3">
+                    <label class="form-label text-muted small">BACKGROUND IMAGE</label>
+                    <input type="file" name="mission_image" class="form-control">
+                </div>
 
                 @if($about->mission_image)
-                <div class="mt-2 p-2 border rounded">
-                    <small class="d-block text-muted mb-1">Gambar Saat Ini:</small>
-                    <img src="{{ $about->mission_image }}" class="img-fluid rounded"
-                        style="max-height: 200px; width: 100%; object-fit: cover;">
+                <div class="mt-3">
+                    <small class="text-muted d-block mb-2">Current Image:</small>
+                    <img src="{{ $about->mission_image }}" class="img-fluid rounded border border-secondary"
+                        style="height: 150px; width: 100%; object-fit: cover;">
                 </div>
                 @endif
             </div>
         </div>
     </div>
 
-    <div class="mt-4 text-end">
-        <button type="submit" class="btn btn-success px-5 fw-bold btn-lg w-100 w-md-auto shadow-sm">Simpan
-            Perubahan</button>
+    <div class="mt-5 text-end">
+        <button type="submit" class="btn btn-gold btn-lg w-100 w-md-auto px-5 rounded-0 shadow">SAVE CHANGES</button>
     </div>
 </form>
 @endsection

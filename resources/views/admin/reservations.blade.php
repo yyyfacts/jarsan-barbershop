@@ -1,87 +1,82 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="mb-4 text-center text-md-start">
-    <h3 class="fw-bold">Daftar Reservasi Pelanggan</h3>
+<div class="mb-5">
+    <h3 class="fw-bold text-white">Client Reservations</h3>
 </div>
 
 @if(session('success'))
-<div class="alert alert-success alert-dismissible fade show fw-bold shadow-sm" role="alert">
-    {{ session('success') }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+<div class="alert alert-dark border-0 shadow-sm text-center mb-4" role="alert"
+    style="border-left: 4px solid var(--gold-accent) !important;">
+    <span style="color: var(--gold-accent);">{{ session('success') }}</span>
 </div>
 @endif
 
-<div class="card border-0 shadow-sm overflow-hidden">
+<div class="card border-0">
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-hover mb-0 align-middle">
-                <thead class="table-dark text-nowrap text-center">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
                     <tr>
-                        <th class="p-3">No</th>
-                        <th class="text-start">Nama & Kontak</th>
-                        <th>Layanan</th>
-                        <th>Jadwal</th>
-                        <th>Status</th>
-                        <th class="p-3">Aksi</th>
+                        <th class="text-center py-4">NO</th>
+                        <th class="py-4">CLIENT DETAILS</th>
+                        <th class="py-4">SERVICE</th>
+                        <th class="py-4">SCHEDULE</th>
+                        <th class="text-center py-4">STATUS</th>
+                        <th class="text-center py-4">ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($reservations as $res)
                     <tr>
-                        <td class="text-center">{{ $loop->iteration }}</td>
-                        <td class="text-start">
-                            <div class="fw-bold">{{ $res->name }}</div>
-                            <div class="small text-muted">{{ $res->phone }}</div>
+                        <td class="text-center text-muted">{{ $loop->iteration }}</td>
+                        <td>
+                            <div class="fw-bold text-white">{{ $res->name }}</div>
+                            <small class="text-muted" style="letter-spacing: 0.5px;">{{ $res->phone }}</small>
                         </td>
-                        <td class="text-center">
-                            @if($res->service)
-                            <span class="badge bg-light text-dark border">{{ $res->service->name }}</span>
-                            @else
-                            <span class="text-danger small fst-italic">Layanan Dihapus</span>
-                            @endif
+                        <td>
+                            <span class="text-white">{{ $res->service->name ?? 'Service Removed' }}</span>
                         </td>
-                        <td class="text-center text-nowrap">
-                            {{ \Carbon\Carbon::parse($res->date)->format('d M Y') }} <br>
-                            <small class="text-primary fw-bold">{{ $res->time }}</small>
+                        <td>
+                            <div style="color: var(--gold-accent); font-weight: 600;">
+                                {{ \Carbon\Carbon::parse($res->date)->format('d M Y') }}
+                            </div>
+                            <small class="text-muted">{{ $res->time }}</small>
                         </td>
                         <td class="text-center">
                             @if(strtolower($res->status) == 'pending')
-                            <span class="badge bg-warning text-dark rounded-pill px-3">Pending</span>
+                            <span
+                                class="badge bg-transparent border border-warning text-warning rounded-0 px-3 py-2">PENDING</span>
                             @else
-                            <span class="badge bg-success rounded-pill px-3">Done</span>
+                            <span
+                                class="badge bg-transparent border border-success text-success rounded-0 px-3 py-2">COMPLETED</span>
                             @endif
                         </td>
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
-                                {{-- FORM GANTI STATUS --}}
                                 <form action="{{ route('admin.reservations.status', $res->id) }}" method="POST">
                                     @csrf @method('PUT')
-
-                                    {{-- Kirim status lawannya --}}
                                     @if(strtolower($res->status) == 'pending')
                                     <input type="hidden" name="status" value="done">
-                                    <button class="btn btn-sm btn-success fw-bold" title="Tandai Selesai">✔
-                                        Done</button>
+                                    <button class="btn btn-sm btn-outline-success rounded-0"
+                                        title="Mark as Done">✓</button>
                                     @else
                                     <input type="hidden" name="status" value="pending">
-                                    <button class="btn btn-sm btn-secondary" title="Kembalikan ke Pending">↺
-                                        Undo</button>
+                                    <button class="btn btn-sm btn-outline-secondary rounded-0" title="Undo">↺</button>
                                     @endif
                                 </form>
 
-                                {{-- FORM HAPUS --}}
                                 <form action="{{ route('admin.reservations.destroy', $res->id) }}" method="POST"
-                                    onsubmit="return confirm('Hapus reservasi ini?')">
+                                    onsubmit="return confirm('Delete reservation?')">
                                     @csrf @method('DELETE')
-                                    <button class="btn btn-sm btn-danger">Hapus</button>
+                                    <button class="btn btn-sm btn-outline-danger rounded-0">✕</button>
                                 </form>
                             </div>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-muted fst-italic">Belum ada reservasi masuk.</td>
+                        <td colspan="6" class="text-center py-5 text-muted">No reservations found.</td>
                     </tr>
                     @endforelse
                 </tbody>

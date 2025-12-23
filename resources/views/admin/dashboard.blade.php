@@ -1,44 +1,44 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="mb-4 text-center text-md-start">
-    <h2 class="fw-bold">Dashboard Admin</h2>
-    <p class="text-muted">Ringkasan aktivitas barbershop Anda hari ini.</p>
+<div class="text-center mb-5">
+    <h2 class="display-5 fw-bold" style="color: var(--gold-accent);">Dashboard Overview</h2>
+    <p class="text-muted">Welcome back, Administrator.</p>
 </div>
 
 <div class="row g-4 justify-content-center">
     <div class="col-12 col-md-4">
-        <div class="card border-0 shadow-sm h-100 py-3">
-            <div class="card-body text-center">
-                <div class="mb-2 text-primary">
-                    <i class="bi bi-calendar-check fs-1"></i>
+        <div class="card h-100 p-4 text-center">
+            <div class="card-body">
+                <div class="mb-3" style="color: var(--gold-accent);">
+                    <i class="bi bi-calendar-check" style="font-size: 2.5rem;"></i>
                 </div>
-                <h5 class="text-muted mb-2">Reservasi Hari Ini</h5>
-                <h1 class="fw-bold display-4 mb-0">{{ $reservasiHariIni ?? 0 }}</h1>
+                <h6 class="text-uppercase text-muted letter-spacing-1">Reservasi Hari Ini</h6>
+                <h1 class="display-3 fw-bold my-2 text-white">{{ $reservasiHariIni ?? 0 }}</h1>
             </div>
         </div>
     </div>
 
     <div class="col-12 col-md-4">
-        <div class="card border-0 shadow-sm h-100 py-3">
-            <div class="card-body text-center">
-                <div class="mb-2 text-success">
-                    <i class="bi bi-scissors fs-1"></i>
+        <div class="card h-100 p-4 text-center">
+            <div class="card-body">
+                <div class="mb-3" style="color: var(--gold-accent);">
+                    <i class="bi bi-scissors" style="font-size: 2.5rem;"></i>
                 </div>
-                <h5 class="text-muted mb-2">Total Layanan</h5>
-                <h1 class="fw-bold display-4 mb-0">{{ $totalLayanan ?? 0 }}</h1>
+                <h6 class="text-uppercase text-muted letter-spacing-1">Total Layanan</h6>
+                <h1 class="display-3 fw-bold my-2 text-white">{{ $totalLayanan ?? 0 }}</h1>
             </div>
         </div>
     </div>
 
     <div class="col-12 col-md-4">
-        <div class="card border-0 shadow-sm h-100 py-3">
-            <div class="card-body text-center">
-                <div class="mb-2 text-warning">
-                    <i class="bi bi-people-fill fs-1"></i>
+        <div class="card h-100 p-4 text-center">
+            <div class="card-body">
+                <div class="mb-3" style="color: var(--gold-accent);">
+                    <i class="bi bi-people" style="font-size: 2.5rem;"></i>
                 </div>
-                <h5 class="text-muted mb-2">Total Barber</h5>
-                <h1 class="fw-bold display-4 mb-0">{{ $totalBarber ?? 0 }}</h1>
+                <h6 class="text-uppercase text-muted letter-spacing-1">Total Barber</h6>
+                <h1 class="display-3 fw-bold my-2 text-white">{{ $totalBarber ?? 0 }}</h1>
             </div>
         </div>
     </div>
