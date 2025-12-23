@@ -33,13 +33,13 @@
                 <tbody>
                     @forelse($barbers as $barber)
                     <tr>
-                        <td class="text-center text-muted">{{ $loop->iteration }}</td>
+                        <td class="text-center text-secondary">{{ $loop->iteration }}</td>
                         <td>
                             <img src="{{ $barber->photo_path ?? 'https://ui-avatars.com/api/?name='.urlencode($barber->name).'&background=D4AF37&color=000' }}"
                                 width="50" height="50" class="rounded-circle object-fit-cover border border-secondary">
                         </td>
                         <td class="fw-bold text-white">{{ $barber->name }}</td>
-                        <td class="text-muted">{{ $barber->specialty }}</td>
+                        <td class="text-secondary">{{ $barber->specialty }}</td>
                         <td class="text-center"><span
                                 class="badge border border-success text-success bg-transparent rounded-0 px-3">ACTIVE</span>
                         </td>
@@ -67,18 +67,19 @@
                                     enctype="multipart/form-data">
                                     @csrf @method('PUT')
                                     <div class="modal-body text-start" style="white-space: normal;">
-                                        <div class="mb-3"><label class="form-label text-muted small">NAME</label><input
-                                                type="text" name="name" class="form-control"
-                                                value="{{ $barber->name }}"></div>
                                         <div class="mb-3"><label
-                                                class="form-label text-muted small">SPECIALTY</label><input type="text"
-                                                name="specialty" class="form-control" value="{{ $barber->specialty }}">
-                                        </div>
+                                                class="form-label text-secondary small">NAME</label><input type="text"
+                                                name="name" class="form-control" value="{{ $barber->name }}"></div>
                                         <div class="mb-3"><label
-                                                class="form-label text-muted small">BIO</label><textarea name="bio"
+                                                class="form-label text-secondary small">SPECIALTY</label><input
+                                                type="text" name="specialty" class="form-control"
+                                                value="{{ $barber->specialty }}"></div>
+                                        <div class="mb-3"><label
+                                                class="form-label text-secondary small">BIO</label><textarea name="bio"
                                                 class="form-control" rows="3">{{ $barber->bio }}</textarea></div>
-                                        <div class="mb-3"><label class="form-label text-muted small">PHOTO</label><input
-                                                type="file" name="photo" class="form-control"></div>
+                                        <div class="mb-3"><label
+                                                class="form-label text-secondary small">PHOTO</label><input type="file"
+                                                name="photo" class="form-control"></div>
                                     </div>
                                     <div class="modal-footer border-0">
                                         <button type="submit" class="btn btn-gold">Save</button>
@@ -89,7 +90,7 @@
                     </div>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">No data.</td>
+                        <td colspan="6" class="text-center py-5 text-secondary">No data.</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -105,23 +106,3 @@
                 <h5 class="modal-title">Add Barber</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('admin.barbers.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="modal-body text-start">
-                    <div class="mb-3"><label class="form-label text-muted small">NAME</label><input type="text"
-                            name="name" class="form-control" required></div>
-                    <div class="mb-3"><label class="form-label text-muted small">SPECIALTY</label><input type="text"
-                            name="specialty" class="form-control"></div>
-                    <div class="mb-3"><label class="form-label text-muted small">BIO</label><textarea name="bio"
-                            class="form-control" rows="3"></textarea></div>
-                    <div class="mb-3"><label class="form-label text-muted small">PHOTO</label><input type="file"
-                            name="photo" class="form-control"></div>
-                </div>
-                <div class="modal-footer border-0">
-                    <button type="submit" class="btn btn-gold">Create</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-@endsection

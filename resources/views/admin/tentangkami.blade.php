@@ -18,9 +18,9 @@
         <div class="col-12 col-lg-6">
             <div class="card h-100 p-4">
                 <h5 class="fw-bold mb-4 text-gold">HISTORY SECTION</h5>
-                <div class="mb-3"><label class="form-label text-muted small">TEXT</label><textarea name="history"
+                <div class="mb-3"><label class="form-label text-secondary small">TEXT</label><textarea name="history"
                         rows="8" class="form-control">{{ $about->history ?? '' }}</textarea></div>
-                <div class="mb-3"><label class="form-label text-muted small">IMAGE</label><input type="file"
+                <div class="mb-3"><label class="form-label text-secondary small">IMAGE</label><input type="file"
                         name="history_image" class="form-control"></div>
                 @if($about->history_image) <img src="{{ $about->history_image }}"
                     class="img-fluid rounded border border-secondary mt-2"> @endif
@@ -29,9 +29,9 @@
         <div class="col-12 col-lg-6">
             <div class="card h-100 p-4">
                 <h5 class="fw-bold mb-4 text-gold">MISSION SECTION</h5>
-                <div class="mb-3"><label class="form-label text-muted small">TEXT</label><textarea name="mission"
+                <div class="mb-3"><label class="form-label text-secondary small">TEXT</label><textarea name="mission"
                         rows="8" class="form-control">{{ $about->mission ?? '' }}</textarea></div>
-                <div class="mb-3"><label class="form-label text-muted small">IMAGE</label><input type="file"
+                <div class="mb-3"><label class="form-label text-secondary small">IMAGE</label><input type="file"
                         name="mission_image" class="form-control"></div>
                 @if($about->mission_image) <img src="{{ $about->mission_image }}"
                     class="img-fluid rounded border border-secondary mt-2"> @endif

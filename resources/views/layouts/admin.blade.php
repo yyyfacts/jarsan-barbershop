@@ -16,7 +16,10 @@
     :root {
         --bg-dark: #121212;
         --bg-card: #1E1E1E;
-        --text-main: #E0E0E0;
+        --text-main: #FFFFFF;
+        /* Ganti jadi Putih Murni */
+        --text-secondary: #CCCCCC;
+        /* Abu-abu Terang */
         --gold-accent: #D4AF37;
         --gold-hover: #F4CF57;
     }
@@ -30,28 +33,39 @@
         min-height: 100vh;
     }
 
-    /* Typography */
+    /* TYPOGRAPHY FIX (Agar terbaca) */
     h1,
     h2,
     h3,
     h4,
-    .serif-font,
-    .navbar-brand {
+    h5,
+    h6,
+    .h1,
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    .h6 {
         font-family: 'Playfair Display', serif;
+        color: #FFFFFF !important;
+    }
+
+    /* Override Bootstrap Muted agar terbaca di background hitam */
+    .text-muted {
+        color: var(--text-secondary) !important;
     }
 
     .text-gold {
         color: var(--gold-accent) !important;
     }
 
-    /* Navbar Styling */
+    /* Navbar & Offcanvas */
     .navbar-custom {
         background-color: #000;
         border-bottom: 1px solid var(--gold-accent);
         padding: 15px 0;
     }
 
-    /* OFFCANVAS (MENU GESER) STYLE */
     .offcanvas-custom {
         background-color: #1a1a1a;
         color: white;
@@ -60,25 +74,22 @@
 
     .offcanvas-header .btn-close {
         filter: invert(1);
-        /* Tombol close jadi putih */
     }
 
     .nav-link {
-        color: #aaa !important;
+        color: #AAAAAA !important;
         font-size: 1rem;
         padding: 10px 0;
         text-transform: uppercase;
         letter-spacing: 1px;
         transition: 0.3s;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        /* Garis tipis antar menu */
     }
 
     .nav-link:hover,
     .nav-link.active {
         color: var(--gold-accent) !important;
         padding-left: 10px;
-        /* Efek geser dikit saat hover */
     }
 
     /* Elements */
@@ -88,7 +99,7 @@
         border-radius: 12px;
     }
 
-    /* TABLE RESPONSIVE & SCROLLABLE */
+    /* TABLE FIX */
     .table-responsive {
         border-radius: 8px;
         overflow-x: auto;
@@ -98,7 +109,7 @@
 
     .table {
         --bs-table-bg: transparent;
-        --bs-table-color: #E0E0E0;
+        --bs-table-color: #FFFFFF;
         border-color: #333;
         white-space: nowrap;
     }
@@ -108,25 +119,42 @@
         border-bottom: 2px solid var(--gold-accent);
         font-family: 'Playfair Display', serif;
         padding: 15px;
+        font-weight: bold;
     }
 
     tbody td {
         padding: 15px;
+        color: #E0E0E0;
+        /* Warna isi tabel terang */
     }
 
-    /* Inputs & Modals */
-    .form-control {
+    /* FORM INPUT FIX (Agar teks input kelihatan) */
+    .form-control,
+    .form-select {
         background-color: #2A2A2A;
         border: 1px solid #444;
-        color: white !important;
+        color: #FFFFFF !important;
+        /* Teks input putih */
     }
 
     .form-control:focus {
         background-color: #333;
         border-color: var(--gold-accent);
+        color: #FFFFFF !important;
         box-shadow: none;
     }
 
+    .form-control::placeholder {
+        color: #888;
+    }
+
+    label {
+        color: #FFFFFF !important;
+    }
+
+    /* Label form putih */
+
+    /* Modal */
     .modal-content {
         background-color: var(--bg-card);
         border: 1px solid var(--gold-accent);
@@ -228,7 +256,7 @@
 
     <footer class="text-center">
         <div class="container">
-            <small class="text-muted text-uppercase letter-spacing-1">&copy; 2025 Jarsan Barbershop. All Rights
+            <small class="text-secondary text-uppercase letter-spacing-1">&copy; 2025 Jarsan Barbershop. All Rights
                 Reserved.</small>
         </div>
     </footer>

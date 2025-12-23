@@ -33,9 +33,9 @@
                 <tbody>
                     @forelse($services as $service)
                     <tr>
-                        <td class="text-center text-muted">{{ $loop->iteration }}</td>
+                        <td class="text-center text-secondary">{{ $loop->iteration }}</td>
                         <td class="fw-bold text-white">{{ $service->name }}</td>
-                        <td class="text-muted">{{ $service->duration_minutes }} Mins</td>
+                        <td class="text-secondary">{{ $service->duration_minutes }} Mins</td>
                         <td class="text-gold" style="font-family: 'Playfair Display';">Rp
                             {{ number_format($service->price, 0, ',', '.') }}</td>
                         <td>
@@ -68,25 +68,26 @@
                                     enctype="multipart/form-data">
                                     @csrf @method('PUT')
                                     <div class="modal-body text-start" style="white-space: normal;">
-                                        <div class="mb-3"><label class="form-label text-muted small">NAME</label><input
-                                                type="text" name="name" class="form-control"
-                                                value="{{ $service->name }}"></div>
+                                        <div class="mb-3"><label
+                                                class="form-label text-secondary small">NAME</label><input type="text"
+                                                name="name" class="form-control" value="{{ $service->name }}"></div>
                                         <div class="row">
                                             <div class="col-6 mb-3"><label
-                                                    class="form-label text-muted small">PRICE</label><input
+                                                    class="form-label text-secondary small">PRICE</label><input
                                                     type="number" name="price" class="form-control"
                                                     value="{{ $service->price }}"></div>
                                             <div class="col-6 mb-3"><label
-                                                    class="form-label text-muted small">DURATION</label><input
+                                                    class="form-label text-secondary small">DURATION</label><input
                                                     type="number" name="duration" class="form-control"
                                                     value="{{ $service->duration_minutes }}"></div>
                                         </div>
                                         <div class="mb-3"><label
-                                                class="form-label text-muted small">DESC</label><textarea
+                                                class="form-label text-secondary small">DESC</label><textarea
                                                 name="description" class="form-control"
                                                 rows="3">{{ $service->description }}</textarea></div>
-                                        <div class="mb-3"><label class="form-label text-muted small">IMAGE</label><input
-                                                type="file" name="image" class="form-control"></div>
+                                        <div class="mb-3"><label
+                                                class="form-label text-secondary small">IMAGE</label><input type="file"
+                                                name="image" class="form-control"></div>
                                     </div>
                                     <div class="modal-footer border-0"><button type="submit"
                                             class="btn btn-gold">Save</button></div>
@@ -96,7 +97,7 @@
                     </div>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">No services.</td>
+                        <td colspan="6" class="text-center py-5 text-secondary">No services.</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -114,17 +115,17 @@
             <form action="{{ route('admin.services.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body text-start">
-                    <div class="mb-3"><label class="form-label text-muted small">NAME</label><input type="text"
+                    <div class="mb-3"><label class="form-label text-secondary small">NAME</label><input type="text"
                             name="name" class="form-control" required></div>
                     <div class="row">
-                        <div class="col-6 mb-3"><label class="form-label text-muted small">PRICE</label><input
+                        <div class="col-6 mb-3"><label class="form-label text-secondary small">PRICE</label><input
                                 type="number" name="price" class="form-control" required></div>
-                        <div class="col-6 mb-3"><label class="form-label text-muted small">DURATION</label><input
+                        <div class="col-6 mb-3"><label class="form-label text-secondary small">DURATION</label><input
                                 type="number" name="duration" class="form-control"></div>
                     </div>
-                    <div class="mb-3"><label class="form-label text-muted small">DESC</label><textarea
+                    <div class="mb-3"><label class="form-label text-secondary small">DESC</label><textarea
                             name="description" class="form-control" rows="3"></textarea></div>
-                    <div class="mb-3"><label class="form-label text-muted small">IMAGE</label><input type="file"
+                    <div class="mb-3"><label class="form-label text-secondary small">IMAGE</label><input type="file"
                             name="image" class="form-control"></div>
                 </div>
                 <div class="modal-footer border-0"><button type="submit" class="btn btn-gold">Create</button></div>
