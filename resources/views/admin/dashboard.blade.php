@@ -13,7 +13,7 @@
                 <div class="mb-3" style="color: var(--gold-accent);">
                     <i class="bi bi-calendar-check" style="font-size: 2.5rem;"></i>
                 </div>
-                <h6 class="text-uppercase text-muted letter-spacing-1">Reservasi Hari Ini</h6>
+                <h6 class="text-uppercase text-muted" style="letter-spacing: 1px;">Reservasi Hari Ini</h6>
                 <h1 class="display-3 fw-bold my-2 text-white">{{ $reservasiHariIni ?? 0 }}</h1>
             </div>
         </div>
@@ -25,7 +25,7 @@
                 <div class="mb-3" style="color: var(--gold-accent);">
                     <i class="bi bi-scissors" style="font-size: 2.5rem;"></i>
                 </div>
-                <h6 class="text-uppercase text-muted letter-spacing-1">Total Layanan</h6>
+                <h6 class="text-uppercase text-muted" style="letter-spacing: 1px;">Total Layanan</h6>
                 <h1 class="display-3 fw-bold my-2 text-white">{{ $totalLayanan ?? 0 }}</h1>
             </div>
         </div>
@@ -37,7 +37,7 @@
                 <div class="mb-3" style="color: var(--gold-accent);">
                     <i class="bi bi-people" style="font-size: 2.5rem;"></i>
                 </div>
-                <h6 class="text-uppercase text-muted letter-spacing-1">Total Barber</h6>
+                <h6 class="text-uppercase text-muted" style="letter-spacing: 1px;">Total Barber</h6>
                 <h1 class="display-3 fw-bold my-2 text-white">{{ $totalBarber ?? 0 }}</h1>
             </div>
         </div>

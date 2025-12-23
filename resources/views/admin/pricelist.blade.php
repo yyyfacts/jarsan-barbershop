@@ -3,7 +3,7 @@
 @section('content')
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-5 gap-3">
     <h3 class="fw-bold m-0 text-white">Service Pricelist</h3>
-    <button type="button" class="btn btn-gold px-4 py-2 w-100 w-md-auto" data-bs-toggle="modal"
+    <button type="button" class="btn btn-gold px-4 py-2 w-100 w-md-auto shadow" data-bs-toggle="modal"
         data-bs-target="#modalTambahService">
         + ADD SERVICE
     </button>
