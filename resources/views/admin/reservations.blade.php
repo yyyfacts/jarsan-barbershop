@@ -15,15 +15,15 @@
 <div class="card border-0">
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0 text-nowrap">
                 <thead>
                     <tr>
-                        <th class="text-center py-4">NO</th>
-                        <th class="py-4">CLIENT</th>
-                        <th class="py-4">SERVICE</th>
-                        <th class="py-4">SCHEDULE</th>
-                        <th class="text-center py-4">STATUS</th>
-                        <th class="text-center py-4">ACTIONS</th>
+                        <th class="text-center">NO</th>
+                        <th>CLIENT</th>
+                        <th>SERVICE</th>
+                        <th>SCHEDULE</th>
+                        <th class="text-center">STATUS</th>
+                        <th class="text-center">ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody>

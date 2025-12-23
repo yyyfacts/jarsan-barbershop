@@ -12,22 +12,22 @@
 @if(session('success'))
 <div class="alert alert-dark border-0 shadow-sm text-center mb-4"
     style="border-left: 4px solid var(--gold-accent) !important;">
-    <span class="text-gold">{{ session('success') }}</span>
+    <span style="color: var(--gold-accent);">{{ session('success') }}</span>
 </div>
 @endif
 
 <div class="card border-0">
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0 text-nowrap">
                 <thead>
                     <tr>
-                        <th class="text-center py-4">NO</th>
-                        <th class="py-4">SERVICE</th>
-                        <th class="py-4">DURATION</th>
-                        <th class="py-4">PRICE</th>
-                        <th class="py-4">IMAGE</th>
-                        <th class="text-center py-4">ACTIONS</th>
+                        <th class="text-center">NO</th>
+                        <th>SERVICE</th>
+                        <th>DURATION</th>
+                        <th>PRICE</th>
+                        <th>IMAGE</th>
+                        <th class="text-center">ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -67,7 +67,7 @@
                                 <form action="{{ route('admin.services.update', $service->id) }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf @method('PUT')
-                                    <div class="modal-body text-start">
+                                    <div class="modal-body text-start" style="white-space: normal;">
                                         <div class="mb-3"><label class="form-label text-muted small">NAME</label><input
                                                 type="text" name="name" class="form-control"
                                                 value="{{ $service->name }}"></div>

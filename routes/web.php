@@ -76,6 +76,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     
     // Services (Pricelist)
+    // Penamaan route disesuaikan dengan view: admin.services.index, admin.services.store, dst.
     Route::get('/services', [ServiceController::class, 'adminIndex'])->name('services.index');       
     Route::post('/services', [ServiceController::class, 'store'])->name('services.store');     
     Route::put('/services/{id}', [ServiceController::class, 'update'])->name('services.update'); 
@@ -88,7 +89,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::delete('/barbers/{id}', [BarberController::class, 'destroy'])->name('barbers.destroy'); 
     
     // About (Tentang Kami)
-    // Route ini penting agar sidebar yang mengarah ke 'admin.about.index' tidak error
+    // Route '/about' diberi nama 'about.index' agar sidebar aktif saat diklik
     Route::get('/about', [AboutController::class, 'edit'])->name('about.index');
     Route::get('/about/edit', [AboutController::class, 'edit'])->name('about.edit');
     Route::put('/about/update', [AboutController::class, 'update'])->name('about.update');

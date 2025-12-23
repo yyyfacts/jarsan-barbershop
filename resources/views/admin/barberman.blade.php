@@ -12,22 +12,22 @@
 @if(session('success'))
 <div class="alert alert-dark border-0 shadow-sm text-center mb-4"
     style="border-left: 4px solid var(--gold-accent) !important;">
-    <span class="text-gold">{{ session('success') }}</span>
+    <span style="color: var(--gold-accent);">{{ session('success') }}</span>
 </div>
 @endif
 
 <div class="card border-0">
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0 text-nowrap">
                 <thead>
                     <tr>
-                        <th class="text-center py-4">NO</th>
-                        <th class="py-4">PROFILE</th>
-                        <th class="py-4">NAME</th>
-                        <th class="py-4">SPECIALTY</th>
-                        <th class="text-center py-4">STATUS</th>
-                        <th class="text-center py-4">ACTIONS</th>
+                        <th class="text-center">NO</th>
+                        <th>PROFILE</th>
+                        <th>NAME</th>
+                        <th>SPECIALTY</th>
+                        <th class="text-center">STATUS</th>
+                        <th class="text-center">ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,13 +60,13 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Edit Barber</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    <h5 class="modal-title">Edit Barber</h5><button class="btn-close"
+                                        data-bs-dismiss="modal"></button>
                                 </div>
                                 <form action="{{ route('admin.barbers.update', $barber->id) }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf @method('PUT')
-                                    <div class="modal-body text-start">
+                                    <div class="modal-body text-start" style="white-space: normal;">
                                         <div class="mb-3"><label class="form-label text-muted small">NAME</label><input
                                                 type="text" name="name" class="form-control"
                                                 value="{{ $barber->name }}"></div>
@@ -80,9 +80,8 @@
                                         <div class="mb-3"><label class="form-label text-muted small">PHOTO</label><input
                                                 type="file" name="photo" class="form-control"></div>
                                     </div>
-                                    <div class="modal-footer border-0">
-                                        <button type="submit" class="btn btn-gold">Save</button>
-                                    </div>
+                                    <div class="modal-footer border-0"><button type="submit"
+                                            class="btn btn-gold">Save</button></div>
                                 </form>
                             </div>
                         </div>
@@ -102,8 +101,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Barber</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title">Add Barber</h5><button class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="{{ route('admin.barbers.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -117,9 +115,7 @@
                     <div class="mb-3"><label class="form-label text-muted small">PHOTO</label><input type="file"
                             name="photo" class="form-control"></div>
                 </div>
-                <div class="modal-footer border-0">
-                    <button type="submit" class="btn btn-gold">Create</button>
-                </div>
+                <div class="modal-footer border-0"><button type="submit" class="btn btn-gold">Create</button></div>
             </form>
         </div>
     </div>
