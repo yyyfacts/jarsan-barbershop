@@ -6,9 +6,9 @@
 </div>
 
 @if(session('success'))
-<div class="alert alert-dark border-0 shadow-sm text-center mb-4" role="alert"
+<div class="alert alert-dark border-0 shadow-sm text-center mb-4"
     style="border-left: 4px solid var(--gold-accent) !important;">
-    <span style="color: var(--gold-accent);">{{ session('success') }}</span>
+    <span class="text-gold">{{ session('success') }}</span>
 </div>
 @endif
 
@@ -19,7 +19,7 @@
                 <thead>
                     <tr>
                         <th class="text-center py-4">NO</th>
-                        <th class="py-4">CLIENT DETAILS</th>
+                        <th class="py-4">CLIENT</th>
                         <th class="py-4">SERVICE</th>
                         <th class="py-4">SCHEDULE</th>
                         <th class="text-center py-4">STATUS</th>
@@ -32,42 +32,35 @@
                         <td class="text-center text-muted">{{ $loop->iteration }}</td>
                         <td>
                             <div class="fw-bold text-white">{{ $res->name }}</div>
-                            <small class="text-muted" style="letter-spacing: 0.5px;">{{ $res->phone }}</small>
+                            <small class="text-muted">{{ $res->phone }}</small>
                         </td>
+                        <td><span class="text-white">{{ $res->service->name ?? '-' }}</span></td>
                         <td>
-                            <span class="text-white">{{ $res->service->name ?? 'Service Removed' }}</span>
-                        </td>
-                        <td>
-                            <div style="color: var(--gold-accent); font-weight: 600;">
-                                {{ \Carbon\Carbon::parse($res->date)->format('d M Y') }}
-                            </div>
+                            <div class="text-gold">{{ \Carbon\Carbon::parse($res->date)->format('d M Y') }}</div>
                             <small class="text-muted">{{ $res->time }}</small>
                         </td>
                         <td class="text-center">
                             @if(strtolower($res->status) == 'pending')
                             <span
-                                class="badge bg-transparent border border-warning text-warning rounded-0 px-3 py-2">PENDING</span>
+                                class="badge border border-warning text-warning bg-transparent rounded-0 px-3">PENDING</span>
                             @else
                             <span
-                                class="badge bg-transparent border border-success text-success rounded-0 px-3 py-2">COMPLETED</span>
+                                class="badge border border-success text-success bg-transparent rounded-0 px-3">DONE</span>
                             @endif
                         </td>
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
                                 <form action="{{ route('admin.reservations.status', $res->id) }}" method="POST">
                                     @csrf @method('PUT')
-                                    @if(strtolower($res->status) == 'pending')
-                                    <input type="hidden" name="status" value="done">
-                                    <button class="btn btn-sm btn-outline-success rounded-0"
-                                        title="Mark as Done">✓</button>
-                                    @else
-                                    <input type="hidden" name="status" value="pending">
-                                    <button class="btn btn-sm btn-outline-secondary rounded-0" title="Undo">↺</button>
-                                    @endif
+                                    <input type="hidden" name="status"
+                                        value="{{ strtolower($res->status) == 'pending' ? 'done' : 'pending' }}">
+                                    <button
+                                        class="btn btn-sm {{ strtolower($res->status) == 'pending' ? 'btn-outline-success' : 'btn-outline-secondary' }} rounded-0">
+                                        {{ strtolower($res->status) == 'pending' ? '✓' : '↺' }}
+                                    </button>
                                 </form>
-
                                 <form action="{{ route('admin.reservations.destroy', $res->id) }}" method="POST"
-                                    onsubmit="return confirm('Delete reservation?')">
+                                    onsubmit="return confirm('Delete?')">
                                     @csrf @method('DELETE')
                                     <button class="btn btn-sm btn-outline-danger rounded-0">✕</button>
                                 </form>
@@ -76,7 +69,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">No reservations found.</td>
+                        <td colspan="6" class="text-center py-5 text-muted">No reservations.</td>
                     </tr>
                     @endforelse
                 </tbody>
