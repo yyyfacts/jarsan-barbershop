@@ -48,7 +48,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // ====================================================
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
-        if (Auth::user()->email === 'admin@jarsan.com') {
+        if (Auth::user()->email === 'admin@jarsan.com') { // Pastikan logika admin ini sesuai kebutuhan
             return redirect()->route('admin.dashboard');
         }
         return view('user.dashboard');
@@ -59,13 +59,16 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // ====================================================
-// 4. HALAMAN ADMIN
+// 4. HALAMAN ADMIN (PERBAIKAN UTAMA DISINI)
 // ====================================================
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
+    
+    // Dashboard
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     
-    // Services
-    Route::get('/services', [ServiceController::class, 'adminIndex'])->name('services');       
+    // Services (Pricelist)
+    // Perbaikan: name('services') diubah jadi name('services.index') agar sesuai view
+    Route::get('/services', [ServiceController::class, 'adminIndex'])->name('services.index');       
     Route::post('/services', [ServiceController::class, 'store'])->name('services.store');     
     Route::put('/services/{id}', [ServiceController::class, 'update'])->name('services.update'); 
     Route::delete('/services/{id}', [ServiceController::class, 'destroy'])->name('services.destroy'); 
@@ -76,16 +79,20 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::put('/barbers/{id}', [BarberController::class, 'update'])->name('barbers.update');  
     Route::delete('/barbers/{id}', [BarberController::class, 'destroy'])->name('barbers.destroy'); 
     
-    // About
+    // About (Tentang Kami)
+    // Perbaikan: Tambahkan route 'index' yang mengarah ke edit agar Sidebar aktif
+    Route::get('/about', [AboutController::class, 'edit'])->name('about.index');
     Route::get('/about/edit', [AboutController::class, 'edit'])->name('about.edit');
     Route::put('/about/update', [AboutController::class, 'update'])->name('about.update');
 
     // Reservations
-    Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations');
+    // Perbaikan: name('reservations') diubah jadi name('reservations.index')
+    Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
     Route::put('/reservations/{id}/status', [ReservationController::class, 'updateStatus'])->name('reservations.status');
     Route::delete('/reservations/{id}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
     
-    // Contacts
-    Route::get('/contacts', [ContactController::class, 'index'])->name('contacts');
+    // Contacts (Hubungi Kami)
+    // Perbaikan: name('contacts') diubah jadi name('contacts.index')
+    Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
     Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
 });
