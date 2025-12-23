@@ -4,115 +4,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Jarsan</title>
-    {{-- Bootstrap & Icons --}}
+    <title>Admin Jarsan Barbershop</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
     <style>
+    /* Sticky Footer Setup */
     body {
-        background-color: #f8f9fa;
+        background-color: #f4f6f9;
         font-family: 'Poppins', sans-serif;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
     }
 
-    /* Header Hitam */
-    .admin-header {
-        background-color: #212529;
-        color: white;
-        padding: 15px 0;
+    main {
+        flex: 1;
     }
 
-    /* Menu Link */
-    .admin-nav .nav-link {
-        color: #adb5bd;
-        font-weight: 500;
-        margin-left: 15px;
-        transition: 0.3s;
+    /* Navbar Styling */
+    .navbar-dark {
+        background-color: #1a1a1a;
+    }
+
+    .navbar-brand {
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    .nav-link {
         font-size: 0.95rem;
+        margin-right: 10px;
+        color: #ccc !important;
+        transition: 0.3s;
     }
 
-    .admin-nav .nav-link:hover,
-    .admin-nav .nav-link.active {
-        color: #fff;
+    .nav-link:hover,
+    .nav-link.active {
+        color: #fff !important;
+        font-weight: 600;
     }
 
-    /* Tombol Logout Kuning */
-    .btn-logout {
-        background-color: #ffc107;
-        color: #000;
-        font-weight: bold;
-        border: none;
-        padding: 5px 20px;
+    /* Responsive Table Wrapper */
+    .table-responsive {
+        border-radius: 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        /* Smooth scroll on iOS */
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
-    .btn-logout:hover {
-        background-color: #e0a800;
+    /* Footer Styling */
+    footer {
+        background-color: #1a1a1a;
+        color: #adb5bd;
+        padding: 20px 0;
+        margin-top: auto;
+        font-size: 0.9rem;
     }
 
-    /* Card Dashboard */
-    .card-dashboard {
-        border: none;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    }
-
-    /* Tabel */
-    .table th {
-        background-color: #212529;
-        color: white;
-        text-align: center;
-    }
-
-    .table td {
-        vertical-align: middle;
-        text-align: center;
+    /* Mobile Adjustments */
+    @media (max-width: 768px) {
+        .btn-action-mobile {
+            width: 100%;
+            margin-bottom: 10px;
+        }
     }
     </style>
 </head>
 
 <body>
 
-    <div class="admin-header shadow-sm sticky-top">
-        <div class="container d-flex justify-content-between align-items-center">
-
-            <a href="{{ route('admin.dashboard') }}" class="text-white text-decoration-none">
-                <h4 class="m-0 fw-bold">Admin Jarsan</h4>
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ route('admin.dashboard') }}">
+                <i class="bi bi-scissors me-2"></i>Admin Jarsan
             </a>
 
-            <div class="d-flex align-items-center">
-                <nav class="d-none d-md-flex admin-nav me-4">
-                    <a href="{{ route('admin.services') }}"
-                        class="nav-link {{ request()->routeIs('admin.services*') ? 'active' : '' }}">Pricelist</a>
-                    <a href="{{ route('admin.barbers.index') }}"
-                        class="nav-link {{ request()->routeIs('admin.barbers*') ? 'active' : '' }}">Barberman</a>
-                    <a href="{{ route('admin.reservations') }}"
-                        class="nav-link {{ request()->routeIs('admin.reservations*') ? 'active' : '' }}">Reservasi</a>
-                    <a href="{{ route('admin.about.edit') }}"
-                        class="nav-link {{ request()->routeIs('admin.about*') ? 'active' : '' }}">Tentang Kami</a>
-                    <a href="{{ route('admin.contacts') }}"
-                        class="nav-link {{ request()->routeIs('admin.contacts*') ? 'active' : '' }}">Hubungi Kami</a>
-                </nav>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#adminNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button class="btn btn-sm btn-logout rounded-1">Logout</button>
-                </form>
+            <div class="collapse navbar-collapse" id="adminNavbar">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+                            href="{{ route('admin.dashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.services*') ? 'active' : '' }}"
+                            href="{{ route('admin.services.index') }}">Pricelist</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.barbers*') ? 'active' : '' }}"
+                            href="{{ route('admin.barbers.index') }}">Barberman</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.reservations*') ? 'active' : '' }}"
+                            href="{{ route('admin.reservations.index') }}">Reservasi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.about*') ? 'active' : '' }}"
+                            href="{{ route('admin.about.index') }}">Tentang Kami</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.contacts*') ? 'active' : '' }}"
+                            href="{{ route('admin.contacts.index') }}">Pesan</a>
+                    </li>
+
+                    <li class="nav-item mt-2 mt-lg-0 ms-lg-3 w-100 w-lg-auto">
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button class="btn btn-warning fw-bold w-100 rounded-pill btn-sm py-2 px-3">Logout</button>
+                        </form>
+                    </li>
+                </ul>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <div class="container mt-5 mb-5">
-
-        {{-- Alert Sukses --}}
-        @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-        @endif
-
+    <main class="container py-4">
         @yield('content')
-    </div>
+    </main>
+
+    <footer class="text-center">
+        <div class="container">
+            <p class="mb-0">&copy; 2025 Jarsan Barbershop Management System. All Rights Reserved.</p>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
