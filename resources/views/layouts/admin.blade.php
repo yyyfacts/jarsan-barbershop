@@ -13,99 +13,119 @@
         rel="stylesheet">
 
     <style>
-        :root {
-            --bg-body: #F4F6F9;
-            --bg-card: #FFFFFF;
-            --bg-input: #FFFFFF;
-            --text-main: #333333;
-            --text-muted: #6c757d;
-            --border-color: #e9ecef;
-            --gold-primary: #C5A028;
-            --gold-hover: #b08d21;
-            --table-hover: #f8f9fa;
-        }
+    /* CSS VARIABLES */
+    :root {
+        --bg-body: #F4F6F9;
+        --bg-card: #FFFFFF;
+        --bg-input: #FFFFFF;
+        --text-main: #333333;
+        --text-muted: #6c757d;
+        --border-color: #e9ecef;
+        --gold-primary: #C5A028;
+        --gold-hover: #b08d21;
+        --table-hover: #f8f9fa;
+    }
 
-        [data-theme="dark"] {
-            --bg-body: #121212;
-            --bg-card: #1E1E1E;
-            --bg-input: #2C2C2C;
-            --text-main: #E0E0E0;
-            --text-muted: #A0A0A0;
-            --border-color: #333333;
-            --gold-primary: #D4AF37;
-            --gold-hover: #F4CF57;
-            --table-hover: #252525;
-        }
+    [data-theme="dark"] {
+        --bg-body: #121212;
+        --bg-card: #1E1E1E;
+        --bg-input: #2C2C2C;
+        --text-main: #E0E0E0;
+        --text-muted: #A0A0A0;
+        --border-color: #333333;
+        --gold-primary: #D4AF37;
+        --gold-hover: #F4CF57;
+        --table-hover: #252525;
+    }
 
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+    body {
+        background-color: var(--bg-body);
+        color: var(--text-main);
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        transition: background 0.3s, color 0.3s;
+    }
 
-        .navbar-custom {
-            background-color: var(--bg-card);
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 0;
-        }
+    .navbar-custom {
+        background-color: var(--bg-card);
+        border-bottom: 1px solid var(--border-color);
+        padding: 12px 0;
+    }
 
-        .nav-link {
-            color: var(--text-muted) !important;
-            font-weight: 500;
-            transition: 0.2s;
-        }
+    .nav-link {
+        color: var(--text-muted) !important;
+        font-weight: 500;
+        transition: 0.2s;
+    }
 
-        .nav-link:hover,
-        .nav-link.active {
-            color: var(--gold-primary) !important;
-            font-weight: 600;
-        }
+    .nav-link:hover,
+    .nav-link.active {
+        color: var(--gold-primary) !important;
+        font-weight: 600;
+    }
 
-        .card,
-        .modal-content {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-        }
+    .card,
+    .modal-content {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+    }
 
-        .form-control,
-        .form-select {
-            background-color: var(--bg-input);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-        }
+    .form-control,
+    .form-select {
+        background-color: var(--bg-input);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+    }
 
-        .form-control:focus {
-            border-color: var(--gold-primary);
-            box-shadow: none;
-        }
+    .form-control:focus {
+        border-color: var(--gold-primary);
+        box-shadow: none;
+        color: var(--text-main);
+    }
 
-        .table {
-            color: var(--text-main);
-            --bs-table-bg: transparent;
-            --bs-table-border-color: var(--border-color);
-        }
+    .btn-gold {
+        background-color: var(--gold-primary);
+        color: #000;
+        border: none;
+        font-weight: 600;
+    }
 
-        .btn-gold {
-            background-color: var(--gold-primary);
-            color: #000;
-            border: none;
-            font-weight: 600;
-        }
+    .btn-gold:hover {
+        background-color: var(--gold-hover);
+        color: #000;
+    }
 
-        .btn-gold:hover {
-            background-color: var(--gold-hover);
-            color: #000;
-        }
+    .theme-toggle {
+        cursor: pointer;
+        padding: 8px;
+        color: var(--text-main);
+    }
 
-        .theme-toggle {
-            cursor: pointer;
-            padding: 8px;
-            color: var(--text-main);
-        }
+    /* FIX TABLE COLOR IN DARK MODE */
+    .table {
+        --bs-table-bg: transparent;
+        --bs-table-border-color: var(--border-color);
+        color: var(--text-main);
+    }
+
+    .table tbody td {
+        color: var(--text-main) !important;
+    }
+
+    /* Paksa warna teks tabel */
+    .table thead th {
+        background-color: var(--bg-body);
+        color: var(--text-muted);
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .table-hover tbody tr:hover>* {
+        color: var(--text-main) !important;
+        --bs-table-accent-bg: var(--table-hover);
+    }
     </style>
 </head>
 
@@ -115,19 +135,17 @@
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('admin.dashboard') }}">
                 @php
-                    $appName = 'Jarsan Barbershop';
-                    $logoSrc = 'https://ui-avatars.com/api/?name=Jarsan&background=C5A028&color=fff';
-                    try {
-                        if (\Illuminate\Support\Facades\Schema::hasTable('settings')) {
-                            $set = \App\Models\Setting::first();
-                            if ($set) {
-                                $appName = $set->app_name;
-                                if ($set->logo_path)
-                                    $logoSrc = $set->logo_path;
-                            }
-                        }
-                    } catch (\Exception $e) {
-                    }
+                $appName = 'Jarsan Barbershop';
+                $logoSrc = 'https://ui-avatars.com/api/?name=Jarsan&background=C5A028&color=fff';
+                try {
+                if (\Illuminate\Support\Facades\Schema::hasTable('settings')) {
+                $set = \App\Models\Setting::first();
+                if ($set) {
+                $appName = $set->app_name;
+                if ($set->logo_path) $logoSrc = $set->logo_path;
+                }
+                }
+                } catch (\Exception $e) {}
                 @endphp
                 <img src="{{ $logoSrc }}" width="40" height="40"
                     class="rounded-circle object-fit-cover border border-secondary">
@@ -184,21 +202,21 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        updateIcon(savedTheme);
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateIcon(savedTheme);
 
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme');
-            const newTheme = current === 'light' ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateIcon(newTheme);
-        }
+    function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme');
+        const newTheme = current === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateIcon(newTheme);
+    }
 
-        function updateIcon(t) {
-            document.getElementById('themeIcon').className = t === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
-        }
+    function updateIcon(t) {
+        document.getElementById('themeIcon').className = t === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+    }
     </script>
 </body>
 

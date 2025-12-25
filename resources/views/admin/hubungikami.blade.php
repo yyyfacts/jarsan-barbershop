@@ -6,7 +6,7 @@
     <p class="small" style="color: var(--text-muted);">Daftar pertanyaan dari formulir kontak.</p>
 </div>
 
-<div class="card border-0">
+<div class="card border-0 shadow-sm rounded-3">
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
@@ -37,7 +37,7 @@
                         </td>
                         <td>
                             <div class="p-3 rounded border"
-                                style="background-color: var(--bg-body); font-size: 0.9rem;">
+                                style="background-color: var(--bg-body); color: var(--text-main); font-size: 0.9rem;">
                                 {{ Str::limit($contact->message, 120) }}
                             </div>
                         </td>

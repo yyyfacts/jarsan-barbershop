@@ -52,8 +52,10 @@
                                 {{ $service->description }}</div>
                         </td>
                         <td style="color: var(--text-muted);">{{ $service->duration_minutes }} Menit</td>
+
                         <td class="fw-bold" style="color: var(--text-main);">Rp
                             {{ number_format($service->price, 0, ',', '.') }}</td>
+
                         <td class="text-center">
                             <button class="btn btn-sm btn-outline-primary rounded-circle me-1"
                                 style="width: 32px; height: 32px;" data-bs-toggle="modal"
@@ -71,7 +73,7 @@
 
                     <div class="modal fade" id="modalEditService{{ $service->id }}" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
+                            <div class="modal-content border-0">
                                 <div class="modal-header border-bottom" style="border-color: var(--border-color);">
                                     <h5 class="modal-title fw-bold">Edit Layanan</h5>
                                     <button class="btn-close" data-bs-dismiss="modal"></button>
@@ -110,8 +112,8 @@
                     </div>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5" style="color: var(--text-muted);">Belum ada layanan.
-                        </td>
+                        <td colspan="6" class="text-center py-5" style="color: var(--text-muted);">Belum ada layanan
+                            yang ditambahkan.</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -122,7 +124,7 @@
 
 <div class="modal fade" id="modalTambahService" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <div class="modal-content border-0">
             <div class="modal-header border-bottom" style="border-color: var(--border-color);">
                 <h5 class="modal-title fw-bold">Tambah Layanan Baru</h5>
                 <button class="btn-close" data-bs-dismiss="modal"></button>

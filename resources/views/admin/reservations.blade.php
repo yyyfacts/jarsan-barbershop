@@ -6,11 +6,17 @@
     <p class="small" style="color: var(--text-muted);">Pantau booking masuk dan status pelanggan.</p>
 </div>
 
-<div class="card border-0">
+@if(session('success'))
+<div class="alert alert-success border-0 shadow-sm mb-4">
+    <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
+</div>
+@endif
+
+<div class="card border-0 shadow-sm rounded-3">
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
-                <thead>
+                <thead class="bg-light">
                     <tr>
                         <th class="text-center" width="5%">No</th>
                         <th>Pelanggan</th>
@@ -30,8 +36,8 @@
                                     class="bi bi-telephone me-1"></i>{{ $res->phone }}</div>
                         </td>
                         <td>
-                            <span class="badge border"
-                                style="background-color: var(--bg-body); color: var(--text-main); border-color: var(--border-color) !important;">
+                            <span class="badge border fw-normal"
+                                style="color: var(--text-main); background-color: var(--bg-body); border-color: var(--border-color) !important;">
                                 {{ $res->service->name ?? '-' }}
                             </span>
                         </td>
@@ -74,8 +80,8 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5" style="color: var(--text-muted);">Tidak ada reservasi
-                            masuk.</td>
+                        <td colspan="6" class="text-center py-5" style="color: var(--text-muted);">Tidak ada data
+                            reservasi.</td>
                     </tr>
                     @endforelse
                 </tbody>
