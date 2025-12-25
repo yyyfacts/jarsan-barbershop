@@ -1,250 +1,195 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Jarsan - Premium Barbershop</title>
+    <title>Admin Jarsan Barbershop</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap"
         rel="stylesheet">
 
     <style>
-    :root {
-        --bg-dark: #121212;
-        --bg-card: #1E1E1E;
-        --text-main: #FFFFFF;
-        /* PUTIH TOTAL */
-        --text-secondary: #D1D1D1;
-        /* PERAK TERANG */
-        --gold-accent: #D4AF37;
-        --gold-hover: #F4CF57;
-    }
+        /* CSS VARIABLES */
+        :root {
+            --bg-body: #F4F6F9;
+            --bg-card: #FFFFFF;
+            --bg-input: #FFFFFF;
+            --text-main: #333333;
+            --text-muted: #6c757d;
+            --border-color: #e9ecef;
+            --gold-primary: #C5A028;
+            --gold-hover: #b08d21;
+            --table-hover: #f8f9fa;
+        }
 
-    body {
-        background-color: var(--bg-dark);
-        color: var(--text-main);
-        font-family: 'Inter', sans-serif;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-    }
+        [data-theme="dark"] {
+            --bg-body: #121212;
+            --bg-card: #1E1E1E;
+            --bg-input: #2C2C2C;
+            --text-main: #E0E0E0;
+            --text-muted: #A0A0A0;
+            --border-color: #333333;
+            --gold-primary: #D4AF37;
+            --gold-hover: #F4CF57;
+            --table-hover: #252525;
+        }
 
-    /* --- PAKSA SEMUA TEKS PUTIH --- */
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    p,
-    span,
-    div,
-    li,
-    a {
-        color: var(--text-main);
-    }
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
 
-    /* --- OVERRIDE BOOTSTRAP TEXT-MUTED --- */
-    .text-muted {
-        color: #999999 !important;
-        /* Abu-abu terang, bukan gelap */
-    }
+        .navbar-custom {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 0;
+        }
 
-    .small.text-muted {
-        color: #888888 !important;
-    }
+        .nav-link {
+            color: var(--text-muted) !important;
+            font-weight: 500;
+            transition: 0.2s;
+        }
 
-    /* Typography */
-    .serif-font,
-    h1,
-    h2,
-    h3,
-    .navbar-brand {
-        font-family: 'Playfair Display', serif;
-    }
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--gold-primary) !important;
+            font-weight: 600;
+        }
 
-    .text-gold {
-        color: var(--gold-accent) !important;
-    }
+        .card,
+        .modal-content {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
 
-    /* Navbar & Offcanvas */
-    .navbar-custom {
-        background-color: #000;
-        border-bottom: 1px solid var(--gold-accent);
-        padding: 15px 0;
-        z-index: 9999;
-    }
+        .form-control,
+        .form-select {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
 
-    .offcanvas-custom {
-        background-color: #1a1a1a;
-        border-left: 1px solid var(--gold-accent);
-    }
+        .form-control:focus {
+            border-color: var(--gold-primary);
+            box-shadow: none;
+            color: var(--text-main);
+        }
 
-    .offcanvas-header .btn-close {
-        filter: invert(1);
-    }
+        .btn-gold {
+            background-color: var(--gold-primary);
+            color: #000;
+            border: none;
+            font-weight: 600;
+        }
 
-    .nav-link {
-        color: #CCCCCC !important;
-        /* Menu abu terang */
-        font-size: 0.95rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        padding: 10px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
+        .btn-gold:hover {
+            background-color: var(--gold-hover);
+            color: #000;
+        }
 
-    .nav-link:hover,
-    .nav-link.active {
-        color: var(--gold-accent) !important;
-        padding-left: 10px;
-    }
+        .theme-toggle {
+            cursor: pointer;
+            padding: 8px;
+            color: var(--text-main);
+        }
 
-    /* Card */
-    .card {
-        background-color: var(--bg-card);
-        border: 1px solid #333;
-        border-radius: 12px;
-    }
+        /* FIX TABLE COLOR IN DARK MODE */
+        .table {
+            --bs-table-bg: transparent;
+            --bs-table-border-color: var(--border-color);
+            color: var(--text-main);
+        }
 
-    /* --- PERBAIKAN TABEL (IMPORTANT) --- */
-    .table-responsive {
-        border-radius: 8px;
-        overflow-x: auto;
-        border: 1px solid #333;
-    }
+        .table tbody td {
+            color: var(--text-main) !important;
+        }
 
-    .table {
-        --bs-table-bg: transparent;
-        --bs-table-color: #FFFFFF;
-        /* Warna Teks Tabel Putih */
-        margin-bottom: 0;
-        white-space: nowrap;
-        /* Agar bisa digeser di HP */
-    }
+        /* Paksa warna teks tabel */
+        .table thead th {
+            background-color: var(--bg-body);
+            color: var(--text-muted);
+            border-bottom: 2px solid var(--border-color);
+        }
 
-    .table thead th {
-        background-color: #000;
-        color: var(--gold-accent) !important;
-        border-bottom: 2px solid var(--gold-accent);
-        padding: 15px;
-        font-weight: 600;
-    }
-
-    .table tbody td {
-        color: #E0E0E0 !important;
-        /* Isi tabel Putih Terang */
-        padding: 15px;
-        border-bottom: 1px solid #333;
-        vertical-align: middle;
-    }
-
-    /* Form Input (Agar yang diketik kelihatan) */
-    .form-control {
-        background-color: #2A2A2A;
-        border: 1px solid #555;
-        color: #FFFFFF !important;
-    }
-
-    .form-control:focus {
-        background-color: #333;
-        border-color: var(--gold-accent);
-        color: #FFFFFF !important;
-        box-shadow: none;
-    }
-
-    label {
-        color: #FFFFFF !important;
-        margin-bottom: 5px;
-    }
-
-    /* Modal */
-    .modal-content {
-        background-color: var(--bg-card);
-        border: 1px solid var(--gold-accent);
-    }
-
-    .modal-header,
-    .modal-footer {
-        border-color: #333;
-    }
-
-    .btn-close {
-        filter: invert(1);
-    }
-
-    /* Buttons */
-    .btn-gold {
-        background-color: var(--gold-accent);
-        color: #000;
-        font-weight: bold;
-        border: none;
-    }
-
-    footer {
-        background-color: #000;
-        padding: 25px 0;
-        margin-top: auto;
-        border-top: 1px solid #333;
-    }
+        .table-hover tbody tr:hover>* {
+            color: var(--text-main) !important;
+            --bs-table-accent-bg: var(--table-hover);
+        }
     </style>
 </head>
 
 <body>
 
-    <nav class="navbar navbar-dark navbar-custom sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold fs-4" href="{{ route('admin.dashboard') }}"
-                style="color: var(--gold-accent);">
-                JARSAN<span class="text-white fw-light">ADMIN</span>
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('admin.dashboard') }}">
+                @php
+                    $appName = 'Jarsan Barbershop';
+                    $logoSrc = 'https://ui-avatars.com/api/?name=Jarsan&background=C5A028&color=fff';
+                    try {
+                        if (\Illuminate\Support\Facades\Schema::hasTable('settings')) {
+                            $set = \App\Models\Setting::first();
+                            if ($set) {
+                                $appName = $set->app_name;
+                                if ($set->logo_path)
+                                    $logoSrc = $set->logo_path;
+                            }
+                        }
+                    } catch (\Exception $e) {
+                    }
+                @endphp
+                <img src="{{ $logoSrc }}" width="40" height="40"
+                    class="rounded-circle object-fit-cover border border-secondary">
+                <div class="d-flex flex-column">
+                    <span class="fw-bold fs-5" style="line-height: 1; color: var(--text-main);">{{ $appName }}</span>
+                    <span class="small" style="font-size: 0.7rem; color: var(--text-muted);">ADMINISTRATOR</span>
+                </div>
             </a>
 
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                <i class="bi bi-list fs-1" style="color: var(--gold-accent);"></i>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="bi bi-list fs-2" style="color: var(--text-main);"></i>
             </button>
 
-            <div class="offcanvas offcanvas-end offcanvas-custom" tabindex="-1" id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title serif-font fw-bold text-gold" id="offcanvasNavbarLabel">NAVIGATION</h5>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        <li class="nav-item"><a
-                                class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
-                                href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li class="nav-item"><a
-                                class="nav-link {{ request()->routeIs('admin.services*') ? 'active' : '' }}"
-                                href="{{ route('admin.services.index') }}">Pricelist</a></li>
-                        <li class="nav-item"><a
-                                class="nav-link {{ request()->routeIs('admin.barbers*') ? 'active' : '' }}"
-                                href="{{ route('admin.barbers.index') }}">Barberman</a></li>
-                        <li class="nav-item"><a
-                                class="nav-link {{ request()->routeIs('admin.reservations*') ? 'active' : '' }}"
-                                href="{{ route('admin.reservations.index') }}">Reservasi</a></li>
-                        <li class="nav-item"><a
-                                class="nav-link {{ request()->routeIs('admin.about*') ? 'active' : '' }}"
-                                href="{{ route('admin.about.index') }}">Tentang Kami</a></li>
-                        <li class="nav-item"><a
-                                class="nav-link {{ request()->routeIs('admin.contacts*') ? 'active' : '' }}"
-                                href="{{ route('admin.contacts.index') }}">Pesan</a></li>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+                            href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.barbers*') ? 'active' : '' }}"
+                            href="{{ route('admin.barbers.index') }}">Barberman</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.services*') ? 'active' : '' }}"
+                            href="{{ route('admin.services.index') }}">Layanan</a></li>
+                    <li class="nav-item"><a
+                            class="nav-link {{ request()->routeIs('admin.reservations*') ? 'active' : '' }}"
+                            href="{{ route('admin.reservations.index') }}">Reservasi</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.contacts*') ? 'active' : '' }}"
+                            href="{{ route('admin.contacts.index') }}">Pesan</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.about*') ? 'active' : '' }}"
+                            href="{{ route('admin.about.index') }}">Tentang</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.settings*') ? 'active' : '' }}"
+                            href="{{ route('admin.settings.index') }}">Pengaturan</a></li>
 
-                        <li class="nav-item mt-4">
-                            <form action="{{ route('logout') }}" method="POST">
-                                @csrf
-                                <button class="btn btn-outline-warning w-100 rounded-0"
-                                    style="color: var(--gold-accent); border-color: var(--gold-accent);">LOGOUT</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
+                    <li class="nav-item ms-lg-2">
+                        <div class="theme-toggle" onclick="toggleTheme()"><i id="themeIcon"
+                                class="bi bi-moon-stars-fill"></i></div>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button class="btn btn-sm btn-outline-danger px-3 rounded-pill w-100">Logout</button>
+                        </form>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -253,13 +198,28 @@
         @yield('content')
     </main>
 
-    <footer class="text-center">
-        <div class="container">
-            <small style="color: #888;">&copy; 2025 Jarsan Barbershop. All Rights Reserved.</small>
-        </div>
+    <footer class="text-center py-4 mt-auto border-top" style="border-color: var(--border-color) !important;">
+        <small style="color: var(--text-muted);">&copy; 2025 {{ $appName }}. All Rights Reserved.</small>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const newTheme = current === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateIcon(newTheme);
+        }
+
+        function updateIcon(t) {
+            document.getElementById('themeIcon').className = t === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+        }
+    </script>
 </body>
 
 </html>
