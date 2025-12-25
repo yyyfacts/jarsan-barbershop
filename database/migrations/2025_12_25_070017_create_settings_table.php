@@ -13,11 +13,9 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->string('app_name')->default('Jarsan Barbershop');
-            
-            // Menggunakan longBinary untuk MySQL LONGBLOB (Data Gambar Binary)
-            $table->longBinary('logo_data')->nullable(); 
-            
+            $table->string('app_name');
+            // Menggunakan longText agar muat menampung kode Base64 gambar
+            $table->longText('logo_path')->nullable(); 
             $table->timestamps();
         });
     }

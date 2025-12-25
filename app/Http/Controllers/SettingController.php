@@ -2,46 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Setting;
+use Illuminate\Http\Request;
 
 class SettingController extends Controller
 {
-    // Menampilkan Halaman Pengaturan
+    // 1. ADMIN: TAMPILKAN SETTING
     public function index()
     {
-        // Ambil data setting pertama, jika kosong return null
-        $settings = Setting::first();
-        return view('admin.settings.index', compact('settings'));
+        // Ambil data setting pertama (karena setting biasanya cuma 1 baris)
+        $setting = Setting::first();
+        
+        // Arahkan ke folder 'admin', file 'setting.blade.php'
+        return view('admin.setting', compact('setting'));
     }
 
-    // Menyimpan/Update Pengaturan
+    // 2. ADMIN: UPDATE SETTING
     public function update(Request $request)
     {
         $request->validate([
-            'app_name' => 'required|string|max:255',
-            'logo'     => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Max 2MB
+            'app_name' => 'required',
+            'logo' => 'nullable|image|max:2048' // Validasi gambar max 2MB
         ]);
 
-        // Ambil data pertama, atau buat instance baru jika belum ada
-        $setting = Setting::firstOrNew([]);
+        // Cek data setting pertama
+        $setting = Setting::first();
 
-        // Update Nama Aplikasi
-        $setting->app_name = $request->app_name;
+        // Siapkan data update
+        $updateData = [
+            'app_name' => $request->app_name,
+        ];
 
-        // Logika Simpan Gambar sebagai BLOB
+        // Logika Gambar Base64 (Sama persis dengan BarberController)
         if ($request->hasFile('logo')) {
-            $file = $request->file('logo');
+            $path = $request->file('logo')->getRealPath();
+            $image = file_get_contents($path);
+            $base64 = base64_encode($image);
             
-            // Baca konten file menjadi string binary
-            $binaryData = file_get_contents($file->getRealPath());
-            
-            // Simpan ke kolom logo_data
-            $setting->logo_data = $binaryData;
+            // Simpan sebagai string base64 lengkap
+            $updateData['logo_path'] = 'data:image/' . $request->file('logo')->extension() . ';base64,' . $base64;
         }
 
-        $setting->save();
+        if ($setting) {
+            // Jika sudah ada, update
+            $setting->update($updateData);
+        } else {
+            // Jika belum ada, buat baru
+            Setting::create($updateData);
+        }
 
-        return redirect()->back()->with('success', 'Pengaturan website berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Pengaturan berhasil disimpan');
     }
 }
