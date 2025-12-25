@@ -3,46 +3,41 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Setting; // Pastikan Model Setting sudah dibuat
-use Illuminate\Support\Facades\Storage;
+use App\Models\Setting;
 
 class SettingController extends Controller
 {
+    // Menampilkan Halaman Pengaturan
     public function index()
     {
-        // Ambil data pertama, jika tidak ada buat baru (Singleton pattern sederhana)
-        $settings = Setting::first(); 
+        // Ambil data setting pertama, jika kosong return null
+        $settings = Setting::first();
         return view('admin.settings.index', compact('settings'));
     }
 
+    // Menyimpan/Update Pengaturan
     public function update(Request $request)
     {
         $request->validate([
             'app_name' => 'required|string|max:255',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo'     => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Max 2MB
         ]);
 
-        $setting = Setting::first();
-        if (!$setting) {
-            $setting = new Setting();
-        }
+        // Ambil data pertama, atau buat instance baru jika belum ada
+        $setting = Setting::firstOrNew([]);
 
+        // Update Nama Aplikasi
         $setting->app_name = $request->app_name;
 
+        // Logika Simpan Gambar sebagai BLOB
         if ($request->hasFile('logo')) {
-            // Hapus logo lama jika ada dan bukan url avatar default
-            if ($setting->logo_path && !str_contains($setting->logo_path, 'ui-avatars')) {
-                // Logika hapus file lama dari storage (opsional tapi disarankan)
-                // Storage::delete($setting->logo_path); 
-            }
-
-            // Simpan file baru ke folder public/logos
             $file = $request->file('logo');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('storage/logos'), $filename);
             
-            // Simpan path yang bisa diakses publik
-            $setting->logo_path = asset('storage/logos/' . $filename);
+            // Baca konten file menjadi string binary
+            $binaryData = file_get_contents($file->getRealPath());
+            
+            // Simpan ke kolom logo_data
+            $setting->logo_data = $binaryData;
         }
 
         $setting->save();
