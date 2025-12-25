@@ -12,6 +12,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\BarberController;
+use App\Http\Controllers\SettingController; // Tambahkan ini
 
 /*
 |--------------------------------------------------------------------------
@@ -30,19 +31,15 @@ Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 // ====================================================
-// 2. AUTHENTICATION (Login, Register, Google)
+// 2. AUTHENTICATION
 // ====================================================
-
 Route::middleware('guest')->group(function () {
-    // Login Biasa
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.process');
-    
-    // Register Biasa
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.process');
-
-    // Login Google
+    
+    // Google Auth (Opsional jika digunakan)
     Route::get('auth/google', [AuthController::class, 'redirectToGoogle'])->name('google.login');
     Route::get('auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
 });
@@ -54,8 +51,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // ====================================================
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
-        // Cek jika user adalah admin, redirect ke dashboard admin
-        if (Auth::user()->email === 'admin@jarsan.com') { 
+        if (Auth::user()->email === 'admin@jarsan.com') { // Atau gunakan role check
             return redirect()->route('admin.dashboard');
         }
         return view('user.dashboard');
@@ -68,15 +64,12 @@ Route::middleware(['auth'])->group(function () {
 // ====================================================
 // 4. HALAMAN ADMIN
 // ====================================================
-// Prefix 'admin' membuat URL jadi /admin/dashboard
-// Name 'admin.' membuat panggilan route jadi admin.dashboard
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
     
     // Dashboard
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     
     // Services (Pricelist)
-    // Penamaan route disesuaikan dengan view: admin.services.index, admin.services.store, dst.
     Route::get('/services', [ServiceController::class, 'adminIndex'])->name('services.index');       
     Route::post('/services', [ServiceController::class, 'store'])->name('services.store');     
     Route::put('/services/{id}', [ServiceController::class, 'update'])->name('services.update'); 
@@ -89,9 +82,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::delete('/barbers/{id}', [BarberController::class, 'destroy'])->name('barbers.destroy'); 
     
     // About (Tentang Kami)
-    // Route '/about' diberi nama 'about.index' agar sidebar aktif saat diklik
     Route::get('/about', [AboutController::class, 'edit'])->name('about.index');
-    Route::get('/about/edit', [AboutController::class, 'edit'])->name('about.edit');
     Route::put('/about/update', [AboutController::class, 'update'])->name('about.update');
 
     // Reservations
@@ -102,4 +93,8 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     // Contacts (Hubungi Kami)
     Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
     Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
+
+    // Settings (Pengaturan Logo & Nama App) - BARU
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
 });

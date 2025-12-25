@@ -4,24 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Jarsan - Premium Barbershop</title>
+    <title>Admin Jarsan Barbershop</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap"
         rel="stylesheet">
 
     <style>
     :root {
-        --bg-body: #0a0a0a;
-        --bg-card: #141414;
-        --bg-input: #1f1f1f;
-        --text-main: #FFFFFF;
-        --text-muted: #888888;
-        --gold-primary: #D4AF37;
-        --gold-hover: #c5a028;
-        --border-color: #2a2a2a;
+        --bg-body: #F4F6F9;
+        /* Abu-abu sangat muda (Background Halaman) */
+        --bg-card: #FFFFFF;
+        /* Putih (Background Kartu/Tabel) */
+        --text-main: #333333;
+        /* Hitam (Teks Utama) */
+        --text-muted: #6c757d;
+        /* Abu-abu (Teks Sekunder) */
+        --gold-primary: #C5A028;
+        /* Emas yang lebih hidup/cerah */
+        --gold-hover: #b08d21;
+        --border-color: #e9ecef;
+        /* Garis batas tipis */
     }
 
     body {
@@ -33,24 +38,6 @@
         min-height: 100vh;
     }
 
-    /* CUSTOM SCROLLBAR */
-    ::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: var(--bg-body);
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: #333;
-        border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: var(--gold-primary);
-    }
-
     /* TYPOGRAPHY */
     h1,
     h2,
@@ -59,198 +46,141 @@
     h5,
     h6 {
         font-family: 'Playfair Display', serif;
-        color: #FFFFFF;
+        color: #1a1a1a;
+        /* Hitam hampir pekat */
+        font-weight: 700;
     }
 
-    .text-gold {
-        color: var(--gold-primary) !important;
-    }
-
-    .font-serif {
-        font-family: 'Playfair Display', serif;
-    }
-
-    .small-caps {
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        font-size: 0.75rem;
-        font-weight: 600;
-    }
-
-    /* NAVBAR - GLASS EFFECT */
+    /* NAVBAR */
     .navbar-custom {
-        background: rgba(10, 10, 10, 0.95);
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid var(--border-color);
+        background-color: #FFFFFF;
+        border-bottom: 1px solid #ddd;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         padding: 12px 0;
     }
 
     .navbar-nav .nav-link {
-        color: #999 !important;
-        font-size: 0.9rem;
+        color: #555 !important;
         font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        padding: 8px 16px;
-        transition: all 0.3s ease;
-        border-radius: 4px;
+        padding: 8px 15px;
+        border-radius: 5px;
+        transition: all 0.2s;
     }
 
     .navbar-nav .nav-link:hover,
     .navbar-nav .nav-link.active {
         color: var(--gold-primary) !important;
-        background: rgba(212, 175, 55, 0.1);
-    }
-
-    /* TABLES - CLEANER & COMPACT */
-    .table-custom {
-        --bs-table-bg: transparent;
-        --bs-table-color: var(--text-main);
-        border-collapse: separate;
-        border-spacing: 0;
-    }
-
-    .table-custom thead th {
-        background-color: #1a1a1a;
-        color: var(--gold-primary);
-        font-family: 'Inter', sans-serif;
+        background-color: #f8f9fa;
         font-weight: 600;
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        border-bottom: 2px solid #333;
-        padding: 16px;
     }
 
-    .table-custom tbody td {
-        padding: 16px;
-        vertical-align: middle;
-        border-bottom: 1px solid var(--border-color);
-        color: #e0e0e0;
-        font-size: 0.95rem;
-    }
-
-    .table-custom tbody tr:hover td {
-        background-color: #1a1a1a;
-        color: white;
-    }
-
-    /* Utilitas Lebar Kolom */
-    .w-fit {
-        width: 1%;
-        white-space: nowrap;
-    }
-
-    /* Agar kolom fit content */
-    .max-w-200 {
-        max-width: 200px;
-    }
-
-    /* Untuk truncate text panjang */
-
-    /* FORMS & MODALS */
-    .form-control,
-    .form-select {
-        background-color: var(--bg-input);
-        border: 1px solid var(--border-color);
-        color: #fff !important;
-        padding: 10px 15px;
-        font-size: 0.9rem;
-    }
-
-    .form-control:focus {
-        background-color: #252525;
-        border-color: var(--gold-primary);
-        box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
-    }
-
-    .modal-content {
+    /* CARDS & TABLES */
+    .card {
         background-color: var(--bg-card);
         border: 1px solid var(--border-color);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+        /* Bayangan halus */
     }
 
-    .modal-header,
-    .modal-footer {
-        border-color: var(--border-color);
+    .table thead th {
+        background-color: #f8f9fa;
+        color: #555;
+        font-weight: 600;
+        border-bottom: 2px solid #ddd;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        padding: 15px;
     }
 
-    .btn-close {
-        filter: invert(1);
-        opacity: 0.5;
+    .table tbody td {
+        padding: 15px;
+        vertical-align: middle;
+        color: #333;
+        border-bottom: 1px solid #eee;
     }
 
-    /* BUTTONS */
+    .table-hover tbody tr:hover {
+        background-color: #fafafa;
+    }
+
+    /* BUTTONS & INPUTS */
     .btn-gold {
         background-color: var(--gold-primary);
-        color: #000;
-        font-weight: 600;
+        color: #fff;
         border: none;
-        padding: 8px 24px;
-        letter-spacing: 0.5px;
+        padding: 8px 20px;
+        font-weight: 500;
     }
 
     .btn-gold:hover {
         background-color: var(--gold-hover);
-        color: #000;
+        color: #fff;
     }
 
-    .btn-icon {
-        width: 32px;
-        height: 32px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 6px;
-        transition: 0.2s;
+    .form-control,
+    .form-select {
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        color: #333;
     }
 
-    .btn-icon:hover {
-        background: rgba(255, 255, 255, 0.1);
+    .form-control:focus {
+        border-color: var(--gold-primary);
+        box-shadow: 0 0 0 0.2rem rgba(197, 160, 40, 0.25);
+    }
+
+    /* FOOTER */
+    footer {
+        background-color: #fff;
+        border-top: 1px solid #ddd;
+        margin-top: auto;
+        padding: 20px 0;
     }
     </style>
 </head>
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('admin.dashboard') }}">
-                <img src="https://ui-avatars.com/api/?name=Jarsan&background=D4AF37&color=000&size=128" alt="Logo"
-                    width="35" height="35" class="rounded-circle border border-dark">
-                <div class="d-flex flex-column lh-1">
-                    <span class="fw-bold fs-5 text-white" style="letter-spacing: -0.5px;">JARSAN</span>
-                    <span class="text-gold" style="font-size: 0.65rem; letter-spacing: 2px;">ADMINISTRATOR</span>
+                @php
+                // Contoh logika sederhana mengambil logo. Sesuaikan dengan controller Anda.
+                $settings = \App\Models\Setting::first();
+                $logoUrl = $settings && $settings->logo_path ? asset($settings->logo_path) :
+                'https://ui-avatars.com/api/?name=Jarsan+B&background=C5A028&color=fff';
+                @endphp
+                <img src="{{ $logoUrl }}" alt="Logo" width="40" height="40"
+                    class="rounded-circle object-fit-cover shadow-sm">
+                <div class="d-flex flex-column">
+                    <span class="fw-bold fs-5 text-dark" style="line-height: 1;">JARSAN</span>
+                    <span class="text-muted small" style="font-size: 0.7rem; letter-spacing: 1px;">BARBERSHOP</span>
                 </div>
             </a>
 
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <i class="bi bi-list fs-2 text-gold"></i>
+                <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-lg-center gap-1">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
                             href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.services*') ? 'active' : '' }}"
-                            href="{{ route('admin.services.index') }}">Pricelist</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.barbers*') ? 'active' : '' }}"
                             href="{{ route('admin.barbers.index') }}">Barberman</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.services*') ? 'active' : '' }}"
+                            href="{{ route('admin.services.index') }}">Layanan</a></li>
                     <li class="nav-item"><a
                             class="nav-link {{ request()->routeIs('admin.reservations*') ? 'active' : '' }}"
                             href="{{ route('admin.reservations.index') }}">Reservasi</a></li>
-                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.about*') ? 'active' : '' }}"
-                            href="{{ route('admin.about.index') }}">Tentang</a></li>
-                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.contacts*') ? 'active' : '' }}"
-                            href="{{ route('admin.contacts.index') }}">Pesan</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.settings*') ? 'active' : '' }}"
+                            href="{{ route('admin.settings.index') }}">Pengaturan</a></li>
 
-                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                    <li class="nav-item ms-lg-2">
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
-                            <button class="btn btn-sm btn-outline-danger px-4 py-2 w-100 w-lg-auto"
-                                style="border-radius: 4px;">
-                                <i class="bi bi-box-arrow-right me-1"></i> Logout
-                            </button>
+                            <button class="btn btn-sm btn-outline-danger px-4 rounded-pill">Logout</button>
                         </form>
                     </li>
                 </ul>
@@ -262,10 +192,9 @@
         @yield('content')
     </main>
 
-    <footer class="text-center mt-auto py-4 border-top" style="border-color: #222 !important;">
+    <footer class="text-center">
         <div class="container">
-            <small class="text-muted text-uppercase" style="letter-spacing: 1px; font-size: 0.7rem;">&copy; 2025 Jarsan
-                Barbershop. All Rights Reserved.</small>
+            <small class="text-muted">&copy; 2025 Jarsan Barbershop Management. All Rights Reserved.</small>
         </div>
     </footer>
 
