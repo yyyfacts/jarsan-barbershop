@@ -17,9 +17,7 @@
         --bg-dark: #121212;
         --bg-card: #1E1E1E;
         --text-main: #FFFFFF;
-        /* Ganti jadi Putih Murni */
         --text-secondary: #CCCCCC;
-        /* Abu-abu Terang */
         --gold-accent: #D4AF37;
         --gold-hover: #F4CF57;
     }
@@ -33,83 +31,58 @@
         min-height: 100vh;
     }
 
-    /* TYPOGRAPHY FIX (Agar terbaca) */
+    /* TYPOGRAPHY */
     h1,
     h2,
     h3,
     h4,
     h5,
-    h6,
-    .h1,
-    .h2,
-    .h3,
-    .h4,
-    .h5,
-    .h6 {
+    h6 {
         font-family: 'Playfair Display', serif;
         color: #FFFFFF !important;
-    }
-
-    /* Override Bootstrap Muted agar terbaca di background hitam */
-    .text-muted {
-        color: var(--text-secondary) !important;
     }
 
     .text-gold {
         color: var(--gold-accent) !important;
     }
 
-    /* Navbar & Offcanvas */
+    .text-secondary {
+        color: var(--text-secondary) !important;
+    }
+
+    /* NAVBAR STYLING */
     .navbar-custom {
         background-color: #000;
         border-bottom: 1px solid var(--gold-accent);
         padding: 15px 0;
     }
 
-    .offcanvas-custom {
-        background-color: #1a1a1a;
-        color: white;
-        border-left: 1px solid var(--gold-accent);
-    }
-
-    .offcanvas-header .btn-close {
-        filter: invert(1);
-    }
-
-    .nav-link {
+    .navbar-nav .nav-link {
         color: #AAAAAA !important;
-        font-size: 1rem;
-        padding: 10px 0;
+        font-size: 0.95rem;
         text-transform: uppercase;
         letter-spacing: 1px;
+        padding: 10px 15px;
         transition: 0.3s;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .nav-link:hover,
-    .nav-link.active {
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
         color: var(--gold-accent) !important;
-        padding-left: 10px;
+        font-weight: bold;
     }
 
-    /* Elements */
+    /* CARD & TABLE */
     .card {
         background-color: var(--bg-card);
         border: 1px solid #333;
         border-radius: 12px;
     }
 
-    /* TABLE FIX */
-    .table-responsive {
-        border-radius: 8px;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        border: 1px solid #333;
-    }
-
     .table {
         --bs-table-bg: transparent;
         --bs-table-color: #FFFFFF;
+        /* Warna teks tabel putih */
         border-color: #333;
         white-space: nowrap;
     }
@@ -119,61 +92,30 @@
         border-bottom: 2px solid var(--gold-accent);
         font-family: 'Playfair Display', serif;
         padding: 15px;
-        font-weight: bold;
     }
 
     tbody td {
         padding: 15px;
-        color: #E0E0E0;
-        /* Warna isi tabel terang */
+        vertical-align: middle;
+        color: white !important;
+        /* Paksa putih */
     }
 
-    /* FORM INPUT FIX (Agar teks input kelihatan) */
+    /* FORMS */
     .form-control,
     .form-select {
         background-color: #2A2A2A;
         border: 1px solid #444;
         color: #FFFFFF !important;
-        /* Teks input putih */
     }
 
     .form-control:focus {
         background-color: #333;
         border-color: var(--gold-accent);
-        color: #FFFFFF !important;
         box-shadow: none;
     }
 
-    .form-control::placeholder {
-        color: #888;
-    }
-
-    label {
-        color: #FFFFFF !important;
-    }
-
-    /* Label form putih */
-
-    /* Modal */
-    .modal-content {
-        background-color: var(--bg-card);
-        border: 1px solid var(--gold-accent);
-        color: white;
-    }
-
-    .modal-header {
-        border-bottom: 1px solid #333;
-    }
-
-    .modal-footer {
-        border-top: 1px solid #333;
-    }
-
-    .btn-close {
-        filter: invert(1);
-    }
-
-    /* Buttons */
+    /* BUTTONS */
     .btn-gold {
         background-color: var(--gold-accent);
         color: #000;
@@ -186,66 +128,70 @@
         color: #000;
     }
 
-    footer {
-        background-color: #000;
-        padding: 25px 0;
-        margin-top: auto;
-        border-top: 1px solid #333;
+    /* MODAL */
+    .modal-content {
+        background-color: var(--bg-card);
+        border: 1px solid var(--gold-accent);
+        color: white;
+    }
+
+    .btn-close {
+        filter: invert(1);
     }
     </style>
 </head>
 
 <body>
 
-    <nav class="navbar navbar-dark navbar-custom sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold fs-4" href="{{ route('admin.dashboard') }}"
                 style="color: var(--gold-accent);">
                 JARSAN<span class="text-white fw-light">ADMIN</span>
             </a>
 
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="bi bi-list fs-1" style="color: var(--gold-accent);"></i>
             </button>
 
-            <div class="offcanvas offcanvas-end offcanvas-custom" tabindex="-1" id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title serif-font fw-bold text-gold" id="offcanvasNavbarLabel">NAVIGATION</h5>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                        aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        <li class="nav-item"><a
-                                class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
-                                href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li class="nav-item"><a
-                                class="nav-link {{ request()->routeIs('admin.services*') ? 'active' : '' }}"
-                                href="{{ route('admin.services.index') }}">Pricelist</a></li>
-                        <li class="nav-item"><a
-                                class="nav-link {{ request()->routeIs('admin.barbers*') ? 'active' : '' }}"
-                                href="{{ route('admin.barbers.index') }}">Barberman</a></li>
-                        <li class="nav-item"><a
-                                class="nav-link {{ request()->routeIs('admin.reservations*') ? 'active' : '' }}"
-                                href="{{ route('admin.reservations.index') }}">Reservasi</a></li>
-                        <li class="nav-item"><a
-                                class="nav-link {{ request()->routeIs('admin.about*') ? 'active' : '' }}"
-                                href="{{ route('admin.about.index') }}">Tentang Kami</a></li>
-                        <li class="nav-item"><a
-                                class="nav-link {{ request()->routeIs('admin.contacts*') ? 'active' : '' }}"
-                                href="{{ route('admin.contacts.index') }}">Pesan</a></li>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+                            href="{{ route('admin.dashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.services*') ? 'active' : '' }}"
+                            href="{{ route('admin.services.index') }}">Pricelist</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.barbers*') ? 'active' : '' }}"
+                            href="{{ route('admin.barbers.index') }}">Barberman</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.reservations*') ? 'active' : '' }}"
+                            href="{{ route('admin.reservations.index') }}">Reservasi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.about*') ? 'active' : '' }}"
+                            href="{{ route('admin.about.index') }}">Tentang</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.contacts*') ? 'active' : '' }}"
+                            href="{{ route('admin.contacts.index') }}">Pesan</a>
+                    </li>
 
-                        <li class="nav-item mt-4">
-                            <form action="{{ route('logout') }}" method="POST">
-                                @csrf
-                                <button class="btn btn-outline-warning w-100 rounded-0"
-                                    style="color: var(--gold-accent); border-color: var(--gold-accent);">LOGOUT</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
+                    <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button class="btn btn-sm btn-outline-warning rounded-0 px-4 w-100 w-lg-auto"
+                                style="color: var(--gold-accent); border-color: var(--gold-accent);">
+                                LOGOUT
+                            </button>
+                        </form>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -254,10 +200,9 @@
         @yield('content')
     </main>
 
-    <footer class="text-center">
+    <footer class="text-center mt-auto border-top border-secondary py-4" style="background-color: #000;">
         <div class="container">
-            <small class="text-secondary text-uppercase letter-spacing-1">&copy; 2025 Jarsan Barbershop. All Rights
-                Reserved.</small>
+            <small class="text-secondary text-uppercase">&copy; 2025 Jarsan Barbershop. All Rights Reserved.</small>
         </div>
     </footer>
 

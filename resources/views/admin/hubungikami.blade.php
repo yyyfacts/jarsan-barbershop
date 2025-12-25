@@ -24,7 +24,7 @@
                             <div class="fw-bold text-white">{{ $contact->name }}</div>
                             <div class="small text-secondary">{{ $contact->email }}</div>
                         </td>
-                        <td class="text-secondary" style="min-width: 250px; white-space: normal;">
+                        <td class="text-white" style="min-width: 250px; white-space: normal;">
                             {{ Str::limit($contact->message, 100) }}
                         </td>
                         <td class="small text-secondary">{{ $contact->created_at->format('d M Y, H:i') }}</td>
@@ -38,7 +38,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="text-center py-5 text-secondary">No messages.</td>
+                        <td colspan="5" class="text-center py-5 text-secondary">No messages found.</td>
                     </tr>
                     @endforelse
                 </tbody>

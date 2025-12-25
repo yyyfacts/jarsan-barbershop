@@ -35,14 +35,16 @@
                     <tr>
                         <td class="text-center text-secondary">{{ $loop->iteration }}</td>
                         <td class="fw-bold text-white">{{ $service->name }}</td>
-                        <td class="text-secondary">{{ $service->duration_minutes }} Mins</td>
+                        <td class="text-white">{{ $service->duration_minutes }} Mins</td>
                         <td class="text-gold" style="font-family: 'Playfair Display';">Rp
                             {{ number_format($service->price, 0, ',', '.') }}</td>
                         <td>
                             @if($service->image_path)
                             <img src="{{ $service->image_path }}" width="60" height="40"
                                 class="rounded object-fit-cover border border-secondary">
-                            @else <span class="text-muted small">No Img</span> @endif
+                            @else
+                            <span class="text-muted small">No Img</span>
+                            @endif
                         </td>
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
@@ -61,8 +63,8 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Edit Service</h5><button class="btn-close"
-                                        data-bs-dismiss="modal"></button>
+                                    <h5 class="modal-title text-white">Edit Service</h5>
+                                    <button class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <form action="{{ route('admin.services.update', $service->id) }}" method="POST"
                                     enctype="multipart/form-data">
@@ -97,7 +99,7 @@
                     </div>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-secondary">No services.</td>
+                        <td colspan="6" class="text-center py-5 text-secondary">No services found.</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -110,7 +112,8 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Service</h5><button class="btn-close" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title text-white">Add Service</h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="{{ route('admin.services.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf

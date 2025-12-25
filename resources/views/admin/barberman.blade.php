@@ -39,8 +39,9 @@
                                 width="50" height="50" class="rounded-circle object-fit-cover border border-secondary">
                         </td>
                         <td class="fw-bold text-white">{{ $barber->name }}</td>
-                        <td class="text-secondary">{{ $barber->specialty }}</td>
-                        <td class="text-center"><span
+                        <td class="text-white">{{ $barber->specialty }}</td>
+                        <td class="text-center">
+                            <span
                                 class="badge border border-success text-success bg-transparent rounded-0 px-3">ACTIVE</span>
                         </td>
                         <td class="text-center">
@@ -60,29 +61,35 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Edit Barber</h5>
+                                    <h5 class="modal-title text-white">Edit Barber</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <form action="{{ route('admin.barbers.update', $barber->id) }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf @method('PUT')
                                     <div class="modal-body text-start" style="white-space: normal;">
-                                        <div class="mb-3"><label
-                                                class="form-label text-secondary small">NAME</label><input type="text"
-                                                name="name" class="form-control" value="{{ $barber->name }}"></div>
-                                        <div class="mb-3"><label
-                                                class="form-label text-secondary small">SPECIALTY</label><input
-                                                type="text" name="specialty" class="form-control"
-                                                value="{{ $barber->specialty }}"></div>
-                                        <div class="mb-3"><label
-                                                class="form-label text-secondary small">BIO</label><textarea name="bio"
-                                                class="form-control" rows="3">{{ $barber->bio }}</textarea></div>
-                                        <div class="mb-3"><label
-                                                class="form-label text-secondary small">PHOTO</label><input type="file"
-                                                name="photo" class="form-control"></div>
+                                        <div class="mb-3">
+                                            <label class="form-label text-secondary small">NAME</label>
+                                            <input type="text" name="name" class="form-control"
+                                                value="{{ $barber->name }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label text-secondary small">SPECIALTY</label>
+                                            <input type="text" name="specialty" class="form-control"
+                                                value="{{ $barber->specialty }}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label text-secondary small">BIO</label>
+                                            <textarea name="bio" class="form-control"
+                                                rows="3">{{ $barber->bio }}</textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label text-secondary small">PHOTO</label>
+                                            <input type="file" name="photo" class="form-control">
+                                        </div>
                                     </div>
                                     <div class="modal-footer border-0">
-                                        <button type="submit" class="btn btn-gold">Save</button>
+                                        <button type="submit" class="btn btn-gold">Save Changes</button>
                                     </div>
                                 </form>
                             </div>
@@ -103,6 +110,24 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add Barber</h5>
+                <h5 class="modal-title text-white">Add Barber</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+            <form action="{{ route('admin.barbers.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body text-start">
+                    <div class="mb-3"><label class="form-label text-secondary small">NAME</label><input type="text"
+                            name="name" class="form-control" required></div>
+                    <div class="mb-3"><label class="form-label text-secondary small">SPECIALTY</label><input type="text"
+                            name="specialty" class="form-control" required></div>
+                    <div class="mb-3"><label class="form-label text-secondary small">BIO</label><textarea name="bio"
+                            class="form-control" rows="3"></textarea></div>
+                    <div class="mb-3"><label class="form-label text-secondary small">PHOTO</label><input type="file"
+                            name="photo" class="form-control"></div>
+                </div>
+                <div class="modal-footer border-0"><button type="submit" class="btn btn-gold">Create</button></div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection

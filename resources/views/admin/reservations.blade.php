@@ -37,7 +37,7 @@
                         <td><span class="text-white">{{ $res->service->name ?? '-' }}</span></td>
                         <td>
                             <div class="text-gold">{{ \Carbon\Carbon::parse($res->date)->format('d M Y') }}</div>
-                            <small class="text-secondary">{{ $res->time }}</small>
+                            <small class="text-white">{{ $res->time }}</small>
                         </td>
                         <td class="text-center">
                             @if(strtolower($res->status) == 'pending')
@@ -69,7 +69,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-secondary">No reservations.</td>
+                        <td colspan="6" class="text-center py-5 text-secondary">No reservations found.</td>
                     </tr>
                     @endforelse
                 </tbody>
