@@ -34,25 +34,26 @@
                 <tbody>
                     @forelse($services as $service)
                     <tr>
-                        <td class="text-center text-muted">{{ $loop->iteration }}</td>
+                        <td class="text-center" style="color: var(--text-muted);">{{ $loop->iteration }}</td>
                         <td>
                             @if($service->image_path)
                             <img src="{{ $service->image_path }}" width="50" height="40"
                                 class="rounded object-fit-cover border">
                             @else
-                            <div class="bg-light rounded border d-flex align-items-center justify-content-center"
-                                style="width: 50px; height: 40px;">
-                                <i class="bi bi-image text-muted"></i>
+                            <div class="rounded border d-flex align-items-center justify-content-center"
+                                style="width: 50px; height: 40px; background-color: var(--bg-body);">
+                                <i class="bi bi-image" style="color: var(--text-muted);"></i>
                             </div>
                             @endif
                         </td>
                         <td>
                             <div class="fw-bold">{{ $service->name }}</div>
-                            <div class="small text-muted text-truncate" style="max-width: 250px;">
+                            <div class="small text-truncate" style="max-width: 250px; color: var(--text-muted);">
                                 {{ $service->description }}</div>
                         </td>
-                        <td>{{ $service->duration_minutes }} Menit</td>
-                        <td class="fw-bold text-dark">Rp {{ number_format($service->price, 0, ',', '.') }}</td>
+                        <td style="color: var(--text-muted);">{{ $service->duration_minutes }} Menit</td>
+                        <td class="fw-bold" style="color: var(--text-main);">Rp
+                            {{ number_format($service->price, 0, ',', '.') }}</td>
                         <td class="text-center">
                             <button class="btn btn-sm btn-outline-primary rounded-circle me-1"
                                 style="width: 32px; height: 32px;" data-bs-toggle="modal"
@@ -70,8 +71,8 @@
 
                     <div class="modal fade" id="modalEditService{{ $service->id }}" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content border-0">
-                                <div class="modal-header border-bottom">
+                            <div class="modal-content">
+                                <div class="modal-header border-bottom" style="border-color: var(--border-color);">
                                     <h5 class="modal-title fw-bold">Edit Layanan</h5>
                                     <button class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
@@ -79,28 +80,28 @@
                                     enctype="multipart/form-data">
                                     @csrf @method('PUT')
                                     <div class="modal-body">
-                                        <div class="mb-3"><label class="form-label small fw-bold text-muted">NAMA
-                                                LAYANAN</label><input type="text" name="name" class="form-control"
-                                                value="{{ $service->name }}"></div>
+                                        <div class="mb-3"><label class="form-label small fw-bold"
+                                                style="color: var(--text-muted);">NAMA LAYANAN</label><input type="text"
+                                                name="name" class="form-control" value="{{ $service->name }}"></div>
                                         <div class="row">
-                                            <div class="col-6 mb-3"><label
-                                                    class="form-label small fw-bold text-muted">HARGA (RP)</label><input
+                                            <div class="col-6 mb-3"><label class="form-label small fw-bold"
+                                                    style="color: var(--text-muted);">HARGA (RP)</label><input
                                                     type="number" name="price" class="form-control"
                                                     value="{{ $service->price }}"></div>
-                                            <div class="col-6 mb-3"><label
-                                                    class="form-label small fw-bold text-muted">DURASI
-                                                    (MENIT)</label><input type="number" name="duration"
-                                                    class="form-control" value="{{ $service->duration_minutes }}"></div>
+                                            <div class="col-6 mb-3"><label class="form-label small fw-bold"
+                                                    style="color: var(--text-muted);">DURASI (MENIT)</label><input
+                                                    type="number" name="duration" class="form-control"
+                                                    value="{{ $service->duration_minutes }}"></div>
                                         </div>
-                                        <div class="mb-3"><label
-                                                class="form-label small fw-bold text-muted">DESKRIPSI</label><textarea
+                                        <div class="mb-3"><label class="form-label small fw-bold"
+                                                style="color: var(--text-muted);">DESKRIPSI</label><textarea
                                                 name="description" class="form-control"
                                                 rows="3">{{ $service->description }}</textarea></div>
-                                        <div class="mb-3"><label
-                                                class="form-label small fw-bold text-muted">GAMBAR</label><input
-                                                type="file" name="image" class="form-control"></div>
+                                        <div class="mb-3"><label class="form-label small fw-bold"
+                                                style="color: var(--text-muted);">GAMBAR</label><input type="file"
+                                                name="image" class="form-control"></div>
                                     </div>
-                                    <div class="modal-footer border-top">
+                                    <div class="modal-footer border-top" style="border-color: var(--border-color);">
                                         <button type="submit" class="btn btn-gold w-100">Update Data</button>
                                     </div>
                                 </form>
@@ -109,7 +110,8 @@
                     </div>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">Belum ada layanan yang ditambahkan.</td>
+                        <td colspan="6" class="text-center py-5" style="color: var(--text-muted);">Belum ada layanan.
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -120,28 +122,32 @@
 
 <div class="modal fade" id="modalTambahService" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0">
-            <div class="modal-header border-bottom">
+        <div class="modal-content">
+            <div class="modal-header border-bottom" style="border-color: var(--border-color);">
                 <h5 class="modal-title fw-bold">Tambah Layanan Baru</h5>
                 <button class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form action="{{ route('admin.services.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
-                    <div class="mb-3"><label class="form-label small fw-bold text-muted">NAMA LAYANAN</label><input
-                            type="text" name="name" class="form-control" required></div>
+                    <div class="mb-3"><label class="form-label small fw-bold" style="color: var(--text-muted);">NAMA
+                            LAYANAN</label><input type="text" name="name" class="form-control" required></div>
                     <div class="row">
-                        <div class="col-6 mb-3"><label class="form-label small fw-bold text-muted">HARGA
-                                (RP)</label><input type="number" name="price" class="form-control" required></div>
-                        <div class="col-6 mb-3"><label class="form-label small fw-bold text-muted">DURASI
-                                (MENIT)</label><input type="number" name="duration" class="form-control"></div>
+                        <div class="col-6 mb-3"><label class="form-label small fw-bold"
+                                style="color: var(--text-muted);">HARGA (RP)</label><input type="number" name="price"
+                                class="form-control" required></div>
+                        <div class="col-6 mb-3"><label class="form-label small fw-bold"
+                                style="color: var(--text-muted);">DURASI (MENIT)</label><input type="number"
+                                name="duration" class="form-control"></div>
                     </div>
-                    <div class="mb-3"><label class="form-label small fw-bold text-muted">DESKRIPSI</label><textarea
-                            name="description" class="form-control" rows="3"></textarea></div>
-                    <div class="mb-3"><label class="form-label small fw-bold text-muted">GAMBAR</label><input
-                            type="file" name="image" class="form-control"></div>
+                    <div class="mb-3"><label class="form-label small fw-bold"
+                            style="color: var(--text-muted);">DESKRIPSI</label><textarea name="description"
+                            class="form-control" rows="3"></textarea></div>
+                    <div class="mb-3"><label class="form-label small fw-bold"
+                            style="color: var(--text-muted);">GAMBAR</label><input type="file" name="image"
+                            class="form-control"></div>
                 </div>
-                <div class="modal-footer border-top">
+                <div class="modal-footer border-top" style="border-color: var(--border-color);">
                     <button type="submit" class="btn btn-gold w-100">Simpan Layanan</button>
                 </div>
             </form>
