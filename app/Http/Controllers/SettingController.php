@@ -9,34 +9,39 @@ class SettingController extends Controller
 {
     public function index()
     {
-        // Ambil data setting pertama
+        // Ambil data setting pertama (atau baru jika belum ada)
         $setting = Setting::first();
-        // Passing variabel '$setting' (tunggal) ke view
         return view('admin.setting', compact('setting'));
     }
 
     public function update(Request $request)
     {
         $request->validate([
-            'app_name' => 'required',
-            'logo' => 'nullable|image|max:2048'
+            'app_name' => 'required|string|max:255',
+            'logo'     => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
-        $setting = Setting::first();
-        $updateData = ['app_name' => $request->app_name];
+        // Siapkan data update nama aplikasi
+        $dataToUpdate = [
+            'app_name' => $request->app_name
+        ];
 
+        // Proses Logo menjadi Base64 jika ada file yang diupload
         if ($request->hasFile('logo')) {
-            $path = $request->file('logo')->getRealPath();
+            $file = $request->file('logo');
+            $path = $file->getRealPath();
             $image = file_get_contents($path);
             $base64 = base64_encode($image);
-            $updateData['logo_path'] = 'data:image/' . $request->file('logo')->extension() . ';base64,' . $base64;
+            
+            // Simpan format lengkap: data:image/png;base64,.....
+            $dataToUpdate['logo_path'] = 'data:' . $file->getMimeType() . ';base64,' . $base64;
         }
 
-        if ($setting) {
-            $setting->update($updateData);
-        } else {
-            Setting::create($updateData);
-        }
+        // Update data jika ada, atau buat baru jika belum ada (id = 1)
+        Setting::updateOrCreate(
+            ['id' => 1], // Kunci pencarian
+            $dataToUpdate // Data yang disimpan
+        );
 
         return redirect()->back()->with('success', 'Pengaturan berhasil disimpan');
     }
