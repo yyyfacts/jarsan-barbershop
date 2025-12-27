@@ -4,7 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Akun - Jarsan Barbershop</title>
+
+    {{-- JUDUL DINAMIS --}}
+    <title>Daftar Akun - {{ $setting->app_name ?? 'Jarsan Barbershop' }}</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
     body {
@@ -64,7 +67,9 @@
     <div class="register-container">
         <div class="register-card">
             <h3 class="text-center mb-3 fw-bold">Buat Akun Baru</h3>
-            <p class="text-center text-muted mb-4 small">Daftar untuk melakukan reservasi online</p>
+            {{-- MENGGUNAKAN NAMA APLIKASI DINAMIS DI TEKS --}}
+            <p class="text-center text-muted mb-4 small">Daftar untuk melakukan reservasi di
+                {{ $setting->app_name ?? 'Jarsan Barbershop' }}</p>
 
             <form action="{{ route('register.process') }}" method="POST">
                 @csrf

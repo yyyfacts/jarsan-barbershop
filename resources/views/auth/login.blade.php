@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Jarsan Barbershop</title>
+    {{-- JUDUL DINAMIS --}}
+    <title>Login - {{ $setting->app_name ?? 'Jarsan Barbershop' }}</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
     body {
@@ -29,6 +31,7 @@
     }
 
     .login-image {
+        /* Gambar background samping tetap statis atau bisa diganti dinamis jika mau */
         background: url('{{ asset('images/banner-login.webp') }}') center/cover no-repeat;
         min-height: 100%;
         position: relative;
@@ -55,7 +58,11 @@
 
     .login-logo img {
         width: 150px;
-        filter: brightness(1.2);
+        /* Tambahkan object-fit agar logo admin yang tidak bulat tetap bagus */
+        max-height: 150px;
+        object-fit: contain;
+        filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+        /* Agar kontras dengan background gelap */
     }
 
     .form-section {
@@ -97,9 +104,18 @@
     <div class="login-container">
         <div class="login-card row g-0">
             <div class="col-md-6 login-image d-none d-md-block">
+
+                {{-- LOGO DINAMIS --}}
                 <div class="login-logo">
-                    <img src="{{ asset('images/logo jarsan.png') }}" alt="Logo Jarsan">
+                    @if(isset($setting) && !empty($setting->logo_path))
+                    {{-- Tampilkan Logo Upload Admin --}}
+                    <img src="{{ $setting->logo_path }}" alt="Logo App">
+                    @else
+                    {{-- Tampilkan Logo Default --}}
+                    <img src="{{ asset('images/logo jarsan.png') }}" alt="Logo Default">
+                    @endif
                 </div>
+
             </div>
 
             <div class="col-md-6 form-section d-flex flex-column justify-content-center">
@@ -139,7 +155,6 @@
                     </div>
                     <button type="submit" class="btn btn-login w-100 py-2 fw-bold mb-3">Masuk</button>
 
-                    {{-- TOMBOL LOGIN GOOGLE --}}
                     <div class="text-center position-relative mb-3">
                         <hr class="text-muted">
                         <span
