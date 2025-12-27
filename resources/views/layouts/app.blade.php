@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Jarsan Barbershop')</title>
+
+    {{-- JUDUL DINAMIS: Mengambil Nama Aplikasi dari Database --}}
+    <title>@yield('title') - {{ $setting->app_name ?? 'Jarsan Barbershop' }}</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <style>
@@ -49,10 +49,21 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-black py-3 sticky-top shadow-sm">
         <div class="container">
+
+            {{-- LOGO & NAMA WEBSITE DINAMIS --}}
             <a class="navbar-brand d-flex align-items-center" href="{{ route('welcome') }}">
+                @if(isset($setting) && !empty($setting->logo_path))
+                {{-- OPSI 1: Jika Admin sudah upload logo --}}
+                <img src="{{ $setting->logo_path }}" alt="Logo" height="40" class="me-2 object-fit-contain">
+                @else
+                {{-- OPSI 2: Logo Default (Bawaan Codingan) --}}
                 <img src="{{ asset('images/logo jarsan.png') }}" alt="Logo" height="40" class="me-2">
-                JARSAN BARBERSHOP
+                @endif
+
+                {{-- Nama Website dari Database --}}
+                {{ $setting->app_name ?? 'JARSAN BARBERSHOP' }}
             </a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -60,7 +71,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center">
 
-                    {{-- DAFTAR MENU LENGKAP (Sesuai Gambar 2) --}}
+                    {{-- DAFTAR MENU LENGKAP --}}
                     <li class="nav-item"><a class="nav-link" href="{{ route('welcome') }}">Beranda</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('about') }}">Tentang Kami</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('barberman') }}">Barberman</a></li>
@@ -96,7 +107,8 @@
 
     <footer class="bg-dark text-white py-4 mt-auto">
         <div class="container text-center">
-            <small>&copy; 2025 Jarsan Barbershop. All Rights Reserved.</small>
+            {{-- COPYRIGHT DINAMIS --}}
+            <small>&copy; {{ date('Y') }} {{ $setting->app_name ?? 'Jarsan Barbershop' }}. All Rights Reserved.</small>
         </div>
     </footer>
 
