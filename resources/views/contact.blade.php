@@ -1,133 +1,89 @@
 @extends('layouts.app')
 
-@section('title', 'Kontak')
+@section('title', 'Get in Touch')
 
 @section('content')
-<div class="container py-5">
-    <div class="text-center mb-5">
-        <h2 class="fw-bold text-uppercase">Hubungi Kami</h2>
-        <p class="text-muted">Kami siap membantu Anda! Silakan hubungi kami melalui form atau kunjungi lokasi kami
-            langsung.</p>
-    </div>
+<style>
+.contact-input {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3) !important;
+    color: white !important;
+    padding: 15px 0 !important;
+    border-radius: 0 !important;
+    transition: 0.4s;
+}
 
-    {{-- ✅ Pesan sukses --}}
-    @if(session('success'))
-    <div class="alert alert-success text-center fw-semibold">
-        {{ session('success') }}
-    </div>
-    @endif
+.contact-input:focus {
+    border-bottom-color: var(--luxury-gold) !important;
+    box-shadow: none !important;
+    background: rgba(212, 175, 55, 0.05) !important;
+}
 
-    {{-- ✅ Pesan error --}}
-    @if($errors->any())
-    <div class="alert alert-danger text-center fw-semibold">
-        Terdapat kesalahan dalam pengisian form. Silakan periksa kembali.
-    </div>
-    @endif
+.contact-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
 
+.map-container {
+    border: 1px solid var(--gold-accent);
+    filter: grayscale(100%) invert(90%) contrast(90%);
+    transition: 0.5s;
+}
+
+.map-container:hover {
+    filter: grayscale(0%) invert(0%);
+}
+</style>
+
+<div class="container py-5 mt-5">
     <div class="row g-5">
-        <!-- Form Kontak -->
-        <div class="col-md-6">
-            <div class="card border-0 shadow-sm rounded-4 p-4">
-                <h4 class="fw-bold mb-4">Kirim Pesan</h4>
-                <form action="{{ route('contact.store') }}" method="POST">
-                    @csrf
+        <div class="col-lg-6" data-aos="fade-right">
+            <h5 class="text-gold letter-spacing-2 mb-2">SEND A MESSAGE</h5>
+            <h2 class="display-4 fw-bold text-white mb-5">HUBUNGI KAMI</h2>
 
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Nama Lengkap</label>
-                        <input type="text" id="name" name="name" value="{{ old('name') }}"
-                            class="form-control p-2 @error('name') is-invalid @enderror"
-                            placeholder="Masukkan nama Anda" required>
-                        @error('name')
-                        <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" id="email" name="email" value="{{ old('email') }}"
-                            class="form-control p-2 @error('email') is-invalid @enderror"
-                            placeholder="Masukkan email Anda" required>
-                        @error('email')
-                        <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="message" class="form-label">Pesan</label>
-                        <textarea id="message" name="message" rows="4"
-                            class="form-control p-2 @error('message') is-invalid @enderror"
-                            placeholder="Tulis pesan Anda..." required>{{ old('message') }}</textarea>
-                        @error('message')
-                        <small class="text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-
-                    <button type="submit" class="btn btn-dark w-100 py-2 rounded-3 btn-kirim">Kirim Pesan</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- Lokasi / Google Maps -->
-        <div class="col-md-6">
-            <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
-                <div class="card-body p-0">
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4732.175253708479!2d109.19451492806346!3d-7.614514466033188!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e654152607c751f%3A0xd2db077bc1144cea!2sJarsan%20Barbershop!5e1!3m2!1sid!2sid!4v1761250591023!5m2!1sid!2sid"
-                        width="100%" height="475" style="border:0;" allowfullscreen="" loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
+            <form action="{{ route('contact.store') }}" method="POST">
+                @csrf
+                <div class="mb-4">
+                    <label class="small text-gold fw-bold letter-spacing-2">FULL NAME</label>
+                    <input type="text" name="name" class="form-control contact-input"
+                        placeholder="Masukkan nama Anda..." required>
                 </div>
+                <div class="mb-4">
+                    <label class="small text-gold fw-bold letter-spacing-2">EMAIL ADDRESS</label>
+                    <input type="email" name="email" class="form-control contact-input" placeholder="email@contoh.com"
+                        required>
+                </div>
+                <div class="mb-5">
+                    <label class="small text-gold fw-bold letter-spacing-2">MESSAGE</label>
+                    <textarea name="message" rows="4" class="form-control contact-input"
+                        placeholder="Apa yang ingin Anda sampaikan?"></textarea>
+                </div>
+                <button type="submit" class="btn btn-gold-luxury w-100 py-3 fs-5">KIRIM PESAN SEKARANG</button>
+            </form>
+        </div>
+
+        <div class="col-lg-6" data-aos="fade-left">
+            <div class="glass-card p-5 mb-4 border-0">
+                <h4 class="text-white fw-bold mb-4">OFFICE & BARBER</h4>
+                <p class="text-muted d-flex align-items-center mb-3">
+                    <i class="bi bi-geo-alt text-gold me-3 fs-4"></i>
+                    Jl. Jarsan No. 123, Barbershop City, Indonesia
+                </p>
+                <p class="text-muted d-flex align-items-center mb-3">
+                    <i class="bi bi-telephone text-gold me-3 fs-4"></i>
+                    0882 3256 0561
+                </p>
+                <p class="text-muted d-flex align-items-center mb-0">
+                    <i class="bi bi-envelope text-gold me-3 fs-4"></i>
+                    jarsanbarbershop@gmail.com
+                </p>
+            </div>
+
+            <div class="map-container overflow-hidden" style="height: 350px;">
+                <iframe src="https://www.google.com/maps/embed?..." width="100%" height="100%" style="border:0;"
+                    allowfullscreen="" loading="lazy"></iframe>
             </div>
         </div>
-    </div>
-
-    <!-- Informasi Kontak -->
-    <div class="text-center mt-5">
-        <h5 class="fw-bold mb-3">Informasi Kontak</h5>
-        <p class="text-muted mb-1">
-            <i class="fi fi-sr-phone-flip me-2"></i>
-            <a href="tel:+6288232560561" class="text-decoration-none text-dark">0882 3256 0561</a>
-        </p>
-        <p class="text-muted">
-            <i class="fi fi-sr-envelope me-2"></i>
-            <a href="mailto:jarsanbarbershop@gmail.com"
-                class="text-decoration-none text-dark">jarsanbarbershop@gmail.com</a>
-        </p>
     </div>
 </div>
 @endsection
-
-@push('styles')
-<style>
-/* Efek shadow hitam saat input fokus */
-.form-control:focus {
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
-    border-color: #000;
-    outline: none;
-    transition: all 0.3s ease;
-}
-
-iframe {
-    border-radius: 15px;
-}
-
-/* Tombol elegan dengan efek hover */
-.btn-kirim {
-    background-color: #000;
-    color: white;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-}
-
-.btn-kirim:hover {
-    background-color: #ffffff;
-    color: #000;
-    border: 1px solid #000;
-    transform: scale(1.03);
-}
-
-.alert {
-    border-radius: 10px;
-}
-</style>
-@endpush

@@ -2,102 +2,107 @@
 
 @section('content')
 <style>
-.hero-section {
-    height: 90vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.9)),
-    url('{{ asset('images/banner.webp') }}') center/cover no-repeat;
+.hero-vintage {
+    height: 95vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), var(--deep-charcoal)),
+    url('{{ asset('images/banner.webp') }}') fixed center/cover;
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
+}
+
+.text-reveal {
+    overflow: hidden;
+}
+
+.text-reveal span {
+    display: block;
+    transform: translateY(100%);
+    animation: reveal 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+@keyframes reveal {
+    to {
+        transform: translateY(0);
+    }
 }
 
 .glass-card {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--glass-bg);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 40px 30px;
-    transition: 0.4s;
-    height: 100%;
+    padding: 40px;
+    transition: 0.5s;
+    text-align: center;
 }
 
 .glass-card:hover {
     border-color: var(--luxury-gold);
     transform: translateY(-10px);
-    background: rgba(255, 255, 255, 0.06);
-}
-
-.text-gold {
-    color: var(--luxury-gold) !important;
-}
-
-.letter-spacing-5 {
-    letter-spacing: 5px;
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
 }
 </style>
 
-<section class="hero-section">
-    <div class="container text-center">
-        <h5 class="text-gold letter-spacing-5 fw-bold mb-3" data-aos="fade-down">PROFESSIONAL GROOMING</h5>
-        <h1 class="display-1 fw-bold text-white mb-4" data-aos="zoom-in">QUALITY <span
-                class="text-gold fst-italic">Over</span> QUANTITY</h1>
-        <p class="lead text-white mb-5 mx-auto" style="max-width: 700px;" data-aos="fade-up">
-            Ritual ketampanan premium yang dirancang khusus untuk pria yang menghargai detail dan presisi tinggi.
-        </p>
-        <a href="{{ route('reservasi') }}" class="btn btn-warning btn-lg px-5 py-3 rounded-0 fw-bold shadow-lg"
-            data-aos="fade-up">BOOK YOUR RITUAL</a>
+<section class="hero-vintage">
+    <div class="container">
+        <div class="text-reveal"><span class="text-gold fw-bold letter-spacing-5 mb-3 d-block">ESTABLISHED 2025</span>
+        </div>
+        <h1 class="display-1 fw-bold mb-4" data-aos="zoom-in">QUALITY <br> <span
+                class="fst-italic text-gold">Over</span> QUANTITY</h1>
+        <p class="lead mb-5 opacity-75 mx-auto" style="max-width: 700px;" data-aos="fade-up">Grooming ritual premium
+            untuk pria yang menghargai detail dan presisi tinggi di setiap helai rambutnya.</p>
+        <div data-aos="fade-up">
+            @auth
+            <a href="{{ route('reservasi') }}" class="btn btn-gold btn-lg px-5 py-3">MULAI RITUAL ANDA</a>
+            @else
+            <a href="{{ route('login') }}" class="btn btn-gold btn-lg px-5 py-3">LOGIN UNTUK BOOKING</a>
+            @endauth
+        </div>
     </div>
 </section>
 
-<section class="py-5" style="background: var(--deep-charcoal)">
+<section class="py-5 bg-matte">
     <div class="container py-5">
-        <div class="text-center mb-5">
-            <h2 class="display-4 fw-bold text-white" data-aos="fade-up">OUR PHILOSOPHY</h2>
-            <div class="mx-auto mt-2" style="width: 80px; height: 3px; background: var(--luxury-gold)"></div>
-        </div>
-
+        <h2 class="display-4 fw-bold text-center mb-5" data-aos="fade-down">EXCLUSIVE SERVICES</h2>
         <div class="row g-4">
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="glass-card text-center">
-                    <i class="bi bi-scissors text-gold display-4 mb-4"></i>
-                    <h4 class="text-white fw-bold mb-3">Expert Barber</h4>
-                    <p class="text-light opacity-75">Kombinasi teknik klasik dan modern oleh kapster berpengalaman untuk
-                        hasil yang sangat presisi.</p>
+                <div class="glass-card">
+                    <i class="bi bi-scissors fs-1 text-gold mb-4"></i>
+                    <h4 class="fw-bold">Expert Barber</h4>
+                    <p class="text-muted">Ditangani oleh seniman rambut berpengalaman tinggi.</p>
                 </div>
             </div>
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="glass-card text-center">
-                    <i class="bi bi-cup-hot text-gold display-4 mb-4"></i>
-                    <h4 class="text-white fw-bold mb-3">Luxury Lounge</h4>
-                    <p class="text-light opacity-75">Nikmati kenyamanan maksimal dengan ruangan full AC, musik yang
-                        rileks, dan free high-speed WiFi.</p>
+                <div class="glass-card">
+                    <i class="bi bi-cup-hot fs-1 text-gold mb-4"></i>
+                    <h4 class="fw-bold">Luxury Lounge</h4>
+                    <p class="text-muted">Ruangan full AC dengan kopi premium saat Anda menunggu.</p>
                 </div>
             </div>
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
-                <div class="glass-card text-center">
-                    <i class="bi bi-gem text-gold display-4 mb-4"></i>
-                    <h4 class="text-white fw-bold mb-3">Affordable Luxury</h4>
-                    <p class="text-light opacity-75">Kualitas pelayanan bintang lima yang dapat dinikmati oleh <span
-                            class="text-gold fw-bold">Semua Kalangan</span> tanpa kompromi.</p>
+                <div class="glass-card">
+                    <i class="bi bi-gem fs-1 text-gold mb-4"></i>
+                    <h4 class="fw-bold">Premium Quality</h4>
+                    <p class="text-muted">Layanan bintang lima yang dapat dinikmati semua kalangan.</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="py-5" style="background: var(--matte-black)">
-    <div class="container text-center py-5">
-        <h2 class="display-5 fw-bold text-white mb-5">VOICE OF GENTLEMEN</h2>
-        <div id="quoteCarousel" class="carousel slide" data-bs-ride="carousel">
+<section class="py-5" style="background: #050505">
+    <div class="container py-5 text-center">
+        <h3 class="mb-5 text-gold letter-spacing-2">VOICE OF GENTLEMEN</h3>
+        <div id="testi" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <p class="fs-2 text-white fst-italic">"Presisi pengerjaannya luar biasa. Fade-nya paling rapi yang
-                        pernah saya rasakan."</p>
-                    <p class="text-gold fw-bold mt-3">- ARYA, PELANGGAN SETIA</p>
+                    <p class="fs-2 fst-italic">"Fade paling rapi yang pernah saya dapatkan."</p>
+                    <footer class="mt-3 text-gold">- Zain, Entrepreneur</footer>
                 </div>
                 <div class="carousel-item">
-                    <p class="fs-2 text-white fst-italic">"Tempatnya sangat nyaman dan berkelas. Cocok untuk semua
-                        kalangan yang ingin tampil beda."</p>
-                    <p class="text-gold fw-bold mt-3">- RIZKY, ENTREPRENEUR</p>
+                    <p class="fs-2 fst-italic">"Vibes-nya dapet banget, serasa jadi bos."</p>
+                    <footer class="mt-3 text-gold">- Aga, Creative Director</footer>
                 </div>
             </div>
         </div>

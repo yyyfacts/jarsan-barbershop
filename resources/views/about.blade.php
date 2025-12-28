@@ -1,147 +1,110 @@
 @extends('layouts.app')
 
-@section('title', 'Tentang Kami - Jarsan Barbershop')
+@section('title', 'Our Legacy')
 
 @section('content')
+<style>
+.about-hero {
+    height: 70vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), var(--deep-charcoal)),
+    url('{{ asset('images/banner-login.webp') }}') center/cover fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-{{-- =========================
-   HERO / BANNER
-========================= --}}
-<section class="hero-banner d-flex align-items-center text-center text-white position-relative w-100"
-    style="background: url('{{ asset('images/banner-login.webp') }}') center/cover no-repeat; height: 60vh;">
+.section-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--luxury-gold);
+}
 
-    <div class="overlay position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.7); z-index: 1;">
-    </div>
+.glass-box {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 60px;
+    position: relative;
+}
 
-    <div class="position-relative z-2 w-100">
-        <h1 class="fw-bold display-5 mb-3 text-shadow">Tentang Jarsan Barbershop</h1>
-        <p class="lead mb-0 text-shadow">Gaya rambut terbaik dimulai dari tangan profesional</p>
+.img-luxury {
+    border: 1px solid var(--luxury-gold);
+    padding: 15px;
+    background: var(--matte-black);
+    transition: 0.5s;
+}
+
+.img-luxury:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 30px var(--gold-accent);
+}
+</style>
+
+<section class="about-hero">
+    <div class="container text-center" data-aos="zoom-out">
+        <h5 class="text-gold letter-spacing-5 mb-3">THE HERITAGE</h5>
+        <h1 class="display-2 fw-bold text-white">CRAFTING CONFIDENCE</h1>
     </div>
 </section>
 
-{{-- =========================
-   SEJARAH KAMI (DINAMIS)
-========================= --}}
-@php
-// Logika Background: Jika ada di DB pakai DB, jika tidak pakai Default
-$bgHistory = $about->history_image ?? asset('images/banner.webp');
-@endphp
-
-<section class="position-relative text-white d-flex align-items-center"
-    style="background: url('{{ $bgHistory }}') center/cover no-repeat; min-height: 70vh;">
-
-    <div class="overlay position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.8);"></div>
-
-    <div class="container position-relative z-2">
-        <div class="row justify-content-center text-center">
-            <div class="col-lg-8">
-                <h2 class="fw-bold text-warning mb-4">Sejarah Kami</h2>
-                <p class="lead text-light fs-5 lh-lg">
-                    {{-- KONTEN DINAMIS --}}
-                    {{ $about->history ?? 'Sejarah belum ditambahkan oleh admin.' }}
+<section class="py-5 bg-matte overflow-hidden">
+    <div class="container py-5">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6" data-aos="fade-right">
+                <div class="position-relative">
+                    <img src="{{ $about->history_image ?? asset('images/banner.webp') }}"
+                        class="img-fluid img-luxury shadow-lg" alt="History">
+                </div>
+            </div>
+            <div class="col-lg-6 px-lg-5" data-aos="fade-left">
+                <h2 class="section-title mb-4">Sejarah Kami</h2>
+                <p class="lead text-white opacity-75 lh-lg">
+                    {{ $about->history ?? 'Sejarah Jarsan Barbershop dimulai dari visi untuk menghadirkan ritual ketampanan klasik dalam balutan modernitas.' }}
                 </p>
+                <div class="mt-5 border-top border-warning pt-4" style="width: 100px;"></div>
             </div>
         </div>
     </div>
 </section>
 
-{{-- =========================
-   MISI KAMI (DINAMIS)
-========================= --}}
-@php
-$bgMission = $about->mission_image ?? asset('images/banner-login.webp');
-@endphp
-
-<section class="position-relative text-white d-flex align-items-center"
-    style="background: url('{{ $bgMission }}') center/cover no-repeat; min-height: 60vh;">
-
-    <div class="overlay position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0,0,0,0.8);"></div>
-
-    <div class="container position-relative z-2">
-        <div class="row justify-content-center text-center">
-            <div class="col-lg-8">
-                <h2 class="fw-bold text-warning mb-4">Misi Kami</h2>
-                <p class="lead text-light fs-5 lh-lg">
-                    {{-- KONTEN DINAMIS --}}
-                    {{ $about->mission ?? 'Misi belum ditambahkan oleh admin.' }}
-                </p>
-            </div>
+<section class="py-5 bg-deep" style="background: var(--deep-charcoal)">
+    <div class="container py-5">
+        <div class="glass-box text-center" data-aos="fade-up">
+            <h5 class="text-gold letter-spacing-2 mb-4">OUR PHILOSOPHY</h5>
+            <h2 class="display-4 fw-bold text-white mb-4 italic">"Misi Kami Adalah Presisi"</h2>
+            <p class="fs-5 text-white opacity-75 mx-auto" style="max-width: 800px;">
+                {{ $about->mission ?? 'Memberikan pelayanan grooming terbaik bagi semua kalangan dengan mengutamakan kualitas, kenyamanan, dan detail yang tak tertandingi.' }}
+            </p>
         </div>
     </div>
 </section>
 
-{{-- =========================
-   KENAPA PILIH KAMI (STATIC)
-========================= --}}
-<section class="py-5 position-relative bg-dark">
-    <div class="container position-relative z-2 text-center text-light">
-        <h2 class="fw-bold mb-5 text-uppercase text-warning text-shadow">Kenapa Pilih Kami?</h2>
+<section class="py-5 bg-matte">
+    <div class="container py-5 text-center">
+        <h2 class="text-white mb-5 display-5 fw-bold">WHY CHOOSE THE BEST?</h2>
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="p-4 border border-secondary rounded-4 h-100">
-                    <i class="bi bi-scissors display-4 text-warning mb-3"></i>
-                    <h5 class="fw-bold text-light">Barber Berpengalaman</h5>
-                    <p class="text-white-50 fs-6">
-                        Tim kami terdiri dari barber berpengalaman dengan keahlian dalam berbagai gaya potongan modern
-                        dan klasik.
-                    </p>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="p-5 glass-card h-100 border-0">
+                    <i class="bi bi-scissors display-3 text-gold mb-4"></i>
+                    <h4 class="text-white fw-bold">MASTER BARBER</h4>
+                    <p class="text-muted">Seniman rambut yang tersertifikasi dan berpengalaman luas.</p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="p-4 border border-secondary rounded-4 h-100">
-                    <i class="bi bi-star-fill display-4 text-warning mb-3"></i>
-                    <h5 class="fw-bold text-light">Kualitas Premium</h5>
-                    <p class="text-white-50 fs-6">
-                        Kami menggunakan produk rambut terbaik untuk menjaga kesehatan dan tampilan rambut Anda.
-                    </p>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="p-5 glass-card h-100 border-0">
+                    <i class="bi bi-shield-check display-3 text-gold mb-4"></i>
+                    <h4 class="text-white fw-bold">PREMIUM TOOLS</h4>
+                    <p class="text-muted">Hanya menggunakan produk dan alat kualitas internasional.</p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="p-4 border border-secondary rounded-4 h-100">
-                    <i class="bi bi-clock-history display-4 text-warning mb-3"></i>
-                    <h5 class="fw-bold text-light">Cepat & Tepat Waktu</h5>
-                    <p class="text-white-50 fs-6">
-                        Dengan sistem reservasi online dan pelayanan efisien, Anda tak perlu menunggu lama untuk tampil
-                        keren.
-                    </p>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="p-5 glass-card h-100 border-0">
+                    <i class="bi bi-cup-hot display-3 text-gold mb-4"></i>
+                    <h4 class="text-white fw-bold">EXECUTIVE LOUNGE</h4>
+                    <p class="text-muted">Kenyamanan maksimal dengan kopi pilihan dan suasana eksklusif.</p>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
-{{-- =========================
-   CTA SECTION
-========================= --}}
-<section class="py-5 bg-warning text-center text-dark">
-    <div class="container">
-        <h3 class="fw-bold mb-3">Ingin tampil lebih keren?</h3>
-        <p class="mb-4">Pesan jadwal cukurmu sekarang dan rasakan pengalaman berbeda di Jarsan Barbershop.</p>
-        <a href="{{ url('/reservasi') }}" class="btn btn-dark fw-semibold rounded-pill px-5 py-2 shadow-sm">
-            Reservasi Sekarang
-        </a>
     </div>
 </section>
 @endsection
-
-@push('styles')
-<style>
-.hero-banner {
-    background-position: center;
-    background-size: cover;
-    transition: background-size 1s ease;
-}
-
-.hero-banner:hover {
-    background-size: 110%;
-}
-
-.text-shadow {
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-}
-
-.overlay {
-    background: rgba(0, 0, 0, 0.6);
-}
-</style>
-@endpush

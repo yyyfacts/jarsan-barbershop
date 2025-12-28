@@ -1,62 +1,55 @@
 @extends('layouts.app')
 
-@section('title', 'Join Elite Club')
+@section('title', 'Join Jarsan Elite')
 
 @section('content')
-<div class="d-flex align-items-center justify-content-center py-5"
-    style="min-height: 90vh; background: url('{{ asset('images/banner.webp') }}') center/cover no-repeat fixed;">
-    <div class="overlay" style="position: absolute; inset: 0; background: rgba(10,10,10,0.85);"></div>
-
-    <div class="container position-relative z-2" style="max-width: 550px;">
-        <div class="glass-card p-5 shadow-lg" data-aos="fade-up" style="border-top: 3px solid var(--luxury-gold);">
-
+<div class="register-container d-flex align-items-center justify-content-center"
+    style="min-height: 90vh; padding: 50px 0;">
+    <div class="container" style="max-width: 550px;">
+        <div class="glass-card p-5 shadow-lg" data-aos="fade-up">
             <div class="text-center mb-5">
-                @if($setting && $setting->logo_path)
-                <img src="{{ $setting->logo_path }}" class="mb-3 rounded-circle"
-                    style="width: 80px; border: 2px solid var(--luxury-gold); padding: 3px;">
-                @endif
-                <h3 class="luxury-font text-white fw-bold mb-2">JOIN THE ELITE</h3>
-                <p class="text-white opacity-75 small">Daftar untuk menikmati layanan grooming premium bagi <span
-                        class="text-gold fw-bold">Semua Kalangan</span>.</p>
+                <h3 class="display-6 fw-bold text-white mb-2">JOIN THE ELITE</h3>
+                <p class="text-white opacity-75 small">Layanan grooming premium untuk <span class="fw-bold"
+                        style="color: var(--luxury-gold)">Semua Kalangan</span>.</p>
+                <div class="mx-auto" style="width: 50px; height: 3px; background: var(--luxury-gold);"></div>
             </div>
 
             <form action="{{ route('register.process') }}" method="POST">
                 @csrf
-                <div class="row">
-                    <div class="col-12 mb-4">
-                        <label class="form-label small text-gold fw-bold letter-spacing-2">FULL NAME</label>
-                        <input type="text" name="name"
-                            class="form-control bg-transparent border-0 border-bottom border-secondary text-white rounded-0 ps-0 py-2"
-                            placeholder="Nama Lengkap Anda" required>
-                    </div>
-
-                    <div class="col-12 mb-4">
-                        <label class="form-label small text-gold fw-bold letter-spacing-2">EMAIL ADDRESS</label>
-                        <input type="email" name="email"
-                            class="form-control bg-transparent border-0 border-bottom border-secondary text-white rounded-0 ps-0 py-2"
-                            placeholder="contoh@email.com" required>
-                    </div>
-
-                    <div class="col-md-6 mb-4">
-                        <label class="form-label small text-gold fw-bold letter-spacing-2">PASSWORD</label>
-                        <input type="password" name="password"
-                            class="form-control bg-transparent border-0 border-bottom border-secondary text-white rounded-0 ps-0 py-2"
-                            placeholder="Min. 8 Karakter" required>
-                    </div>
-
-                    <div class="col-md-6 mb-4">
-                        <label class="form-label small text-gold fw-bold letter-spacing-2">CONFIRM</label>
-                        <input type="password" name="password_confirmation"
-                            class="form-control bg-transparent border-0 border-bottom border-secondary text-white rounded-0 ps-0 py-2"
-                            placeholder="Ulangi Password" required>
-                    </div>
+                <div class="mb-4">
+                    <label class="form-label small fw-bold text-white">FULL NAME</label>
+                    <input type="text" name="name"
+                        class="form-control bg-transparent border-0 border-bottom border-secondary text-white rounded-0 p-2 px-0"
+                        style="box-shadow: none;" placeholder="Your Full Name" required>
                 </div>
 
-                <button type="submit" class="btn btn-gold-luxury w-100 py-3 my-4 fs-6">CREATE MEMBERSHIP</button>
+                <div class="mb-4">
+                    <label class="form-label small fw-bold text-white">EMAIL ADDRESS</label>
+                    <input type="email" name="email"
+                        class="form-control bg-transparent border-0 border-bottom border-secondary text-white rounded-0 p-2 px-0"
+                        style="box-shadow: none;" placeholder="example@email.com" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label small fw-bold text-white">CREATE PASSWORD</label>
+                    <input type="password" name="password"
+                        class="form-control bg-transparent border-0 border-bottom border-secondary text-white rounded-0 p-2 px-0"
+                        style="box-shadow: none;" placeholder="Min. 8 Characters" required>
+                </div>
+
+                <div class="mb-5">
+                    <label class="form-label small fw-bold text-white">CONFIRM PASSWORD</label>
+                    <input type="password" name="password_confirmation"
+                        class="form-control bg-transparent border-0 border-bottom border-secondary text-white rounded-0 p-2 px-0"
+                        style="box-shadow: none;" placeholder="Repeat Password" required>
+                </div>
+
+                <button type="submit" class="btn btn-gold-luxury w-100 py-3 mb-4">Create Membership</button>
 
                 <div class="text-center">
-                    <p class="text-muted small mb-0">Sudah memiliki akun? <a href="{{ route('login') }}"
-                            class="text-gold fw-bold text-decoration-none">Login di sini</a></p>
+                    <p class="text-white small">Sudah menjadi anggota? <a href="{{ route('login') }}"
+                            class="fw-bold text-decoration-none" style="color: var(--luxury-gold) !important;">Login di
+                            sini</a></p>
                 </div>
             </form>
         </div>
