@@ -4,115 +4,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    {{-- JUDUL DINAMIS: Mengambil Nama Aplikasi dari Database --}}
     <title>@yield('title') - {{ $setting->app_name ?? 'Jarsan Barbershop' }}</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
+        rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
+    :root {
+        --deep-charcoal: #121212;
+        --matte-black: #1a1a1a;
+        --luxury-gold: #D4AF37;
+        --metallic-red: #c41e3a;
+        --glass-white: rgba(255, 255, 255, 0.05);
+        --font-main: 'Montserrat', sans-serif;
+        --font-heading: 'Playfair Display', serif;
+    }
+
     body {
-        font-family: 'Poppins', sans-serif;
-        background-color: #f8f9fa;
+        font-family: var(--font-main);
+        background-color: var(--deep-charcoal);
+        color: #ffffff;
+        overflow-x: hidden;
     }
 
+    h1,
+    h2,
+    h3,
     .navbar-brand {
-        font-weight: bold;
-        letter-spacing: 1px;
-        text-transform: uppercase;
+        font-family: var(--font-heading);
     }
 
-    .bg-black {
-        background-color: #000 !important;
+    /* --- AESTHETIC PRE-LOADER --- */
+    #preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--deep-charcoal);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    /* Menu Link Style */
-    .navbar-dark .navbar-nav .nav-link {
-        color: rgba(255, 255, 255, 0.8);
-        font-size: 0.95rem;
-        margin: 0 5px;
-        transition: 0.3s;
+    .loader-logo {
+        width: 80px;
+        animation: pulse 2s infinite;
+        filter: drop-shadow(0 0 10px var(--luxury-gold));
     }
 
-    .navbar-dark .navbar-nav .nav-link:hover,
-    .navbar-dark .navbar-nav .nav-link.active {
-        color: #fff;
-        font-weight: 600;
+    @keyframes pulse {
+        0% {
+            opacity: 0.5;
+            transform: scale(0.9);
+        }
+
+        50% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        100% {
+            opacity: 0.5;
+            transform: scale(0.9);
+        }
+    }
+
+    /* --- GLASSMORPHISM NAVBAR --- */
+    .navbar-luxury {
+        background: rgba(18, 18, 18, 0.8);
+        backdrop-filter: blur(15px);
+        border-bottom: 1px solid var(--glass-white);
+        padding: 1.2rem 0;
+    }
+
+    /* --- MOBILE FLOATING DOCK --- */
+    @media (max-width: 991px) {
+        .mobile-dock {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(26, 26, 26, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--luxury-gold);
+            border-radius: 50px;
+            display: flex;
+            padding: 10px 25px;
+            z-index: 999;
+            gap: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .mobile-dock a {
+            color: #fff;
+            font-size: 1.4rem;
+            transition: 0.3s;
+        }
+
+        .mobile-dock a.active {
+            color: var(--luxury-gold);
+        }
+
+        .navbar-toggler {
+            display: none;
+        }
+
+        /* Hide default toggler for unique feel */
     }
     </style>
     @stack('styles')
 </head>
 
-<body class="d-flex flex-column min-vh-100">
+<body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-black py-3 sticky-top shadow-sm">
+    <div id="preloader">
+        <img src="{{ asset('images/logo-jarsan.png') }}" class="loader-logo" alt="Loading...">
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-luxury sticky-top">
         <div class="container">
-
-            {{-- LOGO & NAMA WEBSITE DINAMIS --}}
-            <a class="navbar-brand d-flex align-items-center" href="{{ route('welcome') }}">
-                @if(isset($setting) && !empty($setting->logo_path))
-                {{-- OPSI 1: Jika Admin sudah upload logo --}}
-                <img src="{{ $setting->logo_path }}" alt="Logo" height="40" class="me-2 object-fit-contain">
-                @else
-                {{-- OPSI 2: Logo Default (Bawaan Codingan) --}}
-                <img src="{{ asset('images/logo jarsan.png') }}" alt="Logo" height="40" class="me-2">
-                @endif
-
-                {{-- Nama Website dari Database --}}
-                {{ $setting->app_name ?? 'JARSAN BARBERSHOP' }}
+            <a class="navbar-brand fs-3" href="{{ route('welcome') }}">
+                <span style="color: var(--luxury-gold)">J</span>ARSAN
             </a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-
-                    {{-- DAFTAR MENU LENGKAP --}}
+                <ul class="navbar-nav ms-auto gap-4">
                     <li class="nav-item"><a class="nav-link" href="{{ route('welcome') }}">Beranda</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('about') }}">Tentang Kami</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('barberman') }}">Barberman</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('pricelist') }}">Price List</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('contact') }}">Kontak</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('reservasi') }}">Reservasi</a></li>
-
-                    {{-- LOGIKA TOMBOL KANAN (Login/Logout) --}}
-                    @guest
-                    {{-- Kalau Belum Login --}}
-                    <li class="nav-item ms-lg-3">
-                        <a href="{{ route('login') }}"
-                            class="btn btn-outline-light rounded-pill px-4 btn-sm fw-bold">Login</a>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('pricelist') }}">Layanan</a></li>
+                    <li class="nav-item">
+                        <a href="{{ route('reservasi') }}" class="btn btn-outline-gold rounded-0 px-4">RESERVASI</a>
                     </li>
-                    @else
-                    {{-- Kalau Sudah Login --}}
-                    <li class="nav-item ms-lg-3">
-                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                            @csrf
-                            <button type="submit" class="btn btn-outline-light rounded-0 px-3 btn-sm">Logout</button>
-                        </form>
-                    </li>
-                    @endguest
-
                 </ul>
             </div>
         </div>
     </nav>
 
-    <main class="flex-grow-1">
+    <div class="mobile-dock d-lg-none">
+        <a href="{{ route('welcome') }}"><i class="bi bi-house-door"></i></a>
+        <a href="{{ route('pricelist') }}"><i class="bi bi-scissors"></i></a>
+        <a href="{{ route('reservasi') }}"><i class="bi bi-calendar-check-fill"
+                style="color: var(--luxury-gold)"></i></a>
+        <a href="{{ route('barberman') }}"><i class="bi bi-people"></i></a>
+        <a href="{{ route('contact') }}"><i class="bi bi-geo-alt"></i></a>
+    </div>
+
+    <main>
         @yield('content')
     </main>
 
-    <footer class="bg-dark text-white py-4 mt-auto">
+    <footer class="py-5 border-top border-secondary mt-5" style="background: var(--matte-black)">
         <div class="container text-center">
-            {{-- COPYRIGHT DINAMIS --}}
-            <small>&copy; {{ date('Y') }} {{ $setting->app_name ?? 'Jarsan Barbershop' }}. All Rights Reserved.</small>
+            <h3 class="mb-4 text-gold">JARSAN BARBERSHOP</h3>
+            <div class="social-links mb-4">
+                <a href="#" class="mx-2 text-white"><i class="bi bi-instagram fs-4"></i></a>
+                <a href="#" class="mx-2 text-white"><i class="bi bi-tiktok fs-4"></i></a>
+            </div>
+            <p class="text-muted small">© {{ date('Y') }} Jarsan Barbershop. Crafted for Professionals.</p>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+    AOS.init({
+        duration: 1000,
+        once: true
+    });
+    window.addEventListener('load', function() {
+        $('#preloader').fadeOut('slow');
+    });
+    </script>
     @stack('scripts')
 </body>
 
