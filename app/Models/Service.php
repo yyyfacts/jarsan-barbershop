@@ -9,11 +9,10 @@ class Service extends Model
 {
     use HasFactory;
 
-    // PERBAIKAN: Ganti 'duration' menjadi 'duration_minutes'
     protected $fillable = [
         'name',
         'price',
-        'duration_minutes', // INI YANG BENAR
+        'duration_minutes',
         'description',
         'image_path',
         'is_active'

@@ -7,14 +7,6 @@ use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
-    // === USER ===
-    public function index()
-    {
-        $services = Service::where('is_active', 1)->get();
-        return view('pricelist', compact('services'));
-    }
-
-    // === ADMIN ===
     public function adminIndex()
     {
         $services = Service::all();
@@ -27,45 +19,34 @@ class ServiceController extends Controller
             'name' => 'required|string',
             'price' => 'required|numeric',
             'duration' => 'nullable|integer',
-            'description' => 'nullable|string',
-            // Wajib gambar, max 1MB biar database ga keberatan
-            'image' => 'nullable|image|max:1024' 
+            'image' => 'nullable|image|max:1024' // Batas 1MB biar DB Cloud aman
         ]);
 
         $imageBase64 = null;
         if ($request->hasFile('image')) {
-            // UBAH GAMBAR JADI TEKS BASE64
             $path = $request->file('image')->getRealPath();
-            $logo = file_get_contents($path);
-            $base64 = base64_encode($logo);
-            // Tambahkan header agar browser tahu ini gambar
+            $fileData = file_get_contents($path);
+            $base64 = base64_encode($fileData);
+            // Simpan format base64 lengkap
             $imageBase64 = 'data:image/' . $request->file('image')->extension() . ';base64,' . $base64;
         }
 
         Service::create([
             'name' => $request->name,
             'price' => $request->price,
-            'duration_minutes' => $request->duration,
+            'duration_minutes' => $request->duration, // Sesuaikan nama kolom DB
             'description' => $request->description,
-            'image_path' => $imageBase64, // Simpan kodenya ke DB
+            'image_path' => $imageBase64,
             'is_active' => 1
         ]);
 
-        return redirect()->route('admin.services')->with('success', 'Layanan berhasil ditambahkan!');
+        return redirect()->back()->with('success', 'Layanan berhasil ditambah!');
     }
 
     public function update(Request $request, $id)
     {
         $service = Service::findOrFail($id);
         
-        $request->validate([
-            'name' => 'required|string',
-            'price' => 'required|numeric',
-            'duration' => 'nullable|integer',
-            'description' => 'nullable|string',
-            'image' => 'nullable|image|max:1024'
-        ]);
-
         $updateData = [
             'name' => $request->name,
             'price' => $request->price,
@@ -74,22 +55,18 @@ class ServiceController extends Controller
         ];
 
         if ($request->hasFile('image')) {
-            // UBAH GAMBAR JADI TEKS BASE64
             $path = $request->file('image')->getRealPath();
-            $logo = file_get_contents($path);
-            $base64 = base64_encode($logo);
+            $base64 = base64_encode(file_get_contents($path));
             $updateData['image_path'] = 'data:image/' . $request->file('image')->extension() . ';base64,' . $base64;
         }
 
         $service->update($updateData);
-
-        return redirect()->route('admin.services')->with('success', 'Layanan berhasil diperbarui!');
+        return redirect()->back()->with('success', 'Layanan diperbarui!');
     }
 
     public function destroy($id)
     {
-        // Tinggal hapus row saja, karena gambar nempel di database
         Service::findOrFail($id)->delete();
-        return redirect()->route('admin.services')->with('success', 'Layanan dihapus!');
+        return redirect()->back()->with('success', 'Layanan dihapus!');
     }
 }
