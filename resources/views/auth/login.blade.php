@@ -1,181 +1,77 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {{-- JUDUL DINAMIS --}}
-    <title>Login - {{ $setting->app_name ?? 'Jarsan Barbershop' }}</title>
+@section('title', 'Login Member')
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-    body {
-        background-color: #f5f5f5;
-        font-family: 'Poppins', sans-serif;
-    }
+@section('content')
+<div class="login-container d-flex align-items-center justify-content-center"
+    style="min-height: 90vh; padding: 40px 0;">
+    <div class="container">
+        <div class="row g-0 glass-card shadow-lg overflow-hidden" data-aos="zoom-in">
 
-    .login-container {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .login-card {
-        background-color: #fff;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        max-width: 900px;
-        width: 100%;
-    }
-
-    .login-image {
-        /* Gambar background samping tetap statis atau bisa diganti dinamis jika mau */
-        background: url('{{ asset('images/banner-login.webp') }}') center/cover no-repeat;
-        min-height: 100%;
-        position: relative;
-    }
-
-    .login-image::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-    }
-
-    .login-logo {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-        z-index: 2;
-    }
-
-    .login-logo img {
-        width: 150px;
-        /* Tambahkan object-fit agar logo admin yang tidak bulat tetap bagus */
-        max-height: 150px;
-        object-fit: contain;
-        filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
-        /* Agar kontras dengan background gelap */
-    }
-
-    .form-section {
-        padding: 3rem;
-    }
-
-    .btn-login {
-        background-color: #000;
-        color: white;
-        border-radius: 10px;
-    }
-
-    .btn-login:hover {
-        background-color: #333;
-        color: white;
-    }
-
-    /* Tombol Google */
-    .btn-google {
-        background-color: white;
-        border: 1px solid #ddd;
-        color: #333;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        transition: 0.3s;
-    }
-
-    .btn-google:hover {
-        background-color: #f8f9fa;
-        border-color: #ccc;
-    }
-    </style>
-</head>
-
-<body>
-    <div class="login-container">
-        <div class="login-card row g-0">
-            <div class="col-md-6 login-image d-none d-md-block">
-
-                {{-- LOGO DINAMIS --}}
-                <div class="login-logo">
-                    @if(isset($setting) && !empty($setting->logo_path))
-                    {{-- Tampilkan Logo Upload Admin --}}
-                    <img src="{{ $setting->logo_path }}" alt="Logo App">
-                    @else
-                    {{-- Tampilkan Logo Default --}}
-                    <img src="{{ asset('images/logo jarsan.png') }}" alt="Logo Default">
-                    @endif
+            <div class="col-md-6 d-none d-md-block position-relative">
+                <div
+                    style="background: url('{{ asset('images/banner-login.webp') }}') center/cover; height: 100%; width: 100%; filter: grayscale(30%) brightness(0.7);">
                 </div>
-
+                <div class="position-absolute top-0 start-0 w-100 h-100"
+                    style="background: linear-gradient(to right, rgba(10,10,10,0.9), transparent);"></div>
+                <div class="position-absolute top-50 start-50 translate-middle text-center w-75">
+                    <img src="{{ $setting->logo_path ?? asset('images/logo.png') }}" class="mb-4"
+                        style="width: 130px; filter: drop-shadow(0 0 15px var(--luxury-gold));">
+                    <h2 class="display-5 fw-bold text-white mb-2">{{ $setting->app_name ?? 'JARSAN' }}</h2>
+                    <p class="text-white opacity-75 letter-spacing-2 small fw-bold">ESTABLISHED 2025</p>
+                </div>
             </div>
 
-            <div class="col-md-6 form-section d-flex flex-column justify-content-center">
-                <h3 class="text-center mb-4 fw-bold">Selamat Datang</h3>
-
-                @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show small" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="col-md-6 p-5 d-flex flex-column justify-content-center" style="background: var(--matte-black);">
+                <div class="mb-5">
+                    <h3 class="display-6 fw-bold text-white">AUTHENTICATE</h3>
+                    <div style="width: 60px; height: 4px; background: var(--luxury-gold);"></div>
                 </div>
-                @endif
-                @if($errors->any())
-                <div class="alert alert-danger alert-dismissible fade show small" role="alert">
-                    <ul class="mb-0 ps-3">
-                        @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-                @endif
 
                 <form action="{{ route('login.process') }}" method="POST">
                     @csrf
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" name="email" class="form-control p-2" placeholder="contoh@email.com"
-                            value="{{ old('email') }}" required>
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-white" style="letter-spacing: 2px;">EMAIL
+                            ADDRESS</label>
+                        <input type="email" name="email"
+                            class="form-control bg-transparent border-0 border-bottom border-secondary text-white rounded-0 p-2 px-0"
+                            style="box-shadow: none;" placeholder="gentleman@jarsan.com" required>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Kata Sandi</label>
-                        <input type="password" name="password" class="form-control p-2" placeholder="********" required>
-                    </div>
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                        <label class="form-check-label small" for="remember">Ingat Saya</label>
-                    </div>
-                    <button type="submit" class="btn btn-login w-100 py-2 fw-bold mb-3">Masuk</button>
 
-                    <div class="text-center position-relative mb-3">
-                        <hr class="text-muted">
-                        <span
-                            class="position-absolute top-50 start-50 translate-middle bg-white px-2 text-muted small">ATAU</span>
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-white" style="letter-spacing: 2px;">PRIVATE KEY
+                            (PASSWORD)</label>
+                        <input type="password" name="password"
+                            class="form-control bg-transparent border-0 border-bottom border-secondary text-white rounded-0 p-2 px-0"
+                            style="box-shadow: none;" placeholder="********" required>
                     </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-5">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="remember">
+                            <label class="form-check-label small text-white opacity-75" for="remember">Keep me
+                                verified</label>
+                        </div>
+                        <a href="#" class="small text-white text-decoration-none fw-bold"
+                            style="color: var(--luxury-gold) !important;">Forgot Key?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-gold-luxury w-100 py-3 mb-4 fs-5">Initialize Login</button>
 
                     <a href="{{ route('google.login') }}"
-                        class="btn btn-google w-100 py-2 fw-semibold text-decoration-none">
-                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" alt="Google">
-                        Masuk dengan Google
+                        class="btn w-100 border border-secondary text-white rounded-0 py-2 d-flex align-items-center justify-content-center gap-2 mb-4">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20">
+                        <span class="small fw-bold">CONTINUE WITH GOOGLE</span>
                     </a>
 
-                    <p class="text-center text-muted mt-4 small">
-                        Belum punya akun? <a href="{{ route('register') }}"
-                            class="text-decoration-none fw-bold text-dark">Daftar Sekarang</a>
+                    <p class="text-center text-white small mt-4">
+                        New Member? <a href="{{ route('register') }}"
+                            class="fw-bold text-decoration-none border-bottom border-warning"
+                            style="color: var(--luxury-gold) !important;">Join the Elite Club</a>
                     </p>
                 </form>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+</div>
+@endsection

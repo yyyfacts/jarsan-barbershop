@@ -1,118 +1,58 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@section('title', 'Join Jarsan Elite')
 
-    {{-- JUDUL DINAMIS --}}
-    <title>Daftar Akun - {{ $setting->app_name ?? 'Jarsan Barbershop' }}</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-    body {
-        background-color: #f5f5f5;
-        font-family: 'Poppins', sans-serif;
-    }
-
-    .register-container {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .register-card {
-        background-color: #fff;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        max-width: 500px;
-        width: 100%;
-        padding: 2.5rem;
-    }
-
-    .btn-register {
-        background-color: #000;
-        color: white;
-        border-radius: 10px;
-    }
-
-    .btn-register:hover {
-        background-color: #333;
-        color: white;
-    }
-
-    /* Tombol Google */
-    .btn-google {
-        background-color: white;
-        border: 1px solid #ddd;
-        color: #333;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        transition: 0.3s;
-    }
-
-    .btn-google:hover {
-        background-color: #f8f9fa;
-        border-color: #ccc;
-    }
-    </style>
-</head>
-
-<body>
-    <div class="register-container">
-        <div class="register-card">
-            <h3 class="text-center mb-3 fw-bold">Buat Akun Baru</h3>
-            {{-- MENGGUNAKAN NAMA APLIKASI DINAMIS DI TEKS --}}
-            <p class="text-center text-muted mb-4 small">Daftar untuk melakukan reservasi di
-                {{ $setting->app_name ?? 'Jarsan Barbershop' }}</p>
+@section('content')
+<div class="register-container d-flex align-items-center justify-content-center"
+    style="min-height: 90vh; padding: 50px 0;">
+    <div class="container" style="max-width: 550px;">
+        <div class="glass-card p-5 shadow-lg" data-aos="fade-up">
+            <div class="text-center mb-5">
+                <h3 class="display-6 fw-bold text-white mb-2">JOIN THE ELITE</h3>
+                <p class="text-white opacity-75 small">Layanan grooming premium untuk <span class="fw-bold"
+                        style="color: var(--luxury-gold)">Semua Kalangan</span>.</p>
+                <div class="mx-auto" style="width: 50px; height: 3px; background: var(--luxury-gold);"></div>
+            </div>
 
             <form action="{{ route('register.process') }}" method="POST">
                 @csrf
-                <div class="mb-3">
-                    <label class="form-label">Nama Lengkap</label>
-                    <input type="text" name="name" class="form-control p-2" placeholder="Nama Anda" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control p-2" placeholder="contoh@email.com" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Kata Sandi</label>
-                    <input type="password" name="password" class="form-control p-2" placeholder="Minimal 6 karakter"
-                        required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Konfirmasi Kata Sandi</label>
-                    <input type="password" name="password_confirmation" class="form-control p-2"
-                        placeholder="Ulangi kata sandi" required>
-                </div>
-                <button type="submit" class="btn btn-register w-100 py-2 fw-bold mb-3">Daftar</button>
-
-                {{-- TOMBOL GOOGLE --}}
-                <div class="text-center position-relative mb-3">
-                    <hr class="text-muted">
-                    <span
-                        class="position-absolute top-50 start-50 translate-middle bg-white px-2 text-muted small">ATAU</span>
+                <div class="mb-4">
+                    <label class="form-label small fw-bold text-white">FULL NAME</label>
+                    <input type="text" name="name"
+                        class="form-control bg-transparent border-0 border-bottom border-secondary text-white rounded-0 p-2 px-0"
+                        style="box-shadow: none;" placeholder="Your Full Name" required>
                 </div>
 
-                <a href="{{ route('google.login') }}"
-                    class="btn btn-google w-100 py-2 fw-semibold text-decoration-none">
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" alt="Google">
-                    Daftar dengan Google
-                </a>
+                <div class="mb-4">
+                    <label class="form-label small fw-bold text-white">EMAIL ADDRESS</label>
+                    <input type="email" name="email"
+                        class="form-control bg-transparent border-0 border-bottom border-secondary text-white rounded-0 p-2 px-0"
+                        style="box-shadow: none;" placeholder="example@email.com" required>
+                </div>
 
-                <p class="text-center text-muted mt-3 small">
-                    Sudah punya akun? <a href="{{ route('login') }}"
-                        class="text-decoration-none fw-bold text-dark">Login di sini</a>
-                </p>
+                <div class="mb-4">
+                    <label class="form-label small fw-bold text-white">CREATE PASSWORD</label>
+                    <input type="password" name="password"
+                        class="form-control bg-transparent border-0 border-bottom border-secondary text-white rounded-0 p-2 px-0"
+                        style="box-shadow: none;" placeholder="Min. 8 Characters" required>
+                </div>
+
+                <div class="mb-5">
+                    <label class="form-label small fw-bold text-white">CONFIRM PASSWORD</label>
+                    <input type="password" name="password_confirmation"
+                        class="form-control bg-transparent border-0 border-bottom border-secondary text-white rounded-0 p-2 px-0"
+                        style="box-shadow: none;" placeholder="Repeat Password" required>
+                </div>
+
+                <button type="submit" class="btn btn-gold-luxury w-100 py-3 mb-4">Create Membership</button>
+
+                <div class="text-center">
+                    <p class="text-white small">Sudah menjadi anggota? <a href="{{ route('login') }}"
+                            class="fw-bold text-decoration-none" style="color: var(--luxury-gold) !important;">Login di
+                            sini</a></p>
+                </div>
             </form>
         </div>
     </div>
-</body>
-
-</html>
+</div>
+@endsection
