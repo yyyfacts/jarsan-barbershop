@@ -4,12 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{-- Judul Dinamis --}}
     <title>@yield('title') - {{ $setting->app_name ?? 'Jarsan Barbershop' }}</title>
 
+    {{-- Typography --}}
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
         rel="stylesheet">
 
+    {{-- Libraries --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -54,7 +57,7 @@
     }
 
     .loader-logo {
-        width: 80px;
+        width: 100px;
         animation: pulse 2s infinite;
         filter: drop-shadow(0 0 10px var(--luxury-gold));
     }
@@ -76,12 +79,23 @@
         }
     }
 
-    /* --- GLASSMORPHISM NAVBAR --- */
+    /* --- NAVBAR --- */
     .navbar-luxury {
         background: rgba(18, 18, 18, 0.8);
         backdrop-filter: blur(15px);
         border-bottom: 1px solid var(--glass-white);
         padding: 1.2rem 0;
+    }
+
+    .btn-outline-gold {
+        border: 1px solid var(--luxury-gold);
+        color: var(--luxury-gold);
+        transition: 0.3s;
+    }
+
+    .btn-outline-gold:hover {
+        background: var(--luxury-gold);
+        color: #000;
     }
 
     /* --- MOBILE FLOATING DOCK --- */
@@ -115,8 +129,11 @@
         .navbar-toggler {
             display: none;
         }
+    }
 
-        /* Hide default toggler for unique feel */
+    footer a:hover {
+        color: var(--luxury-gold) !important;
+        transition: 0.3s;
     }
     </style>
     @stack('styles')
@@ -124,14 +141,25 @@
 
 <body>
 
+    {{-- Pre-loader Dinamis --}}
     <div id="preloader">
-        <img src="{{ asset('images/logo-jarsan.png') }}" class="loader-logo" alt="Loading...">
+        @if($setting && $setting->logo_path)
+        <img src="{{ $setting->logo_path }}" class="loader-logo" alt="Jarsan Logo">
+        @else
+        <h1 class="loader-logo fw-bold" style="color: var(--luxury-gold); font-size: 3rem; text-align: center;">J</h1>
+        @endif
     </div>
 
+    {{-- Navbar Dinamis --}}
     <nav class="navbar navbar-expand-lg navbar-dark navbar-luxury sticky-top">
         <div class="container">
-            <a class="navbar-brand fs-3" href="{{ route('welcome') }}">
-                <span style="color: var(--luxury-gold)">J</span>ARSAN
+            <a class="navbar-brand d-flex align-items-center fs-3" href="{{ route('welcome') }}">
+                @if($setting && $setting->logo_path)
+                <img src="{{ $setting->logo_path }}" alt="Logo" height="40" class="me-2">
+                @else
+                <span style="color: var(--luxury-gold); font-weight: bold; margin-right: 5px;">J</span>
+                @endif
+                {{ $setting->app_name ?? 'JARSAN' }}
             </a>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto gap-4">
@@ -145,6 +173,7 @@
         </div>
     </nav>
 
+    {{-- Mobile Nav --}}
     <div class="mobile-dock d-lg-none">
         <a href="{{ route('welcome') }}"><i class="bi bi-house-door"></i></a>
         <a href="{{ route('pricelist') }}"><i class="bi bi-scissors"></i></a>
@@ -158,17 +187,28 @@
         @yield('content')
     </main>
 
+    {{-- Footer dengan Link Sosial Media --}}
     <footer class="py-5 border-top border-secondary mt-5" style="background: var(--matte-black)">
         <div class="container text-center">
-            <h3 class="mb-4 text-gold">JARSAN BARBERSHOP</h3>
+            <h3 class="mb-4" style="color: var(--luxury-gold)">{{ $setting->app_name ?? 'JARSAN BARBERSHOP' }}</h3>
             <div class="social-links mb-4">
-                <a href="#" class="mx-2 text-white"><i class="bi bi-instagram fs-4"></i></a>
-                <a href="#" class="mx-2 text-white"><i class="bi bi-tiktok fs-4"></i></a>
+                {{-- Link Instagram --}}
+                <a href="https://www.instagram.com/jarsan_barbershop?igsh=MWRpb2ZzbG56MWc3bg==" target="_blank"
+                    class="mx-2 text-white">
+                    <i class="bi bi-instagram fs-4"></i>
+                </a>
+                {{-- Link TikTok --}}
+                <a href="https://www.tiktok.com/@jarsan_barbershop?_r=1&_t=ZS-92bYdkMyeG8" target="_blank"
+                    class="mx-2 text-white">
+                    <i class="bi bi-tiktok fs-4"></i>
+                </a>
             </div>
-            <p class="text-muted small">© {{ date('Y') }} Jarsan Barbershop. Crafted for Professionals.</p>
+            <p class="text-muted small">© {{ date('Y') }} {{ $setting->app_name ?? 'Jarsan Barbershop' }}. Crafted for
+                Professionals.</p>
         </div>
     </footer>
 
+    {{-- Scripts --}}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
@@ -177,7 +217,9 @@
         once: true
     });
     window.addEventListener('load', function() {
-        $('#preloader').fadeOut('slow');
+        setTimeout(function() {
+            $('#preloader').fadeOut('slow');
+        }, 500); // Memberikan sedikit jeda agar animasi pulse terlihat
     });
     </script>
     @stack('scripts')
