@@ -1,9 +1,14 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="mb-4">
-    <h3 class="fw-bold m-0">Data Reservasi</h3>
-    <p class="small" style="color: var(--text-muted);">Pantau booking masuk dan status pelanggan.</p>
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold m-0">Data Reservasi</h3>
+        <p class="small" style="color: var(--text-muted);">Pantau booking masuk dan status pelanggan.</p>
+    </div>
+    <a href="{{ route('admin.reservations.export') }}" class="btn btn-success shadow-sm">
+        <i class="bi bi-file-earmark-excel me-1"></i> Export Excel
+    </a>
 </div>
 
 @if(session('success'))

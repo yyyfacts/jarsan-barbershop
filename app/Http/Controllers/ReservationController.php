@@ -7,15 +7,16 @@ use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+// IMPORT UNTUK EXCEL
+use App\Exports\ReservationsExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class ReservationController extends Controller
 {
     // --- USER: FORM BOOKING ---
     public function create()
     {
-        // Ambil layanan yang aktif
         $services = Service::where('is_active', 1)->get();
-        
-        // PERBAIKAN 1: Hapus 'user.' jika file ada di resources/views/reservasi.blade.php
         return view('reservasi', compact('services')); 
     }
 
@@ -48,12 +49,14 @@ class ReservationController extends Controller
     // --- ADMIN: LIHAT DATA ---
     public function index()
     {
-        // Ini butuh relasi 'service' di Model Reservation (Lihat langkah 2 di bawah)
         $reservations = Reservation::with('service')->latest()->get();
-        
-        // Pastikan Anda punya file: resources/views/admin/reservations.blade.php
-        // Jika error view not found lagi, coba ganti jadi: view('admin.reservations')
         return view('admin.reservations', compact('reservations'));
+    }
+
+    // --- ADMIN: FUNGSI EXPORT EXCEL ---
+    public function exportExcel()
+    {
+        return Excel::download(new ReservationsExport, 'Laporan_Reservasi_' . date('d-m-Y') . '.xlsx');
     }
 
     // --- ADMIN: GANTI STATUS ---
@@ -64,7 +67,6 @@ class ReservationController extends Controller
         if ($request->has('status')) {
             $reservation->update(['status' => $request->status]);
         } else {
-            // Toggle manual jika tidak ada input status
             $reservation->status = $reservation->status == 'pending' ? 'done' : 'pending';
             $reservation->save();
         }
