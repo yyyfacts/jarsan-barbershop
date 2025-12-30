@@ -19,27 +19,42 @@
         --deep-charcoal: #0a0a0a;
         --matte-black: #121212;
         --luxury-gold: #D4AF37;
-        --gold-accent: rgba(212, 175, 55, 0.4);
-        --text-white: #ffffff;
+        --gold-accent: rgba(212, 175, 55, 0.5);
+        /* Aksen lebih terang */
+        --metallic-red: #960018;
+        --glass-bg: rgba(255, 255, 255, 0.05);
+        --text-light: #ffffff;
+        /* UBAH KE PUTIH MURNI */
         --font-main: 'Montserrat', sans-serif;
         --font-heading: 'Playfair Display', serif;
     }
 
     body {
         background-color: var(--deep-charcoal);
-        color: var(--text-white);
+        color: var(--text-light) !important;
+        /* Paksa semua teks jadi putih */
         font-family: var(--font-main);
         overflow-x: hidden;
     }
 
-    /* Override Bootstrap Colors for High Contrast */
-    .text-muted,
+    /* MENGHILANGKAN WARNA ABU-ABU/HITAM BAWAAN BOOTSTRAP */
     p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
     span,
-    label,
-    small {
-        color: #ffffff !important;
-        opacity: 1 !important;
+    div,
+    li,
+    a {
+        color: var(--text-light);
+    }
+
+    /* Override class text-muted agar tidak jadi abu-abu gelap */
+    .text-muted {
+        color: #e0e0e0 !important;
+        /* Ubah ke abu-abu sangat terang (hampir putih) */
     }
 
     h1,
@@ -47,12 +62,25 @@
     h3,
     h4,
     h5,
-    .navbar-brand {
+    .navbar-brand,
+    .luxury-font {
         font-family: var(--font-heading);
+        color: var(--text-light);
+    }
+
+    .text-gold {
         color: var(--luxury-gold) !important;
     }
 
-    /* Pre-loader Lingkaran */
+    .bg-matte {
+        background-color: var(--matte-black);
+    }
+
+    .letter-spacing-2 {
+        letter-spacing: 2px;
+    }
+
+    /* --- CIRCULAR PRE-LOADER --- */
     #preloader {
         position: fixed;
         top: 0;
@@ -80,6 +108,7 @@
         height: 110px;
         border-radius: 50%;
         object-fit: cover;
+        position: relative;
         z-index: 2;
         animation: pulse-logo 2.5s infinite ease-in-out;
     }
@@ -101,11 +130,14 @@
         0%,
         100% {
             transform: scale(0.95);
+            opacity: 0.9;
+            /* Opacity lebih terang */
         }
 
         50% {
             transform: scale(1);
-            box-shadow: 0 0 25px var(--gold-accent);
+            opacity: 1;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
         }
     }
 
@@ -119,7 +151,7 @@
         }
     }
 
-    /* Navbar */
+    /* --- LUXURY NAVBAR --- */
     .navbar-luxury {
         background: rgba(10, 10, 10, 0.95);
         backdrop-filter: blur(15px);
@@ -129,10 +161,28 @@
 
     .nav-link {
         color: #ffffff !important;
-        font-weight: 600;
+        /* Pastikan Putih */
+        font-weight: 500;
         letter-spacing: 1px;
         transition: 0.3s;
         font-size: 0.9rem;
+        position: relative;
+    }
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: var(--luxury-gold);
+        transition: width 0.3s;
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+        width: 100%;
     }
 
     .nav-link:hover,
@@ -140,14 +190,15 @@
         color: var(--luxury-gold) !important;
     }
 
-    /* Mobile Dock */
+    /* --- MOBILE FLOATING DOCK --- */
     @media (max-width: 991px) {
         .mobile-dock {
             position: fixed;
             bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(18, 18, 18, 0.95);
+            background: rgba(30, 30, 30, 0.98);
+            /* Background sedikit lebih terang agar kontras */
             backdrop-filter: blur(20px);
             border: 1px solid var(--luxury-gold);
             border-radius: 50px;
@@ -155,19 +206,21 @@
             padding: 12px 25px;
             z-index: 1000;
             gap: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
         }
 
         .mobile-dock a {
-            color: #ffffff !important;
+            color: #ffffff;
+            /* Icon Putih Cerah */
             font-size: 1.3rem;
             transition: 0.3s;
             display: flex;
             align-items: center;
         }
 
-        .mobile-dock a.active {
-            color: var(--luxury-gold) !important;
+        .mobile-dock a.active,
+        .mobile-dock a:hover {
+            color: var(--luxury-gold);
             transform: translateY(-3px);
         }
 
@@ -177,9 +230,11 @@
     }
 
     .btn-gold-luxury {
-        background: var(--luxury-gold);
+        background: linear-gradient(45deg, var(--luxury-gold), #fff0d1);
+        /* Gradasi lebih terang */
         border: none;
-        color: #000 !important;
+        color: #000000;
+        /* Teks tombol tetap hitam agar terbaca di background emas */
         font-weight: 700;
         letter-spacing: 1px;
         border-radius: 2px;
@@ -187,23 +242,28 @@
     }
 
     .btn-gold-luxury:hover {
-        background: #ffffff;
-        color: #000 !important;
-        box-shadow: 0 5px 15px var(--gold-accent);
+        background: linear-gradient(45deg, #fff0d1, var(--luxury-gold));
+        box-shadow: 0 5px 20px rgba(212, 175, 55, 0.5);
+        color: #000;
+    }
+
+    /* Hover effects for footer icons */
+    .hover-gold:hover {
+        color: var(--luxury-gold) !important;
     }
     </style>
     @stack('styles')
 </head>
 
 <body>
+
     <div id="preloader">
         <div class="loader-container">
             @if($setting && $setting->logo_path)
-            <img src="{{ $setting->logo_path }}" class="loader-logo" alt="Logo">
+            <img src="{{ $setting->logo_path }}" class="loader-logo" alt="Jarsan Logo">
             @else
-            <div class="loader-logo d-flex align-items-center justify-content-center bg-dark fs-1 fw-bold text-gold"
-                style="border: 2px solid var(--luxury-gold); color: var(--luxury-gold); width: 100%; height: 100%; border-radius: 50%;">
-                J</div>
+            <div class="loader-logo d-flex align-items-center justify-content-center bg-matte fs-1 fw-bold text-gold"
+                style="border: 2px solid var(--luxury-gold);">J</div>
             @endif
             <div class="loader-ring"></div>
         </div>
@@ -213,10 +273,14 @@
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{{ route('welcome') }}">
                 @if($setting && $setting->logo_path)
-                <img src="{{ $setting->logo_path }}" alt="Logo" height="50"
-                    class="me-3 rounded-circle border border-warning">
+                <img src="{{ $setting->logo_path }}" alt="Logo" height="50" class="me-3 rounded-circle"
+                    style="border: 2px solid var(--luxury-gold); padding: 2px;">
                 @endif
-                <span class="fw-bold text-white fs-3">{{ $setting->app_name ?? 'JARSAN' }}</span>
+                <div>
+                    <span class="d-block fw-bold lh-1 text-white">{{ $setting->app_name ?? 'JARSAN' }}</span>
+                    <span class="small text-gold letter-spacing-2"
+                        style="font-size: 0.6rem; font-family: var(--font-main);">BARBERSHOP</span>
+                </div>
             </a>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto gap-3 align-items-center">
@@ -230,10 +294,13 @@
                             href="{{ route('pricelist') }}">LAYANAN</a></li>
                     <li class="nav-item"><a class="nav-link {{ Request::is('contact') ? 'active' : '' }}"
                             href="{{ route('contact') }}">KONTAK</a></li>
+
                     <li class="nav-item ms-lg-2">
                         @auth
+                        {{-- Jika sudah login, bisa langsung reservasi --}}
                         <a href="{{ route('reservasi') }}" class="btn btn-gold-luxury px-4 py-2">BOOK NOW</a>
                         @else
+                        {{-- Jika belum login, diarahkan ke login dulu --}}
                         <a href="{{ route('login') }}" class="btn btn-gold-luxury px-4 py-2">LOGIN TO BOOK</a>
                         @endauth
                     </li>
@@ -243,26 +310,45 @@
     </nav>
 
     <div class="mobile-dock d-lg-none">
-        <a href="{{ route('welcome') }}"><i class="bi bi-house"></i></a>
-        <a href="{{ route('pricelist') }}"><i class="bi bi-scissors"></i></a>
-        <a href="{{ auth()->check() ? route('reservasi') : route('login') }}"><i
-                class="bi bi-calendar-check-fill text-gold fs-3" style="color: var(--luxury-gold) !important;"></i></a>
-        <a href="{{ route('contact') }}"><i class="bi bi-geo-alt"></i></a>
-        <a href="{{ auth()->check() ? route('dashboard') : route('login') }}"><i class="bi bi-person-circle"></i></a>
+        <a href="{{ route('welcome') }}" class="{{ Request::is('/') ? 'active' : '' }}"><i class="bi bi-house"></i></a>
+        <a href="{{ route('pricelist') }}" class="{{ Request::is('pricelist') ? 'active' : '' }}"><i
+                class="bi bi-scissors"></i></a>
+
+        {{-- Tombol Reservasi Tengah Mobile --}}
+        @auth
+        <a href="{{ route('reservasi') }}" class="{{ Request::is('reservasi') ? 'active' : '' }}"><i
+                class="bi bi-calendar-plus-fill fs-4 text-gold"></i></a>
+        @else
+        <a href="{{ route('login') }}"><i class="bi bi-calendar-plus fs-4 text-white"></i></a>
+        @endauth
+
+        <a href="{{ route('contact') }}" class="{{ Request::is('contact') ? 'active' : '' }}"><i
+                class="bi bi-geo-alt"></i></a>
+
+        @auth
+        <a href="{{ route('dashboard') }}" class="{{ Request::is('dashboard') ? 'active' : '' }}"><i
+                class="bi bi-person-circle"></i></a>
+        @else
+        <a href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right"></i></a>
+        @endauth
     </div>
 
-    <main>@yield('content')</main>
+    <main>
+        @yield('content')
+    </main>
 
-    <footer class="py-5 bg-matte border-top border-secondary mt-5" style="background: #121212;">
+    <footer class="py-5 bg-matte" style="border-top: 1px solid #333; margin-top: 50px;">
         <div class="container text-center">
             <h2 class="text-gold mb-4 fw-bold letter-spacing-2">{{ $setting->app_name ?? 'JARSAN BARBERSHOP' }}</h2>
             <div class="mb-4 d-flex justify-content-center gap-4">
-                <a href="https://www.instagram.com/jarsan_barbershop" target="_blank" class="text-white fs-4"><i
-                        class="bi bi-instagram"></i></a>
-                <a href="https://www.tiktok.com/@jarsan_barbershop" target="_blank" class="text-white fs-4"><i
-                        class="bi bi-tiktok"></i></a>
+                <a href="https://www.instagram.com/jarsan_barbershop" target="_blank"
+                    class="text-white fs-4 hover-gold"><i class="bi bi-instagram"></i></a>
+                <a href="https://www.tiktok.com/@jarsan_barbershop" target="_blank"
+                    class="text-white fs-4 hover-gold"><i class="bi bi-tiktok"></i></a>
             </div>
-            <p class="text-white small">© {{ date('Y') }} Jarsan Barbershop. All Rights Reserved.</p>
+            {{-- Mengubah text-muted menjadi text-white untuk tulisan copyright --}}
+            <p class="text-white small mb-0">© {{ date('Y') }} {{ $setting->app_name ?? 'Jarsan Barbershop' }}. <br
+                    class="d-md-none">Luxury Grooming for Every Gentleman.</p>
         </div>
     </footer>
 
@@ -270,11 +356,30 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
     <script>
-    AOS.init();
+    AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 100
+    });
+
     window.addEventListener('load', function() {
-        setTimeout(() => {
-            document.getElementById('preloader').style.display = 'none';
-        }, 600);
+        const tl = gsap.timeline();
+        tl.to(".loader-logo", {
+                scale: 1.1,
+                opacity: 0,
+                duration: 0.5,
+                ease: "power2.in"
+            })
+            .to(".loader-ring", {
+                scale: 0.1,
+                opacity: 0,
+                duration: 0.5
+            }, "-=0.3")
+            .to("#preloader", {
+                yPercent: -100,
+                duration: 0.8,
+                ease: "expo.inOut"
+            });
     });
     </script>
     @stack('scripts')
