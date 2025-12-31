@@ -25,7 +25,8 @@ class ReservationController extends Controller
 
         // Kirim $services DAN $barbers ke view
         // Pastikan nama view sesuai dengan lokasi file Anda (misal: 'user.reservasi' atau 'reservasi')
-        return view('user.reservasi', compact('services', 'barbers')); 
+        return view('
+        reservasi', compact('services', 'barbers')); 
     }
 
     // --- USER: KIRIM DATA ---
