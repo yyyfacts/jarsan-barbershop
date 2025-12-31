@@ -172,11 +172,12 @@
                                     @endphp
 
                                     @if($status == 'done' || $status == 'selesai')
+                                    {{-- STATUS SELESAI --}}
                                     <span class="badge bg-success bg-opacity-75 text-white px-3 py-2 rounded-1 mb-2">
                                         <i class="bi bi-check-circle-fill me-1"></i> SELESAI
                                     </span>
 
-                                    {{-- LOGIC TOMBOL REVIEW --}}
+                                    {{-- LOGIC TOMBOL REVIEW (Hanya jika Selesai & Ada Barber & Belum Review) --}}
                                     @if(!$hasReview && $res->barber_id)
                                     <div class="mt-2">
                                         <button class="btn btn-sm btn-outline-warning text-gold border-warning"
@@ -243,6 +244,16 @@
                                         </small>
                                     </div>
                                     @endif
+
+                                    @elseif($status == 'approved' || $status == 'dikonfirmasi')
+                                    {{-- STATUS BARU: DIKONFIRMASI / ACC --}}
+                                    <span class="badge bg-info bg-opacity-75 text-white px-3 py-2 rounded-1">
+                                        <i class="bi bi-calendar-check me-1"></i> DIKONFIRMASI
+                                    </span>
+                                    <div class="mt-1">
+                                        <small class="text-white-50" style="font-size: 0.65rem;">Silahkan datang sesuai
+                                            jadwal.</small>
+                                    </div>
 
                                     @elseif($status == 'pending' || $status == 'menunggu')
                                     <span class="badge bg-warning bg-opacity-75 text-black px-3 py-2 rounded-1">

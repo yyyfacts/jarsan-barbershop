@@ -71,19 +71,19 @@ class ReservationController extends Controller
     }
 
     // --- ADMIN: GANTI STATUS ---
+    // --- ADMIN: GANTI STATUS (UPDATE FLOW) ---
     public function updateStatus(Request $request, $id)
     {
         $reservation = Reservation::findOrFail($id);
         
+        // Cek apakah ada request status spesifik dari tombol (Approved / Done / Canceled)
         if ($request->has('status')) {
-            $reservation->update(['status' => $request->status]);
-        } else {
-            // Toggle sederhana (Pending <-> Done)
-            $reservation->status = $reservation->status == 'pending' ? 'done' : 'pending';
+            $reservation->status = $request->status;
             $reservation->save();
+            return redirect()->back()->with('success', 'Status berhasil diubah menjadi: ' . $request->status);
         }
 
-        return redirect()->back()->with('success', 'Status diperbarui.');
+        return redirect()->back()->with('error', 'Gagal mengubah status.');
     }
 
     // --- ADMIN: HAPUS ---
