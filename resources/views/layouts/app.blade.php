@@ -324,7 +324,12 @@
                         <a href="{{ $setting->tiktok_link }}" target="_blank" class="social-icon-circle"><i
                                 class="bi bi-tiktok"></i></a>
                         @endif
-                        <a href="#" class="social-icon-circle"><i class="bi bi-whatsapp"></i></a>
+
+                        {{-- LOGIKA WHATSAPP OTOMATIS --}}
+                        @if($setting && $setting->whatsapp_number)
+                        <a href="https://wa.me/{{ $setting->whatsapp_number }}" target="_blank"
+                            class="social-icon-circle"><i class="bi bi-whatsapp"></i></a>
+                        @endif
                     </div>
                 </div>
 

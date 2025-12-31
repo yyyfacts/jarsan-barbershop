@@ -3,7 +3,7 @@
 @section('content')
 <div class="text-center mb-5">
     <h3 class="fw-bold m-0 text-dark">Pengaturan Website</h3>
-    <p class="small text-muted">Sesuaikan identitas, logo, dan kontak media sosial aplikasi.</p>
+    <p class="small text-muted">Sesuaikan identitas, logo, kontak WhatsApp, dan media sosial.</p>
 </div>
 
 @if(session('success'))
@@ -25,7 +25,7 @@
                 <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf @method('PUT')
 
-                    {{-- --- LOGO PREVIEW --- --}}
+                    {{-- --- 1. LOGO PREVIEW --- --}}
                     <div class="mb-4 text-center">
                         <label class="form-label d-block small fw-bold mb-3 text-muted">LOGO SAAT INI</label>
                         <div class="d-inline-block p-3 border rounded bg-light">
@@ -38,7 +38,7 @@
                         </div>
                     </div>
 
-                    {{-- --- IDENTITAS WEB --- --}}
+                    {{-- --- 2. IDENTITAS WEB --- --}}
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
                             <label class="form-label small fw-bold text-muted">NAMA WEBSITE</label>
@@ -53,10 +53,25 @@
 
                     <hr class="my-4 text-muted opacity-25">
 
-                    {{-- --- SOSIAL MEDIA --- --}}
-                    <h6 class="fw-bold text-uppercase small text-muted mb-3"><i class="bi bi-share me-1"></i> Sosial
-                        Media</h6>
+                    {{-- --- 3. KONTAK & SOSMED --- --}}
+                    <h6 class="fw-bold text-uppercase small text-muted mb-3"><i class="bi bi-share me-1"></i> Kontak &
+                        Sosial Media</h6>
 
+                    {{-- Input WhatsApp (BARU) --}}
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted">NOMOR WHATSAPP (OFFICIAL)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-success text-white"><i class="bi bi-whatsapp"></i></span>
+                            <input type="number" name="whatsapp_number" class="form-control"
+                                value="{{ $setting->whatsapp_number ?? '' }}" placeholder="Contoh: 62812345678">
+                        </div>
+                        <div class="form-text small text-muted">
+                            <i class="bi bi-info-circle me-1"></i> Gunakan kode negara (62) di depan. Jangan pakai spasi
+                            atau tanda (+).
+                        </div>
+                    </div>
+
+                    {{-- Input Instagram --}}
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-muted">LINK INSTAGRAM</label>
                         <div class="input-group">
@@ -67,6 +82,7 @@
                         </div>
                     </div>
 
+                    {{-- Input TikTok --}}
                     <div class="mb-4">
                         <label class="form-label small fw-bold text-muted">LINK TIKTOK</label>
                         <div class="input-group">
@@ -78,7 +94,7 @@
 
                     <hr class="my-4 text-muted opacity-25">
 
-                    {{-- --- GOOGLE MAPS --- --}}
+                    {{-- --- 4. GOOGLE MAPS --- --}}
                     <h6 class="fw-bold text-uppercase small text-muted mb-3"><i class="bi bi-geo-alt me-1"></i> Lokasi
                         Peta</h6>
 
