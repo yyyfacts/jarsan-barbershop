@@ -99,7 +99,7 @@
                 </div>
 
                 {{-- Telepon --}}
-                <div class="d-flex mb-0">
+                <div class="d-flex mb-4">
                     <i class="bi bi-whatsapp text-gold me-3 fs-4"></i>
                     <div>
                         <h6 class="text-white fw-bold mb-1">WhatsApp Official</h6>
@@ -107,7 +107,37 @@
                     </div>
                 </div>
 
-                {{-- Bagian Email DIHAPUS karena user info "tidak ada" --}}
+                {{-- JAM OPERASIONAL (SESUAI GAMBAR) --}}
+                <div class="d-flex mb-0">
+                    <i class="bi bi-clock-history text-gold me-3 fs-4"></i>
+                    <div class="w-100">
+                        <h6 class="text-white fw-bold mb-2">Jam Operasional</h6>
+
+                        {{-- Ringkasan Sesi Malam (Karena sama semua hari) --}}
+                        <div
+                            class="badge bg-secondary bg-opacity-25 text-gold border border-secondary mb-2 w-100 text-start">
+                            <i class="bi bi-moon-stars me-1"></i> SESI MALAM: 19.30 - 21.00 (Setiap Hari)
+                        </div>
+
+                        {{-- Rincian Sesi Siang --}}
+                        <ul class="list-unstyled text-white-50 mb-0 small">
+                            <li
+                                class="d-flex justify-content-between py-1 border-bottom border-secondary border-opacity-10">
+                                <span>Senin, Kamis, Jumat</span>
+                                <span class="text-white">13.00 - 15.00</span>
+                            </li>
+                            <li
+                                class="d-flex justify-content-between py-1 border-bottom border-secondary border-opacity-10">
+                                <span>Selasa, Rabu</span>
+                                <span class="text-white">13.00 - 17.00</span>
+                            </li>
+                            <li class="d-flex justify-content-between py-1">
+                                <span>Sabtu, Minggu</span>
+                                <span class="text-white">13.00 - 17.00</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
             {{-- PETA --}}

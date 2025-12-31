@@ -58,10 +58,6 @@
                         <p class="text-muted small lh-base">
                             {{ $barber->bio ?? 'Siap memberikan potongan rambut terbaik untuk Anda.' }}
                         </p>
-                        <div class="mt-4 d-flex justify-content-center gap-3">
-                            <a href="#" class="text-gold"><i class="bi bi-instagram"></i></a>
-                            <a href="#" class="text-gold"><i class="bi bi-twitter-x"></i></a>
-                        </div>
                     </div>
                 </div>
             </div>
