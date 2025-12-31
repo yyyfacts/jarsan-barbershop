@@ -89,7 +89,7 @@
                 {{-- TOMBOL LAMA (LOGOUT) DIHAPUS, GANTI DENGAN INI: --}}
 
                 <div class="mt-4">
-                    <a href="#"
+                    <a href="{{ route('profile.edit') }}"
                         class="btn btn-outline-light w-100 rounded-0 py-2 fw-bold letter-spacing-1 hover-gold-border"
                         style="opacity: 0.8;">
                         <i class="bi bi-pencil-square me-2"></i> EDIT PROFILE

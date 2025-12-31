@@ -367,8 +367,11 @@
                     <li class="nav-item dropdown ms-lg-2">
                         <a class="nav-link user-dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&background=D4AF37&color=000' }}"
+
+                            {{-- UPDATE: Mengambil gambar dari BLOB Database --}}
+                            <img src="{{ Auth::user()->avatar_blob ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&background=D4AF37&color=000' }}"
                                 class="user-avatar-small" alt="Profile">
+
                             <span
                                 class="small fw-bold text-uppercase ms-1">{{ Str::limit(Auth::user()->name, 10) }}</span>
                             <i class="bi bi-chevron-down small ms-1" style="font-size: 0.7rem;"></i>
@@ -379,6 +382,12 @@
                             <li>
                                 <a class="dropdown-item custom-dropdown-item" href="{{ route('dashboard') }}">
                                     <i class="bi bi-speedometer2"></i> Dashboard
+                                </a>
+                            </li>
+                            {{-- MENU BARU: Edit Profile --}}
+                            <li>
+                                <a class="dropdown-item custom-dropdown-item" href="{{ route('profile.edit') }}">
+                                    <i class="bi bi-person-gear"></i> Edit Profile
                                 </a>
                             </li>
                             <li>

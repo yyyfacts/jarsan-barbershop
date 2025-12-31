@@ -23,7 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'google_id', // Tambahan: Agar login Google bisa menyimpan ID
+        'google_id',
+        'avatar_blob', // Tambahan: Agar login Google bisa menyimpan ID
     ];
 
     /**
