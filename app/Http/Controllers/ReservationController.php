@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reservation;
 use App\Models\Service;
-use App\Models\Barber; // TAMBAHAN: Jangan lupa import model Barber
+use App\Models\Barber; // Import Model Barber
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,16 +17,15 @@ class ReservationController extends Controller
     // --- USER: FORM BOOKING ---
     public function create()
     {
-        // Ambil data service yang aktif
+        // 1. Ambil data service yang aktif
         $services = Service::where('is_active', 1)->get();
         
-        // TAMBAHAN: Ambil data barber untuk ditampilkan di pilihan
-        $barbers = Barber::all(); 
+        // 2. Ambil data barber BESERTA ulasan dan user yang mengulas
+        // 'with(['reviews.user'])' ini PENTING agar pop-up detail bisa menampilkan rating & komentar
+        $barbers = Barber::with(['reviews.user'])->get(); 
 
-        // Kirim $services DAN $barbers ke view
-        // Pastikan nama view sesuai dengan lokasi file Anda (misal: 'user.reservasi' atau 'reservasi')
-        return view('
-        reservasi', compact('services', 'barbers')); 
+        // 3. Kirim ke view reservasi
+        return view('reservasi', compact('services', 'barbers')); 
     }
 
     // --- USER: KIRIM DATA ---
@@ -38,7 +37,7 @@ class ReservationController extends Controller
             'date' => 'required|date',
             'time' => 'required',
             'service_id' => 'required|exists:services,id', 
-            'barber_id' => 'nullable|exists:barbers,id', // TAMBAHAN: Validasi barber (nullable karena bisa pilih 'Any Barber')
+            'barber_id' => 'nullable|exists:barbers,id', // Nullable = Bisa pilih "Any Barber"
             'notes' => 'nullable|string',
         ]);
 
@@ -49,7 +48,7 @@ class ReservationController extends Controller
             'date' => $request->date,
             'time' => $request->time,
             'service_id' => $request->service_id,
-            'barber_id' => $request->barber_id, // TAMBAHAN: Simpan ID Barber yang dipilih
+            'barber_id' => $request->barber_id, // Simpan ID Barber
             'notes' => $request->notes,
             'status' => 'Pending'           
         ]);
@@ -60,7 +59,7 @@ class ReservationController extends Controller
     // --- ADMIN: LIHAT DATA ---
     public function index()
     {
-        // Menggunakan with('service', 'barber') agar nama barber juga terambil (Eager Loading)
+        // Eager loading service & barber agar query lebih efisien
         $reservations = Reservation::with(['service', 'barber'])->latest()->get();
         return view('admin.reservations', compact('reservations'));
     }
@@ -79,7 +78,7 @@ class ReservationController extends Controller
         if ($request->has('status')) {
             $reservation->update(['status' => $request->status]);
         } else {
-            // Toggle sederhana jika tidak ada input spesifik
+            // Toggle sederhana (Pending <-> Done)
             $reservation->status = $reservation->status == 'pending' ? 'done' : 'pending';
             $reservation->save();
         }

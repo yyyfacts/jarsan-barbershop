@@ -32,4 +32,13 @@ class Barber extends Model
         'schedule' => 'array',
         'is_active' => 'boolean',
     ];
+
+    /**
+     * RELASI KE TABLE REVIEWS
+     * Wajib ada agar bisa memanggil $barber->reviews di halaman reservasi
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

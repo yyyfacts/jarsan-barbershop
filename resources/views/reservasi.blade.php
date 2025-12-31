@@ -71,7 +71,6 @@ body {
     transform: translateY(-5px);
 }
 
-/* Style saat DIPILIH (Active) */
 .selection-input:checked+.selection-card {
     border: 1px solid var(--luxury-gold);
     background: linear-gradient(to bottom, rgba(212, 175, 55, 0.1), rgba(0, 0, 0, 0));
@@ -80,7 +79,7 @@ body {
 
 .selection-input:checked+.selection-card::after {
     content: '\F26E';
-    /* Bootstrap Icon Check */
+    /* Icon Check */
     font-family: 'bootstrap-icons';
     position: absolute;
     top: 10px;
@@ -89,7 +88,7 @@ body {
     font-size: 1.2rem;
 }
 
-/* GAMBAR BARBER (Bulat Emas) */
+/* GAMBAR BARBER */
 .barber-img {
     width: 80px;
     height: 80px;
@@ -106,7 +105,7 @@ body {
     filter: grayscale(0%);
 }
 
-/* TOMBOL LIHAT DETAIL (Baru) */
+/* TOMBOL DETAIL */
 .btn-detail {
     font-size: 0.7rem;
     letter-spacing: 1px;
@@ -119,7 +118,6 @@ body {
     text-decoration: none;
     display: inline-block;
     z-index: 10;
-    /* Agar di atas layer card */
     position: relative;
 }
 
@@ -171,7 +169,7 @@ body {
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
 }
 
-/* --- INPUT TANGGAL MEWAH --- */
+/* --- DATE INPUT --- */
 .date-luxury {
     background: transparent;
     border: none;
@@ -198,7 +196,7 @@ body {
     cursor: pointer;
 }
 
-/* --- STICKY BOTTOM SUMMARY BAR --- */
+/* --- STICKY SUMMARY --- */
 .booking-summary {
     position: fixed;
     bottom: 0;
@@ -223,7 +221,7 @@ body {
     }
 }
 
-/* --- MODAL DETAIL BARBER (CUSTOM LUXURY) --- */
+/* --- MODAL DETAIL --- */
 .modal-content-luxury {
     background-color: #121212;
     border: 1px solid var(--luxury-gold);
@@ -255,7 +253,6 @@ body {
     color: rgba(212, 175, 55, 0.8);
 }
 
-/* Input Kontak */
 .form-control-luxury {
     background: transparent;
     border: 1px solid #444;
@@ -269,6 +266,28 @@ body {
     border-color: var(--luxury-gold);
     color: white;
     box-shadow: none;
+}
+
+/* ULASAN STYLE */
+.review-item {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.review-user {
+    font-weight: bold;
+    color: var(--luxury-gold);
+    font-size: 0.85rem;
+}
+
+.review-text {
+    font-size: 0.8rem;
+    color: #ccc;
+    font-style: italic;
 }
 </style>
 @endpush
@@ -322,23 +341,43 @@ body {
 
                 {{-- Loop Barber --}}
                 @foreach($barbers as $barber)
+                @php
+                // Prioritaskan photo_path (Base64) sesuai admin controller, fallback ke default
+                $imgSrc = $barber->photo_path ??
+                'https://ui-avatars.com/api/?name='.urlencode($barber->name).'&background=D4AF37&color=000';
+
+                // Data Jadwal (JSON)
+                $scheduleJson = json_encode($barber->schedule ?? []);
+
+                // Data Review (Ambil 5 terbaru via relasi)
+                $reviews = $barber->reviews->sortByDesc('created_at')->take(5)->values();
+                $reviewsJson = json_encode($reviews);
+
+                // Hitung Rating
+                $avgRating = $barber->reviews->avg('rating') ?? 0;
+                $ratingCount = $barber->reviews->count();
+                $avgRatingFormat = number_format($avgRating, 1);
+                @endphp
+
                 <div class="col-6 col-md-3 col-lg-2">
                     <input type="radio" name="barber_id" id="barber_{{ $barber->id }}" value="{{ $barber->id }}"
                         class="selection-input" data-name="{{ $barber->name }}" onchange="updateSummary()">
                     <label for="barber_{{ $barber->id }}" class="selection-card pb-1">
-                        {{-- Logika Gambar: Cek image_path dulu (Barberman upload), kalau ga ada cek avatar_blob (User), kalau ga ada default --}}
-                        @php
-                        $imgSrc = $barber->image_path ? asset('storage/'.$barber->image_path) : ($barber->avatar_blob ??
-                        'https://ui-avatars.com/api/?name='.urlencode($barber->name).'&background=D4AF37&color=000');
-                        @endphp
 
                         <img src="{{ $imgSrc }}" class="barber-img" alt="{{ $barber->name }}">
                         <h6 class="text-white fw-bold mb-0 small text-uppercase">{{ Str::limit($barber->name, 10) }}
                         </h6>
 
-                        {{-- TOMBOL LIHAT DETAIL (DENGAN MODAL) --}}
-                        <button type="button" class="btn-detail"
-                            onclick="event.stopPropagation(); showBarberDetail('{{ $barber->name }}', '{{ $imgSrc }}')">
+                        {{-- TOMBOL LIHAT DETAIL (Mengirim Data ke JS) --}}
+                        <button type="button" class="btn-detail" onclick="event.stopPropagation(); showBarberDetail(
+                                    '{{ $barber->name }}', 
+                                    '{{ $imgSrc }}', 
+                                    '{{ $barber->bio ?? 'Profesional Barber at Jarsan' }}', 
+                                    {{ $scheduleJson }}, 
+                                    {{ $reviewsJson }}, 
+                                    '{{ $avgRatingFormat }}', 
+                                    {{ $ratingCount }}
+                                )">
                             Lihat Detail
                         </button>
                     </label>
@@ -384,17 +423,12 @@ body {
         <div class="mb-5" data-aos="fade-up">
             <h4 class="section-title">04. PILIH WAKTU</h4>
             <div class="row g-2 justify-content-center">
-                @php
-                $start = strtotime('10:00');
-                $end = strtotime('21:00');
-                @endphp
-                @for ($t = $start; $t <= $end; $t +=60 * 60) @php $timeVal=date('H:i', $t); $isBooked=false; @endphp
-                    <div class="col-4 col-md-2">
+                @php $start = strtotime('10:00'); $end = strtotime('21:00'); @endphp
+                @for ($t = $start; $t <= $end; $t +=60 * 60) @php $timeVal=date('H:i', $t); @endphp <div
+                    class="col-4 col-md-2">
                     <input type="radio" name="time" id="time_{{ $timeVal }}" value="{{ $timeVal }}"
-                        class="selection-input" {{ $isBooked ? 'disabled' : '' }} onchange="updateSummary()" required>
-                    <label for="time_{{ $timeVal }}" class="time-slot-label {{ $isBooked ? 'booked' : '' }}">
-                        {{ $timeVal }}
-                    </label>
+                        class="selection-input" onchange="updateSummary()" required>
+                    <label for="time_{{ $timeVal }}" class="time-slot-label">{{ $timeVal }}</label>
             </div>
             @endfor
         </div>
@@ -420,7 +454,7 @@ body {
     </div>
 </div>
 
-{{-- SUMMARY STICKY BOTTOM --}}
+{{-- SUMMARY BAR (STICKY) --}}
 <div class="booking-summary" id="summaryBar">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center">
@@ -431,9 +465,8 @@ body {
                 </h3>
                 <small class="text-white fst-italic" id="summaryText" style="opacity: 0.8;">Menunggu pilihan...</small>
             </div>
-            <button type="submit" class="btn btn-gold-luxury px-5 py-3 fw-bold rounded-0" style="letter-spacing: 2px;">
-                CONFIRM BOOKING
-            </button>
+            <button type="submit" class="btn btn-gold-luxury px-5 py-3 fw-bold rounded-0"
+                style="letter-spacing: 2px;">CONFIRM BOOKING</button>
         </div>
     </div>
 </div>
@@ -441,9 +474,9 @@ body {
 </form>
 </div>
 
-{{-- MODAL DETAIL BARBER --}}
+{{-- MODAL DETAIL BARBER (DINAMIS) --}}
 <div class="modal fade" id="barberDetailModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content modal-content-luxury">
             <div class="modal-header modal-header-luxury">
                 <h5 class="modal-title fw-bold text-gold letter-spacing-1" id="modalBarberName">Barber Name</h5>
@@ -452,33 +485,33 @@ body {
             </div>
             <div class="modal-body modal-body-luxury text-center">
 
-                {{-- FOTO BESAR --}}
-                <img src="" id="modalBarberImg" class="rounded-circle border border-warning mb-4"
-                    style="width: 150px; height: 150px; object-fit: cover; border-width: 3px !important; border-color: var(--luxury-gold) !important;">
+                <div class="row">
+                    {{-- KOLOM KIRI: FOTO, BIO, RATING --}}
+                    <div class="col-md-5 border-end border-secondary">
+                        <img src="" id="modalBarberImg" class="rounded-circle border border-warning mb-3 shadow"
+                            style="width: 150px; height: 150px; object-fit: cover; border-width: 3px !important; border-color: var(--luxury-gold) !important;">
 
-                {{-- RATING (STATIC DEMO) --}}
-                <div class="mb-4">
-                    <div class="text-warning fs-5">
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
+                        <h5 class="fw-bold text-white mb-1" id="modalBarberName2">Name</h5>
+                        <p class="text-white-50 small fst-italic mb-3" id="modalBarberBio">Bio...</p>
+
+                        <div id="ratingBox" class="mb-3 p-2 bg-dark border border-secondary rounded">
+                        </div>
                     </div>
-                    <small class="text-white-50">4.9/5 (241 Ulasan)</small>
-                </div>
 
-                {{-- JADWAL KERJA (SESUAI GAMBAR) --}}
-                <div class="text-start bg-dark p-3 border border-secondary">
-                    <h6 class="text-white border-bottom border-secondary pb-2 mb-3">JADWAL KERJA</h6>
+                    {{-- KOLOM KANAN: JADWAL & ULASAN --}}
+                    <div class="col-md-7 text-start ps-md-4">
+                        <h6 class="text-gold border-bottom border-secondary pb-2 mb-3 fw-bold">JADWAL KERJA MINGGU INI
+                        </h6>
 
-                    <div class="schedule-row"><span>Senin</span> <span class="text-gold-dim">10:00 - 19:00</span></div>
-                    <div class="schedule-row"><span>Selasa</span> <span class="text-gold-dim">14:00 - 21:00</span></div>
-                    <div class="schedule-row"><span>Rabu</span> <span class="text-gold-dim">10:00 - 19:00</span></div>
-                    <div class="schedule-row"><span>Kamis</span> <span class="text-danger">OFF</span></div>
-                    <div class="schedule-row"><span>Jumat</span> <span class="text-gold-dim">13:00 - 21:00</span></div>
-                    <div class="schedule-row"><span>Sabtu</span> <span class="text-gold-dim">10:00 - 19:00</span></div>
-                    <div class="schedule-row"><span>Minggu</span> <span class="text-gold-dim">14:00 - 21:00</span></div>
+                        <div id="scheduleContainer" class="bg-dark p-3 border border-secondary mb-4 rounded">
+                            {{-- Jadwal akan diisi lewat Javascript --}}
+                        </div>
+
+                        <h6 class="text-gold border-bottom border-secondary pb-2 mb-3 fw-bold">ULASAN TERBARU</h6>
+                        <div class="reviews-container" style="max-height: 150px; overflow-y: auto;">
+                            {{-- Ulasan akan diisi lewat Javascript --}}
+                        </div>
+                    </div>
                 </div>
 
                 <button class="btn btn-outline-light w-100 mt-4 rounded-0" data-bs-dismiss="modal">TUTUP</button>
@@ -491,16 +524,80 @@ body {
 
 @push('scripts')
 <script>
-// Logic untuk Modal Detail Barber
-function showBarberDetail(name, imgSrc) {
+// --- 1. LOGIC MODAL DETAIL BARBER (DINAMIS) ---
+function showBarberDetail(name, imgSrc, bio, schedule, reviews, avgRating, ratingCount) {
+    // A. Set Info Dasar
     document.getElementById('modalBarberName').innerText = name;
+    document.getElementById('modalBarberName2').innerText = name;
     document.getElementById('modalBarberImg').src = imgSrc;
+    document.getElementById('modalBarberBio').innerText = bio;
 
+    // B. Render Rating Bintang
+    let starsHtml = '';
+    for (let i = 1; i <= 5; i++) {
+        if (i <= Math.round(avgRating)) {
+            starsHtml += '<i class="bi bi-star-fill"></i> ';
+        } else {
+            starsHtml += '<i class="bi bi-star text-secondary"></i> ';
+        }
+    }
+
+    const ratingBox = document.getElementById('ratingBox');
+    if (ratingBox) {
+        ratingBox.innerHTML = `
+                <div class="text-warning fs-5">${starsHtml}</div>
+                <small class="text-white fw-bold">${avgRating} / 5.0</small> <br>
+                <small class="text-white-50" style="font-size: 0.7rem;">Berdasarkan ${ratingCount} Ulasan</small>
+            `;
+    }
+
+    // C. Render Jadwal Kerja
+    const scheduleContainer = document.getElementById('scheduleContainer');
+    scheduleContainer.innerHTML = ''; // Reset konten lama
+
+    const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+    days.forEach(day => {
+        // Ambil data dari JSON schedule, default 'OFF' jika kosong
+        let time = schedule && schedule[day] ? schedule[day] : 'OFF';
+
+        // Styling warna: Merah jika OFF, Emas Pudar jika Kerja
+        let timeClass = time === 'OFF' ? 'text-danger fw-bold' : 'text-gold-dim';
+
+        scheduleContainer.innerHTML += `
+                <div class="schedule-row">
+                    <span>${day}</span> <span class="${timeClass}">${time}</span>
+                </div>`;
+    });
+
+    // D. Render Ulasan User
+    const reviewsContainer = document.querySelector('.reviews-container');
+    reviewsContainer.innerHTML = ''; // Reset konten lama
+
+    if (reviews && reviews.length > 0) {
+        reviews.forEach(review => {
+            // Ambil nama user dari relasi, atau default 'Customer'
+            let userName = review.user ? review.user.name : 'Customer';
+            let comment = review.comment ? review.comment : 'Memberikan rating tanpa komentar.';
+
+            reviewsContainer.innerHTML += `
+                    <div class="review-item">
+                        <div class="d-flex justify-content-between">
+                            <span class="review-user">${userName}</span>
+                            <span class="text-warning small"><i class="bi bi-star-fill"></i> ${review.rating}</span>
+                        </div>
+                        <div class="review-text">"${comment}"</div>
+                    </div>`;
+        });
+    } else {
+        reviewsContainer.innerHTML = '<p class="text-white-50 small text-center fst-italic mt-3">Belum ada ulasan.</p>';
+    }
+
+    // Tampilkan Modal
     var myModal = new bootstrap.Modal(document.getElementById('barberDetailModal'));
     myModal.show();
 }
 
-// Logic Summary
+// --- 2. LOGIC SUMMARY BAR ---
 function updateSummary() {
     const summaryBar = document.getElementById('summaryBar');
     const priceLabel = document.getElementById('totalPrice');
@@ -514,9 +611,11 @@ function updateSummary() {
     if (selectedService) {
         summaryBar.style.display = 'block';
 
+        // Format Harga
         const price = parseInt(selectedService.getAttribute('data-price'));
         priceLabel.innerText = 'Rp ' + price.toLocaleString('id-ID');
 
+        // Format Teks Ringkasan
         let text = selectedService.getAttribute('data-name');
 
         if (selectedBarber && selectedBarber.value !== "") {
