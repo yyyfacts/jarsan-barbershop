@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+// Import Model Reservation
+use App\Models\Reservation;
 
 class User extends Authenticatable
 {
@@ -21,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'google_id', // Tambahan: Agar login Google bisa menyimpan ID
     ];
 
     /**
@@ -44,5 +47,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * RELASI UTAMA (PERBAIKAN ERROR)
+     * Menghubungkan tabel users ke tabel reservations
+     */
+    public function reservations()
+    {
+        // User memiliki banyak (hasMany) reservasi
+        return $this->hasMany(Reservation::class);
     }
 }

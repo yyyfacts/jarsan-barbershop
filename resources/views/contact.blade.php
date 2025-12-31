@@ -91,37 +91,30 @@
                     <div>
                         <h6 class="text-white fw-bold mb-1">Lokasi</h6>
                         <p class="text-white-50 mb-0">
-                            Jl. Jarsan No. 123, Barbershop City,<br> Jawa Tengah, Indonesia
+                            95PX+9CW, Kayulangit, Sikampuh, <br>
+                            Kec. Kroya, Kabupaten Cilacap, <br>
+                            Jawa Tengah 53282
                         </p>
                     </div>
                 </div>
 
                 {{-- Telepon --}}
-                <div class="d-flex mb-4">
-                    <i class="bi bi-telephone text-gold me-3 fs-4"></i>
+                <div class="d-flex mb-0">
+                    <i class="bi bi-whatsapp text-gold me-3 fs-4"></i>
                     <div>
-                        <h6 class="text-white fw-bold mb-1">Telepon / WhatsApp</h6>
-                        <p class="text-white-50 mb-0">0882 3256 0561</p>
+                        <h6 class="text-white fw-bold mb-1">WhatsApp Official</h6>
+                        <p class="text-white-50 mb-0">0882-3256-0561</p>
                     </div>
                 </div>
 
-                {{-- Email --}}
-                <div class="d-flex mb-0">
-                    <i class="bi bi-envelope text-gold me-3 fs-4"></i>
-                    <div>
-                        <h6 class="text-white fw-bold mb-1">Email Official</h6>
-                        <p class="text-white-50 mb-0">jarsanbarbershop@gmail.com</p>
-                    </div>
-                </div>
+                {{-- Bagian Email DIHAPUS karena user info "tidak ada" --}}
             </div>
 
             {{-- PETA --}}
             <div class="map-wrapper map-container overflow-hidden" style="height: 350px;">
-                {{-- Ganti src iframe di bawah dengan link embed Google Maps lokasi asli barbershop Anda --}}
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3956.270684615286!2d109.2468393!3d-7.4352778!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e655ea49d97c069%3A0xa19c3b8568600d8!2sPurwokerto%2C%20Banyumas%20Regency%2C%20Central%20Java!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid"
-                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade">
+                {{-- Map diarahkan ke alamat Kayulangit, Sikampuh --}}
+                <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+                    src="https://maps.google.com/maps?q=95PX+9CW,+Kayulangit,+Sikampuh,+Kec.+Kroya,+Kabupaten+Cilacap,+Jawa+Tengah+53282&hl=id&z=14&output=embed">
                 </iframe>
             </div>
         </div>
