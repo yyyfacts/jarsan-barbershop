@@ -18,7 +18,8 @@ class BarberController extends Controller
         $request->validate([
             'name' => 'required',
             'specialty' => 'required',
-            'photo' => 'nullable|image|max:1024'
+            'photo' => 'nullable|image|max:2048',
+            'schedule' => 'nullable|array' // Validasi array untuk jadwal
         ]);
 
         $photoBase64 = null;
@@ -28,10 +29,12 @@ class BarberController extends Controller
             $photoBase64 = 'data:image/' . $request->file('photo')->extension() . ';base64,' . $base64;
         }
 
+        // Simpan data
         Barber::create([
             'name' => $request->name,
             'specialty' => $request->specialty,
             'bio' => $request->bio,
+            'schedule' => $request->schedule, // Laravel otomatis convert ke JSON karena di-cast di Model
             'photo_path' => $photoBase64,
             'is_active' => 1
         ]);
@@ -46,13 +49,15 @@ class BarberController extends Controller
         $request->validate([
             'name' => 'required',
             'specialty' => 'required',
-            'photo' => 'nullable|image|max:1024'
+            'photo' => 'nullable|image|max:2048',
+            'schedule' => 'nullable|array'
         ]);
 
         $updateData = [
             'name' => $request->name,
             'specialty' => $request->specialty,
             'bio' => $request->bio,
+            'schedule' => $request->schedule, // Update jadwal
         ];
 
         if ($request->hasFile('photo')) {
