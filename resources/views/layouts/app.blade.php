@@ -182,6 +182,36 @@
         color: var(--luxury-gold) !important;
     }
 
+    /* --- TOGGLER (HAMBURGER MENU) STYLING --- */
+    .navbar-toggler {
+        border-color: var(--luxury-gold) !important;
+        color: var(--luxury-gold) !important;
+    }
+
+    .navbar-toggler:focus {
+        box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    }
+
+    /* Styling Menu Saat Dibuka di HP */
+    @media (max-width: 991px) {
+        .navbar-collapse {
+            background: rgba(15, 15, 15, 0.98);
+            padding: 20px;
+            margin-top: 15px;
+            border-radius: 5px;
+            border: 1px solid var(--gold-accent);
+        }
+
+        .nav-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 10px 0;
+        }
+
+        .nav-item:last-child {
+            border-bottom: none;
+        }
+    }
+
     /* --- USER DROPDOWN --- */
     .user-dropdown-toggle {
         display: flex;
@@ -240,43 +270,6 @@
         color: black;
     }
 
-    /* --- MOBILE DOCK (HANYA DI HP) --- */
-    @media (max-width: 991px) {
-        .mobile-dock {
-            position: fixed;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(30, 30, 30, 0.98);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--luxury-gold);
-            border-radius: 50px;
-            display: flex;
-            padding: 12px 25px;
-            z-index: 1000;
-            gap: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
-        }
-
-        .mobile-dock a {
-            color: #ffffff;
-            font-size: 1.3rem;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-        }
-
-        .mobile-dock a.active,
-        .mobile-dock a:hover {
-            color: var(--luxury-gold);
-            transform: translateY(-3px);
-        }
-
-        .navbar-toggler {
-            display: none;
-        }
-    }
-
     .btn-gold-luxury {
         background: linear-gradient(45deg, var(--luxury-gold), #fff0d1);
         border: none;
@@ -328,9 +321,15 @@
                 </div>
             </a>
 
-            {{-- MENU DESKTOP --}}
+            {{-- TOMBOL HAMBURGER (MUNCUL DI HP) --}}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            {{-- MENU UTAMA --}}
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto gap-3 align-items-center">
+                <ul class="navbar-nav ms-auto gap-3 align-items-lg-center">
                     <li class="nav-item"><a class="nav-link {{ Request::is('/') ? 'active' : '' }}"
                             href="{{ route('welcome') }}">BERANDA</a></li>
                     <li class="nav-item"><a class="nav-link {{ Request::is('about') ? 'active' : '' }}"
@@ -343,17 +342,17 @@
                             href="{{ route('contact') }}">KONTAK</a></li>
 
                     @guest
-                    <li class="nav-item ms-lg-2">
-                        <a href="{{ route('login') }}" class="btn btn-outline-light rounded-0 px-4 py-2"
+                    <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+                        <a href="{{ route('login') }}" class="btn btn-outline-light rounded-0 px-4 py-2 w-100"
                             style="border-color: var(--luxury-gold); color: var(--luxury-gold);">LOGIN</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ route('reservasi') }}" class="btn btn-gold-luxury px-4 py-2">BOOK NOW</a>
+                    <li class="nav-item mt-2 mt-lg-0">
+                        <a href="{{ route('reservasi') }}" class="btn btn-gold-luxury px-4 py-2 w-100">BOOK NOW</a>
                     </li>
                     @else
-                    <li class="nav-item dropdown ms-lg-2">
-                        <a class="nav-link user-dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
+                    <li class="nav-item dropdown ms-lg-2 mt-2 mt-lg-0">
+                        <a class="nav-link user-dropdown-toggle justify-content-center justify-content-lg-start"
+                            href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="{{ Auth::user()->avatar_blob ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&background=D4AF37&color=000' }}"
                                 class="user-avatar-small" alt="Profile">
                             <span
@@ -380,38 +379,14 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ route('reservasi') }}" class="btn btn-gold-luxury px-4 py-2">BOOK</a>
+                    <li class="nav-item mt-2 mt-lg-0">
+                        <a href="{{ route('reservasi') }}" class="btn btn-gold-luxury px-4 py-2 w-100">BOOK</a>
                     </li>
                     @endguest
                 </ul>
             </div>
         </div>
     </nav>
-
-    {{-- MENU MOBILE (Hanya Muncul di Layar Kecil) --}}
-    <div class="mobile-dock d-lg-none">
-        <a href="{{ route('welcome') }}" class="{{ Request::is('/') ? 'active' : '' }}"><i class="bi bi-house"></i></a>
-        <a href="{{ route('pricelist') }}" class="{{ Request::is('pricelist') ? 'active' : '' }}"><i
-                class="bi bi-scissors"></i></a>
-
-        @auth
-        <a href="{{ route('reservasi') }}" class="{{ Request::is('reservasi') ? 'active' : '' }}"><i
-                class="bi bi-calendar-plus-fill fs-4 text-gold"></i></a>
-        @else
-        <a href="{{ route('login') }}"><i class="bi bi-calendar-plus fs-4 text-white"></i></a>
-        @endauth
-
-        <a href="{{ route('contact') }}" class="{{ Request::is('contact') ? 'active' : '' }}"><i
-                class="bi bi-geo-alt"></i></a>
-
-        @auth
-        <a href="{{ route('dashboard') }}" class="{{ Request::is('dashboard') ? 'active' : '' }}"><i
-                class="bi bi-person-circle"></i></a>
-        @else
-        <a href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right"></i></a>
-        @endauth
-    </div>
 
     <main>
         @yield('content')
