@@ -9,7 +9,6 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
         rel="stylesheet">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -20,8 +19,6 @@
         --matte-black: #121212;
         --luxury-gold: #D4AF37;
         --gold-accent: rgba(212, 175, 55, 0.5);
-        --metallic-red: #960018;
-        --glass-bg: rgba(255, 255, 255, 0.05);
         --text-light: #ffffff;
         --font-main: 'Montserrat', sans-serif;
         --font-heading: 'Playfair Display', serif;
@@ -47,21 +44,6 @@
         color: var(--text-light);
     }
 
-    .text-muted {
-        color: #e0e0e0 !important;
-    }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    .navbar-brand,
-    .luxury-font {
-        font-family: var(--font-heading);
-        color: var(--text-light);
-    }
-
     .text-gold {
         color: var(--luxury-gold) !important;
     }
@@ -72,76 +54,6 @@
 
     .letter-spacing-2 {
         letter-spacing: 2px;
-    }
-
-    /* --- CIRCULAR PRE-LOADER --- */
-    #preloader {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: var(--deep-charcoal);
-        z-index: 9999;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .loader-container {
-        position: relative;
-        width: 150px;
-        height: 150px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .loader-logo {
-        width: 110px;
-        height: 110px;
-        border-radius: 50%;
-        object-fit: cover;
-        position: relative;
-        z-index: 2;
-        animation: pulse-logo 2.5s infinite ease-in-out;
-    }
-
-    .loader-ring {
-        position: absolute;
-        width: 140px;
-        height: 140px;
-        border-radius: 50%;
-        border: 2px solid transparent;
-        border-top-color: var(--luxury-gold);
-        border-left-color: var(--gold-accent);
-        z-index: 1;
-        animation: spin-ring 1.5s linear infinite;
-    }
-
-    @keyframes pulse-logo {
-
-        0%,
-        100% {
-            transform: scale(0.95);
-            opacity: 0.9;
-        }
-
-        50% {
-            transform: scale(1);
-            opacity: 1;
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
-        }
-    }
-
-    @keyframes spin-ring {
-        0% {
-            transform: rotate(0deg);
-        }
-
-        100% {
-            transform: rotate(360deg);
-        }
     }
 
     /* --- LUXURY NAVBAR --- */
@@ -161,55 +73,9 @@
         position: relative;
     }
 
-    .nav-link::after {
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 2px;
-        bottom: 0;
-        left: 0;
-        background-color: var(--luxury-gold);
-        transition: width 0.3s;
-    }
-
-    .nav-link:hover::after,
-    .nav-link.active::after {
-        width: 100%;
-    }
-
     .nav-link:hover,
     .nav-link.active {
         color: var(--luxury-gold) !important;
-    }
-
-    /* --- TOGGLER (HAMBURGER MENU) STYLING --- */
-    .navbar-toggler {
-        border-color: var(--luxury-gold) !important;
-        color: var(--luxury-gold) !important;
-    }
-
-    .navbar-toggler:focus {
-        box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-    }
-
-    /* Styling Menu Saat Dibuka di HP */
-    @media (max-width: 991px) {
-        .navbar-collapse {
-            background: rgba(15, 15, 15, 0.98);
-            padding: 20px;
-            margin-top: 15px;
-            border-radius: 5px;
-            border: 1px solid var(--gold-accent);
-        }
-
-        .nav-item {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 10px 0;
-        }
-
-        .nav-item:last-child {
-            border-bottom: none;
-        }
     }
 
     /* --- USER DROPDOWN --- */
@@ -261,19 +127,11 @@
         color: black !important;
     }
 
-    .custom-dropdown-item i {
-        margin-right: 10px;
-        color: var(--luxury-gold);
-    }
-
-    .custom-dropdown-item:hover i {
-        color: black;
-    }
-
+    /* --- BUTTONS --- */
     .btn-gold-luxury {
         background: linear-gradient(45deg, var(--luxury-gold), #fff0d1);
         border: none;
-        color: #000000;
+        color: #000;
         font-weight: 700;
         letter-spacing: 1px;
         border-radius: 2px;
@@ -283,29 +141,89 @@
     .btn-gold-luxury:hover {
         background: linear-gradient(45deg, #fff0d1, var(--luxury-gold));
         box-shadow: 0 5px 20px rgba(212, 175, 55, 0.5);
-        color: #000;
     }
 
-    .hover-gold:hover {
-        color: var(--luxury-gold) !important;
+    /* --- FOOTER LUXURY STYLE --- */
+    footer {
+        background-color: #050505;
+        border-top: 1px solid var(--gold-accent);
+        padding-top: 80px;
+        position: relative;
+    }
+
+    .footer-brand {
+        font-family: var(--font-heading);
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--luxury-gold);
+        margin-bottom: 20px;
+        display: block;
+        text-decoration: none;
+    }
+
+    .footer-desc {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+        line-height: 1.8;
+        max-width: 300px;
+    }
+
+    .footer-title {
+        color: #fff;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 25px;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+    }
+
+    .footer-links li {
+        margin-bottom: 12px;
+    }
+
+    .footer-links a {
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        transition: 0.3s;
+        font-size: 0.9rem;
+    }
+
+    .footer-links a:hover {
+        color: var(--luxury-gold);
+        padding-left: 5px;
+    }
+
+    .social-icon-circle {
+        width: 40px;
+        height: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .social-icon-circle:hover {
+        border-color: var(--luxury-gold);
+        background: var(--luxury-gold);
+        color: #000;
+        transform: translateY(-3px);
+    }
+
+    .copyright-bar {
+        background-color: #000;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 25px 0;
+        margin-top: 60px;
     }
     </style>
     @stack('styles')
 </head>
 
 <body>
-
-    <div id="preloader">
-        <div class="loader-container">
-            @if($setting && $setting->logo_path)
-            <img src="{{ $setting->logo_path }}" class="loader-logo" alt="Jarsan Logo">
-            @else
-            <div class="loader-logo d-flex align-items-center justify-content-center bg-matte fs-1 fw-bold text-gold"
-                style="border: 2px solid var(--luxury-gold);">J</div>
-            @endif
-            <div class="loader-ring"></div>
-        </div>
-    </div>
 
     <nav class="navbar navbar-expand-lg navbar-dark navbar-luxury sticky-top">
         <div class="container">
@@ -321,13 +239,10 @@
                 </div>
             </a>
 
-            {{-- TOMBOL HAMBURGER (MUNCUL DI HP) --}}
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            {{-- MENU UTAMA --}}
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto gap-3 align-items-lg-center">
                     <li class="nav-item"><a class="nav-link {{ Request::is('/') ? 'active' : '' }}"
@@ -352,16 +267,14 @@
                     @else
                     <li class="nav-item dropdown ms-lg-2 mt-2 mt-lg-0">
                         <a class="nav-link user-dropdown-toggle justify-content-center justify-content-lg-start"
-                            href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
                             <img src="{{ Auth::user()->avatar_blob ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&background=D4AF37&color=000' }}"
-                                class="user-avatar-small" alt="Profile">
+                                class="user-avatar-small">
                             <span
                                 class="small fw-bold text-uppercase ms-1">{{ Str::limit(Auth::user()->name, 10) }}</span>
                             <i class="bi bi-chevron-down small ms-1" style="font-size: 0.7rem;"></i>
                         </a>
-
-                        <ul class="dropdown-menu custom-dropdown-menu dropdown-menu-end"
-                            aria-labelledby="navbarDropdown">
+                        <ul class="dropdown-menu custom-dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item custom-dropdown-item" href="{{ route('dashboard') }}"><i
                                         class="bi bi-speedometer2"></i> Dashboard</a></li>
                             <li><a class="dropdown-item custom-dropdown-item" href="{{ route('profile.edit') }}"><i
@@ -372,9 +285,8 @@
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf
-                                    <button type="submit" class="dropdown-item custom-dropdown-item w-100 text-start">
-                                        <i class="bi bi-box-arrow-right"></i> Logout
-                                    </button>
+                                    <button type="submit" class="dropdown-item custom-dropdown-item w-100 text-start"><i
+                                            class="bi bi-box-arrow-right"></i> Logout</button>
                                 </form>
                             </li>
                         </ul>
@@ -392,49 +304,75 @@
         @yield('content')
     </main>
 
-    <footer class="py-5 bg-matte" style="border-top: 1px solid #333; margin-top: 50px;">
-        <div class="container text-center">
-            <h2 class="text-gold mb-4 fw-bold letter-spacing-2">{{ $setting->app_name ?? 'JARSAN BARBERSHOP' }}</h2>
-            <div class="mb-4 d-flex justify-content-center gap-4">
-                <a href="https://www.instagram.com/jarsan_barbershop" target="_blank"
-                    class="text-white fs-4 hover-gold"><i class="bi bi-instagram"></i></a>
-                <a href="https://www.tiktok.com/@jarsan_barbershop" target="_blank"
-                    class="text-white fs-4 hover-gold"><i class="bi bi-tiktok"></i></a>
+    <footer>
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-4 col-md-6">
+                    <a href="{{ route('welcome') }}" class="footer-brand">
+                        {{ $setting->app_name ?? 'JARSAN' }}
+                    </a>
+                    <p class="footer-desc">
+                        Destinasi grooming premium untuk pria modern. Kami memadukan teknik klasik dengan gaya hidup
+                        masa kini.
+                    </p>
+                    <div class="d-flex gap-3 mt-4">
+                        @if($setting && $setting->instagram_link)
+                        <a href="{{ $setting->instagram_link }}" target="_blank" class="social-icon-circle"><i
+                                class="bi bi-instagram"></i></a>
+                        @endif
+                        @if($setting && $setting->tiktok_link)
+                        <a href="{{ $setting->tiktok_link }}" target="_blank" class="social-icon-circle"><i
+                                class="bi bi-tiktok"></i></a>
+                        @endif
+                        <a href="#" class="social-icon-circle"><i class="bi bi-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="footer-title">QUICK LINKS</h6>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="{{ route('welcome') }}">Beranda</a></li>
+                        <li><a href="{{ route('about') }}">Tentang Kami</a></li>
+                        <li><a href="{{ route('barberman') }}">Tim Barber</a></li>
+                        <li><a href="{{ route('pricelist') }}">Daftar Layanan</a></li>
+                        <li><a href="{{ route('contact') }}">Hubungi Kami</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-12">
+                    <h6 class="footer-title">STUDIO & HOURS</h6>
+                    <div class="mb-4">
+                        <p class="mb-1 text-white opacity-75 small">ALAMAT STUDIO</p>
+                        <p class="text-white small">Kayulangit, Sikampuh, Kroya, Cilacap, Jawa Tengah 53282</p>
+                    </div>
+                    <div>
+                        <p class="mb-1 text-white opacity-75 small">JAM OPERASIONAL</p>
+                        <p class="text-gold fw-bold mb-0">Setiap Hari: 13.00 - 21.00 WIB</p>
+                        <small class="text-white-50">(Kecuali Jumat Libur)</small>
+                    </div>
+                </div>
             </div>
-            <p class="text-white small mb-0">© {{ date('Y') }} {{ $setting->app_name ?? 'Jarsan Barbershop' }}. <br
-                    class="d-md-none">Luxury Grooming for Every Gentleman.</p>
+        </div>
+
+        <div class="copyright-bar text-center">
+            <div class="container">
+                <p class="mb-0 small text-white-50">
+                    &copy; {{ date('Y') }} <strong
+                        class="text-white">{{ $setting->app_name ?? 'Jarsan Barbershop' }}</strong>. All Rights
+                    Reserved.
+                </p>
+            </div>
         </div>
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
     <script>
     AOS.init({
         duration: 1000,
         once: true,
-        offset: 100
-    });
-
-    window.addEventListener('load', function() {
-        const tl = gsap.timeline();
-        tl.to(".loader-logo", {
-                scale: 1.1,
-                opacity: 0,
-                duration: 0.5,
-                ease: "power2.in"
-            })
-            .to(".loader-ring", {
-                scale: 0.1,
-                opacity: 0,
-                duration: 0.5
-            }, "-=0.3")
-            .to("#preloader", {
-                yPercent: -100,
-                duration: 0.8,
-                ease: "expo.inOut"
-            });
+        offset: 50
     });
     </script>
     @stack('scripts')
