@@ -99,7 +99,7 @@ input:-webkit-autofill:active {
                     <p class="text-center text-white small mt-5 mb-0">
                         Belum menjadi anggota? <a href="{{ route('register') }}"
                             class="text-gold fw-bold text-decoration-none border-bottom border-warning pb-1">Daftar
-                            Elite Club</a>
+                            Sekarang
                     </p>
                 </form>
             </div>
