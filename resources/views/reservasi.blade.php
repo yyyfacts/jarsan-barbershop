@@ -4,188 +4,437 @@
 
 @push('styles')
 <style>
+/* --- LUXURY THEME VARIABLES --- */
 :root {
-    --metallic-red: #a80017;
-    /* Merah Metalik Gelap */
-    --bright-red: #dc143c;
-    /* Merah Crimson Cerah untuk Hover */
+    --bg-dark: #0a0a0a;
+    --card-bg: #121212;
+    --luxury-gold: #D4AF37;
+    --gold-dim: rgba(212, 175, 55, 0.2);
+    --text-white: #ffffff;
+    --border-color: #333;
 }
 
-/* Background dengan overlay merah tipis */
-.bg-red-overlay {
-    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(20, 0, 0, 0.9)),
-    url('{{ asset('images/banner-login.webp') }}') center/cover fixed;
+/* BACKGROUND HALAMAN */
+body {
+    background-color: var(--bg-dark) !important;
+    background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #0a0a0a 70%);
 }
 
-/* Custom CSS untuk Card */
-.glass-card {
-    background: rgba(15, 15, 15, 0.9);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(168, 0, 23, 0.3);
-    /* Border Merah Tipis */
-    box-shadow: 0 0 40px rgba(168, 0, 23, 0.15);
-    /* Glow Merah */
-}
-
-/* Styling Input */
-.form-luxury {
-    background-color: transparent !important;
-    border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 0;
-    color: white !important;
-    padding: 12px 0;
-    transition: 0.4s;
-}
-
-/* Efek Focus menjadi Merah */
-.form-luxury:focus {
-    background-color: rgba(168, 0, 23, 0.05) !important;
-    border-bottom-color: var(--metallic-red);
-    box-shadow: none;
-    color: white !important;
-}
-
-.form-luxury::placeholder {
-    color: rgba(255, 255, 255, 0.5) !important;
-}
-
-/* Label Styling */
-.label-luxury {
-    font-size: 0.75rem;
+/* JUDUL SECTION */
+.section-title {
+    color: var(--luxury-gold);
+    font-family: 'Playfair Display', serif;
     font-weight: 700;
+    text-align: center;
+    margin-bottom: 30px;
     letter-spacing: 2px;
-    color: var(--metallic-red);
-    /* Label berwarna Merah */
     text-transform: uppercase;
+    font-size: 1.2rem;
+    position: relative;
+    padding-bottom: 15px;
 }
 
-/* Tombol Merah Metalik */
-.btn-red-luxury {
-    background: linear-gradient(135deg, var(--metallic-red) 0%, #600000 100%);
-    border: 1px solid var(--metallic-red);
-    color: white;
-    transition: all 0.4s ease;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 1px;
+    background-color: var(--luxury-gold);
 }
 
-.btn-red-luxury:hover {
-    background: linear-gradient(135deg, var(--bright-red) 0%, var(--metallic-red) 100%);
-    box-shadow: 0 0 25px rgba(220, 20, 60, 0.6);
-    /* Glow Merah Terang */
-    color: white;
-    border-color: var(--bright-red);
-    transform: translateY(-2px);
+/* --- CARD SELECTION STYLE (RADIO BUTTON HACK) --- */
+.selection-input {
+    display: none;
+    /* Sembunyikan radio button asli */
 }
 
-/* Icon Kalender Putih */
-input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
+.selection-card {
+    background: rgba(255, 255, 255, 0.03);
+    /* Glass Effect Tipis */
+    border: 1px solid var(--border-color);
+    border-radius: 0;
+    /* Kotak tegas khas Luxury */
+    padding: 20px 10px;
     cursor: pointer;
-    opacity: 0.8;
+    transition: all 0.3s ease;
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator:hover {
-    opacity: 1;
-    filter: drop-shadow(0 0 5px red);
+.selection-card:hover {
+    border-color: var(--luxury-gold);
+    background: rgba(212, 175, 55, 0.05);
+    transform: translateY(-5px);
 }
 
-/* Dropdown Option */
-select.form-luxury option {
-    background-color: #0a0a0a;
+/* Style saat DIPILIH (Active) */
+.selection-input:checked+.selection-card {
+    border: 1px solid var(--luxury-gold);
+    background: linear-gradient(to bottom, rgba(212, 175, 55, 0.1), rgba(0, 0, 0, 0));
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+}
+
+/* Icon Centang Emas */
+.selection-input:checked+.selection-card::after {
+    content: '\F26E';
+    /* Bootstrap Icon Check */
+    font-family: 'bootstrap-icons';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: var(--luxury-gold);
+    font-size: 1.2rem;
+}
+
+/* GAMBAR BARBER (Bulat Emas) */
+.barber-img {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #333;
+    margin-bottom: 15px;
+    transition: 0.3s;
+    filter: grayscale(100%);
+    /* Hitam putih biar elegan */
+}
+
+/* Saat dipilih, gambar jadi berwarna */
+.selection-input:checked+.selection-card .barber-img {
+    border-color: var(--luxury-gold);
+    filter: grayscale(0%);
+}
+
+/* GAMBAR SERVICE */
+.service-img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    margin-bottom: 15px;
+    filter: brightness(0.8);
+    border: 1px solid #333;
+}
+
+.selection-input:checked+.selection-card .service-img {
+    filter: brightness(1);
+    border-color: var(--luxury-gold);
+}
+
+/* --- TIME SLOTS (TOMBOL JAM) --- */
+.time-slot-label {
+    display: block;
+    background-color: transparent;
+    color: var(--text-white);
+    padding: 12px 0;
+    border: 1px solid #444;
+    text-align: center;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.time-slot-label:hover {
+    border-color: var(--luxury-gold);
+    color: var(--luxury-gold);
+}
+
+/* Logic Time Slot Dipilih */
+.selection-input:checked+.time-slot-label {
+    background-color: var(--luxury-gold);
+    border-color: var(--luxury-gold);
+    color: #000;
+    /* Teks hitam di background emas */
+    font-weight: 700;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+}
+
+/* Logic Time Slot Penuh/Disabled */
+.time-slot-label.booked {
+    background-color: #222;
+    color: #555;
+    border-color: #333;
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+
+/* --- INPUT TANGGAL MEWAH --- */
+.date-luxury {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #444;
+    color: var(--luxury-gold);
+    padding: 15px;
+    width: 100%;
+    font-size: 1.5rem;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    border-radius: 0;
+}
+
+.date-luxury:focus {
+    background: transparent;
+    border-bottom-color: var(--luxury-gold);
+    color: var(--luxury-gold);
+    box-shadow: none;
+}
+
+/* Icon Kalender (Invert biar putih/emas) */
+.date-luxury::-webkit-calendar-picker-indicator {
+    filter: invert(1) sepia(100%) saturate(1000%) hue-rotate(0deg) brightness(1.2) contrast(1);
+    cursor: pointer;
+}
+
+/* --- STICKY BOTTOM SUMMARY BAR --- */
+.booking-summary {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--luxury-gold);
+    padding: 20px 0;
+    z-index: 1050;
+    display: none;
+    /* Hidden default */
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Input Kontak */
+.form-control-luxury {
+    background: transparent;
+    border: 1px solid #444;
     color: white;
-    padding: 10px;
+    padding: 15px;
+    border-radius: 0;
+}
+
+.form-control-luxury:focus {
+    background: transparent;
+    border-color: var(--luxury-gold);
+    color: white;
+    box-shadow: none;
 }
 </style>
 @endpush
 
 @section('content')
-<section class="py-5 d-flex align-items-center bg-red-overlay" style="min-height: 90vh;">
-    <div class="container py-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="glass-card p-4 p-md-5" data-aos="zoom-in" data-aos-duration="1000">
+<div class="container pb-5" style="margin-top: 100px; margin-bottom: 120px;">
 
-                    <div class="text-center mb-5">
-                        <h5 class="fw-bold mb-2" style="color: var(--bright-red); letter-spacing: 3px;">SECURE YOUR SEAT
-                        </h5>
-                        <h2 class="display-5 fw-bold text-white">BOOK YOUR SLOT</h2>
-                        <div class="mx-auto mt-3"
-                            style="width: 80px; height: 3px; background: var(--metallic-red); box-shadow: 0 0 10px var(--metallic-red);">
-                        </div>
-                    </div>
+    <div class="text-center mb-5" data-aos="fade-down">
+        <h5 class="text-gold letter-spacing-2 mb-2 fw-bold">PREMIUM RESERVATION</h5>
+        <h2 class="display-4 fw-bold text-white">BOOK YOUR SLOT</h2>
+    </div>
 
-                    @if(session('success'))
-                    <div class="alert bg-black border border-danger text-white text-center mb-4 rounded-0 shadow-lg">
-                        <i class="bi bi-check-circle-fill me-2 text-danger"></i> {{ session('success') }}
-                    </div>
-                    @endif
+    @if(session('success'))
+    <div class="alert alert-success bg-transparent border border-success text-white text-center mb-5 rounded-0">
+        <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
+    </div>
+    @endif
 
-                    <form action="{{ route('reservasi.store') }}" method="POST">
-                        @csrf
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <label class="label-luxury mb-2">Nama Lengkap</label>
-                                <input type="text" name="name" class="form-control form-luxury"
-                                    placeholder="Masukkan nama Anda" value="{{ Auth::user()->name ?? '' }}" required>
-                            </div>
+    <form action="{{ route('reservasi.store') }}" method="POST" id="bookingForm">
+        @csrf
 
-                            <div class="col-md-6">
-                                <label class="label-luxury mb-2">Nomor Telepon</label>
-                                <input type="number" name="phone" class="form-control form-luxury"
-                                    placeholder="08XXXXXXXXXX" required>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="label-luxury mb-2">Tanggal Ritual</label>
-                                <input type="date" name="date" class="form-control form-luxury"
-                                    min="{{ date('Y-m-d') }}" required>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="label-luxury mb-2">Pilih Jam</label>
-                                <select name="time" class="form-select form-luxury" required style="cursor: pointer;">
-                                    <option value="" selected disabled>-- Pilih Jam --</option>
-                                    @php
-                                    $start = strtotime('10:00');
-                                    $end = strtotime('21:00');
-                                    for ($t = $start; $t <= $end; $t +=60 * 60) { $time=date('H:i', $t);
-                                        echo "<option value='$time'>$time WIB</option>" ; } @endphp </select>
-                            </div>
-
-                            <div class="col-12">
-                                <label class="label-luxury mb-2">Pilih Layanan</label>
-                                <select name="service_id" class="form-select form-luxury" required>
-                                    <option value="" selected disabled>-- Pilih Menu Perawatan --</option>
-                                    @foreach($services as $service)
-                                    <option value="{{ $service->id }}">
-                                        {{ $service->name }} (Rp {{ number_format($service->price, 0, ',', '.') }})
-                                    </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="col-12">
-                                <label class="label-luxury mb-2">Catatan Khusus (Opsional)</label>
-                                <textarea name="notes" class="form-control form-luxury" rows="2"
-                                    placeholder="Contoh: Fade gaya klasik, jangan terlalu pendek"></textarea>
-                            </div>
-
-                            <div class="col-12 text-center mt-5">
-                                <button type="submit" class="btn btn-red-luxury w-100 py-3 fw-bold fs-6">
-                                    KONFIRMASI BOOKING
-                                </button>
-                                <p class="text-white-50 small mt-3 fst-italic">
-                                    <span class="text-danger">*</span> Mohon datang 10 menit sebelum jadwal yang
-                                    dipilih.
-                                </p>
-                            </div>
-                        </div>
-                    </form>
+        {{-- 1. PILIH TANGGAL --}}
+        <div class="mb-5" data-aos="fade-up">
+            <h4 class="section-title">01. PILIH TANGGAL</h4>
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <input type="date" name="date" class="form-control date-luxury" min="{{ date('Y-m-d') }}" required
+                        id="dateInput">
+                    <div class="text-center mt-2 text-white-50 small">Klik tanggal untuk mengubah</div>
                 </div>
             </div>
         </div>
+
+        {{-- 2. PILIH BARBER (GRID LAYOUT) --}}
+        <div class="mb-5" data-aos="fade-up">
+            <h4 class="section-title">02. PILIH BARBER</h4>
+            <div class="row g-3 justify-content-center">
+                {{-- Opsi Any Barber --}}
+                <div class="col-6 col-md-3 col-lg-2">
+                    <input type="radio" name="barber_id" id="barber_null" value="" class="selection-input" checked
+                        onchange="updateSummary()">
+                    <label for="barber_null" class="selection-card">
+                        <div
+                            class="barber-img d-flex align-items-center justify-content-center bg-dark text-white border-secondary">
+                            <i class="bi bi-shuffle fs-2 text-white-50"></i>
+                        </div>
+                        <h6 class="text-white fw-bold mb-1 small">ANY BARBER</h6>
+                        <small class="text-white-50" style="font-size: 0.7rem;">Pilih Acak</small>
+                    </label>
+                </div>
+
+                {{-- Loop Barber --}}
+                @foreach($barbers as $barber)
+                <div class="col-6 col-md-3 col-lg-2">
+                    <input type="radio" name="barber_id" id="barber_{{ $barber->id }}" value="{{ $barber->id }}"
+                        class="selection-input" data-name="{{ $barber->name }}" onchange="updateSummary()">
+                    <label for="barber_{{ $barber->id }}" class="selection-card">
+                        {{-- Avatar Barber --}}
+                        <img src="{{ $barber->avatar_blob ?? 'https://ui-avatars.com/api/?name='.urlencode($barber->name).'&background=D4AF37&color=000' }}"
+                            class="barber-img" alt="{{ $barber->name }}">
+                        <h6 class="text-white fw-bold mb-1 small text-uppercase">{{ Str::limit($barber->name, 10) }}
+                        </h6>
+                        <small class="text-gold" style="font-size: 0.7rem;">Top Barber</small>
+                    </label>
+                </div>
+                @endforeach
+            </div>
+        </div>
+
+        {{-- 3. PILIH SERVICE (GRID LAYOUT) --}}
+        <div class="mb-5" data-aos="fade-up">
+            <h4 class="section-title">03. PILIH LAYANAN</h4>
+            <div class="row g-4">
+                @foreach($services as $service)
+                <div class="col-6 col-md-4 col-lg-3">
+                    <input type="radio" name="service_id" id="service_{{ $service->id }}" value="{{ $service->id }}"
+                        class="selection-input" data-name="{{ $service->name }}" data-price="{{ $service->price }}"
+                        onchange="updateSummary()" required>
+                    <label for="service_{{ $service->id }}" class="selection-card p-0 pb-3">
+                        {{-- Image Service --}}
+                        <div
+                            style="width: 100%; height: 140px; overflow: hidden; margin-bottom: 15px; position: relative;">
+                            <img src="{{ $service->image_path ?? asset('images/default-service.jpg') }}"
+                                class="service-img m-0 border-0" style="width: 100%; height: 100%;"
+                                alt="{{ $service->name }}"
+                                onerror="this.src='https://via.placeholder.com/300x200/000000/FFFFFF?text=PREMIUM'">
+                        </div>
+
+                        <div class="px-3 w-100">
+                            <h6 class="text-white fw-bold mb-2 text-uppercase"
+                                style="font-size: 0.85rem; letter-spacing: 1px;">{{ $service->name }}</h6>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <span class="text-gold fw-bold border border-warning px-2 py-1"
+                                    style="font-size: 0.8rem; border-color: var(--luxury-gold) !important;">
+                                    Rp {{ number_format($service->price, 0, ',', '.') }}
+                                </span>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+                @endforeach
+            </div>
+        </div>
+
+        {{-- 4. PILIH WAKTU (BUTTONS) --}}
+        <div class="mb-5" data-aos="fade-up">
+            <h4 class="section-title">04. PILIH WAKTU</h4>
+            <div class="row g-2 justify-content-center">
+                @php
+                $start = strtotime('10:00');
+                $end = strtotime('21:00');
+                @endphp
+
+                @for ($t = $start; $t <= $end; $t +=60 * 60) {{-- Interval 1 Jam --}} @php $timeVal=date('H:i', $t);
+                    $isBooked=false; // Logic backend nanti @endphp <div class="col-4 col-md-2">
+                    <input type="radio" name="time" id="time_{{ $timeVal }}" value="{{ $timeVal }}"
+                        class="selection-input" {{ $isBooked ? 'disabled' : '' }} onchange="updateSummary()" required>
+                    <label for="time_{{ $timeVal }}" class="time-slot-label {{ $isBooked ? 'booked' : '' }}">
+                        {{ $timeVal }}
+                    </label>
+            </div>
+            @endfor
+        </div>
+</div>
+
+{{-- 5. KONTAK INFO --}}
+<div class="mb-5" data-aos="fade-up">
+    <h4 class="section-title">05. KONFIRMASI</h4>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <input type="hidden" name="name" value="{{ Auth::user()->name }}">
+            <div class="mb-3">
+                <label class="text-gold small fw-bold letter-spacing-2 mb-2">NOMOR WHATSAPP</label>
+                <input type="text" name="phone" class="form-control form-control-luxury"
+                    placeholder="Contoh: 08123456789" required>
+            </div>
+            <div class="mb-3">
+                <label class="text-gold small fw-bold letter-spacing-2 mb-2">CATATAN (OPSIONAL)</label>
+                <textarea name="notes" class="form-control form-control-luxury" rows="2"
+                    placeholder="Pesan khusus untuk barber..."></textarea>
+            </div>
+        </div>
     </div>
-</section>
+</div>
+
+{{-- SUMMARY STICKY BOTTOM (THEME LUXURY) --}}
+<div class="booking-summary" id="summaryBar">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <small class="text-white-50 d-block mb-1 letter-spacing-1" style="font-size: 0.7rem;">ESTIMASI
+                    TOTAL</small>
+                <h3 class="text-gold fw-bold m-0" id="totalPrice" style="font-family: 'Playfair Display', serif;">Rp 0
+                </h3>
+                <small class="text-white fst-italic" id="summaryText" style="opacity: 0.8;">Menunggu pilihan...</small>
+            </div>
+            <button type="submit" class="btn btn-gold-luxury px-5 py-3 fw-bold rounded-0" style="letter-spacing: 2px;">
+                CONFIRM BOOKING
+            </button>
+        </div>
+    </div>
+</div>
+
+</form>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+function updateSummary() {
+    const summaryBar = document.getElementById('summaryBar');
+    const priceLabel = document.getElementById('totalPrice');
+    const summaryText = document.getElementById('summaryText');
+
+    const selectedService = document.querySelector('input[name="service_id"]:checked');
+    const selectedBarber = document.querySelector('input[name="barber_id"]:checked');
+    const selectedTime = document.querySelector('input[name="time"]:checked');
+    const selectedDate = document.getElementById('dateInput').value;
+
+    if (selectedService) {
+        summaryBar.style.display = 'block';
+
+        // Format Harga
+        const price = parseInt(selectedService.getAttribute('data-price'));
+        priceLabel.innerText = 'Rp ' + price.toLocaleString('id-ID');
+
+        // Format Teks Ringkasan
+        let text = selectedService.getAttribute('data-name');
+
+        if (selectedBarber && selectedBarber.value !== "") {
+            text += ' with ' + selectedBarber.getAttribute('data-name');
+        } else {
+            text += ' with Any Barber';
+        }
+
+        if (selectedTime && selectedDate) {
+            text += ' at ' + selectedTime.value;
+        }
+
+        summaryText.innerText = text;
+    }
+}
+</script>
+@endpush
