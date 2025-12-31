@@ -45,18 +45,15 @@ body {
     background-color: var(--luxury-gold);
 }
 
-/* --- CARD SELECTION STYLE (RADIO BUTTON HACK) --- */
+/* --- CARD SELECTION STYLE --- */
 .selection-input {
     display: none;
-    /* Sembunyikan radio button asli */
 }
 
 .selection-card {
     background: rgba(255, 255, 255, 0.03);
-    /* Glass Effect Tipis */
     border: 1px solid var(--border-color);
     border-radius: 0;
-    /* Kotak tegas khas Luxury */
     padding: 20px 10px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -81,7 +78,6 @@ body {
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
 }
 
-/* Icon Centang Emas */
 .selection-input:checked+.selection-card::after {
     content: '\F26E';
     /* Bootstrap Icon Check */
@@ -95,21 +91,41 @@ body {
 
 /* GAMBAR BARBER (Bulat Emas) */
 .barber-img {
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #333;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     transition: 0.3s;
     filter: grayscale(100%);
-    /* Hitam putih biar elegan */
 }
 
-/* Saat dipilih, gambar jadi berwarna */
 .selection-input:checked+.selection-card .barber-img {
     border-color: var(--luxury-gold);
     filter: grayscale(0%);
+}
+
+/* TOMBOL LIHAT DETAIL (Baru) */
+.btn-detail {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    color: var(--luxury-gold);
+    border: 1px solid var(--luxury-gold);
+    background: transparent;
+    padding: 5px 15px;
+    margin-top: 10px;
+    transition: 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    z-index: 10;
+    /* Agar di atas layer card */
+    position: relative;
+}
+
+.btn-detail:hover {
+    background: var(--luxury-gold);
+    color: #000;
 }
 
 /* GAMBAR SERVICE */
@@ -127,7 +143,7 @@ body {
     border-color: var(--luxury-gold);
 }
 
-/* --- TIME SLOTS (TOMBOL JAM) --- */
+/* --- TIME SLOTS --- */
 .time-slot-label {
     display: block;
     background-color: transparent;
@@ -147,23 +163,12 @@ body {
     color: var(--luxury-gold);
 }
 
-/* Logic Time Slot Dipilih */
 .selection-input:checked+.time-slot-label {
     background-color: var(--luxury-gold);
     border-color: var(--luxury-gold);
     color: #000;
-    /* Teks hitam di background emas */
     font-weight: 700;
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
-}
-
-/* Logic Time Slot Penuh/Disabled */
-.time-slot-label.booked {
-    background-color: #222;
-    color: #555;
-    border-color: #333;
-    cursor: not-allowed;
-    text-decoration: line-through;
 }
 
 /* --- INPUT TANGGAL MEWAH --- */
@@ -188,7 +193,6 @@ body {
     box-shadow: none;
 }
 
-/* Icon Kalender (Invert biar putih/emas) */
 .date-luxury::-webkit-calendar-picker-indicator {
     filter: invert(1) sepia(100%) saturate(1000%) hue-rotate(0deg) brightness(1.2) contrast(1);
     cursor: pointer;
@@ -206,7 +210,6 @@ body {
     padding: 20px 0;
     z-index: 1050;
     display: none;
-    /* Hidden default */
     animation: slideUp 0.3s ease-out;
 }
 
@@ -218,6 +221,38 @@ body {
     to {
         transform: translateY(0);
     }
+}
+
+/* --- MODAL DETAIL BARBER (CUSTOM LUXURY) --- */
+.modal-content-luxury {
+    background-color: #121212;
+    border: 1px solid var(--luxury-gold);
+    color: white;
+    border-radius: 0;
+}
+
+.modal-header-luxury {
+    border-bottom: 1px solid #333;
+}
+
+.modal-body-luxury {
+    padding: 2rem;
+}
+
+.schedule-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #222;
+    font-size: 0.9rem;
+}
+
+.schedule-row:last-child {
+    border-bottom: none;
+}
+
+.text-gold-dim {
+    color: rgba(212, 175, 55, 0.8);
 }
 
 /* Input Kontak */
@@ -267,7 +302,7 @@ body {
             </div>
         </div>
 
-        {{-- 2. PILIH BARBER (GRID LAYOUT) --}}
+        {{-- 2. PILIH BARBER --}}
         <div class="mb-5" data-aos="fade-up">
             <h4 class="section-title">02. PILIH BARBER</h4>
             <div class="row g-3 justify-content-center">
@@ -290,20 +325,29 @@ body {
                 <div class="col-6 col-md-3 col-lg-2">
                     <input type="radio" name="barber_id" id="barber_{{ $barber->id }}" value="{{ $barber->id }}"
                         class="selection-input" data-name="{{ $barber->name }}" onchange="updateSummary()">
-                    <label for="barber_{{ $barber->id }}" class="selection-card">
-                        {{-- Avatar Barber --}}
-                        <img src="{{ $barber->avatar_blob ?? 'https://ui-avatars.com/api/?name='.urlencode($barber->name).'&background=D4AF37&color=000' }}"
-                            class="barber-img" alt="{{ $barber->name }}">
-                        <h6 class="text-white fw-bold mb-1 small text-uppercase">{{ Str::limit($barber->name, 10) }}
+                    <label for="barber_{{ $barber->id }}" class="selection-card pb-1">
+                        {{-- Logika Gambar: Cek image_path dulu (Barberman upload), kalau ga ada cek avatar_blob (User), kalau ga ada default --}}
+                        @php
+                        $imgSrc = $barber->image_path ? asset('storage/'.$barber->image_path) : ($barber->avatar_blob ??
+                        'https://ui-avatars.com/api/?name='.urlencode($barber->name).'&background=D4AF37&color=000');
+                        @endphp
+
+                        <img src="{{ $imgSrc }}" class="barber-img" alt="{{ $barber->name }}">
+                        <h6 class="text-white fw-bold mb-0 small text-uppercase">{{ Str::limit($barber->name, 10) }}
                         </h6>
-                        <small class="text-gold" style="font-size: 0.7rem;">Top Barber</small>
+
+                        {{-- TOMBOL LIHAT DETAIL (DENGAN MODAL) --}}
+                        <button type="button" class="btn-detail"
+                            onclick="event.stopPropagation(); showBarberDetail('{{ $barber->name }}', '{{ $imgSrc }}')">
+                            Lihat Detail
+                        </button>
                     </label>
                 </div>
                 @endforeach
             </div>
         </div>
 
-        {{-- 3. PILIH SERVICE (GRID LAYOUT) --}}
+        {{-- 3. PILIH SERVICE --}}
         <div class="mb-5" data-aos="fade-up">
             <h4 class="section-title">03. PILIH LAYANAN</h4>
             <div class="row g-4">
@@ -313,7 +357,6 @@ body {
                         class="selection-input" data-name="{{ $service->name }}" data-price="{{ $service->price }}"
                         onchange="updateSummary()" required>
                     <label for="service_{{ $service->id }}" class="selection-card p-0 pb-3">
-                        {{-- Image Service --}}
                         <div
                             style="width: 100%; height: 140px; overflow: hidden; margin-bottom: 15px; position: relative;">
                             <img src="{{ $service->image_path ?? asset('images/default-service.jpg') }}"
@@ -321,7 +364,6 @@ body {
                                 alt="{{ $service->name }}"
                                 onerror="this.src='https://via.placeholder.com/300x200/000000/FFFFFF?text=PREMIUM'">
                         </div>
-
                         <div class="px-3 w-100">
                             <h6 class="text-white fw-bold mb-2 text-uppercase"
                                 style="font-size: 0.85rem; letter-spacing: 1px;">{{ $service->name }}</h6>
@@ -338,7 +380,7 @@ body {
             </div>
         </div>
 
-        {{-- 4. PILIH WAKTU (BUTTONS) --}}
+        {{-- 4. PILIH WAKTU --}}
         <div class="mb-5" data-aos="fade-up">
             <h4 class="section-title">04. PILIH WAKTU</h4>
             <div class="row g-2 justify-content-center">
@@ -346,9 +388,8 @@ body {
                 $start = strtotime('10:00');
                 $end = strtotime('21:00');
                 @endphp
-
-                @for ($t = $start; $t <= $end; $t +=60 * 60) {{-- Interval 1 Jam --}} @php $timeVal=date('H:i', $t);
-                    $isBooked=false; // Logic backend nanti @endphp <div class="col-4 col-md-2">
+                @for ($t = $start; $t <= $end; $t +=60 * 60) @php $timeVal=date('H:i', $t); $isBooked=false; @endphp
+                    <div class="col-4 col-md-2">
                     <input type="radio" name="time" id="time_{{ $timeVal }}" value="{{ $timeVal }}"
                         class="selection-input" {{ $isBooked ? 'disabled' : '' }} onchange="updateSummary()" required>
                     <label for="time_{{ $timeVal }}" class="time-slot-label {{ $isBooked ? 'booked' : '' }}">
@@ -359,7 +400,7 @@ body {
         </div>
 </div>
 
-{{-- 5. KONTAK INFO --}}
+{{-- 5. KONTAK --}}
 <div class="mb-5" data-aos="fade-up">
     <h4 class="section-title">05. KONFIRMASI</h4>
     <div class="row justify-content-center">
@@ -379,7 +420,7 @@ body {
     </div>
 </div>
 
-{{-- SUMMARY STICKY BOTTOM (THEME LUXURY) --}}
+{{-- SUMMARY STICKY BOTTOM --}}
 <div class="booking-summary" id="summaryBar">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center">
@@ -399,10 +440,67 @@ body {
 
 </form>
 </div>
+
+{{-- MODAL DETAIL BARBER --}}
+<div class="modal fade" id="barberDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-content-luxury">
+            <div class="modal-header modal-header-luxury">
+                <h5 class="modal-title fw-bold text-gold letter-spacing-1" id="modalBarberName">Barber Name</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body modal-body-luxury text-center">
+
+                {{-- FOTO BESAR --}}
+                <img src="" id="modalBarberImg" class="rounded-circle border border-warning mb-4"
+                    style="width: 150px; height: 150px; object-fit: cover; border-width: 3px !important; border-color: var(--luxury-gold) !important;">
+
+                {{-- RATING (STATIC DEMO) --}}
+                <div class="mb-4">
+                    <div class="text-warning fs-5">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <small class="text-white-50">4.9/5 (241 Ulasan)</small>
+                </div>
+
+                {{-- JADWAL KERJA (SESUAI GAMBAR) --}}
+                <div class="text-start bg-dark p-3 border border-secondary">
+                    <h6 class="text-white border-bottom border-secondary pb-2 mb-3">JADWAL KERJA</h6>
+
+                    <div class="schedule-row"><span>Senin</span> <span class="text-gold-dim">10:00 - 19:00</span></div>
+                    <div class="schedule-row"><span>Selasa</span> <span class="text-gold-dim">14:00 - 21:00</span></div>
+                    <div class="schedule-row"><span>Rabu</span> <span class="text-gold-dim">10:00 - 19:00</span></div>
+                    <div class="schedule-row"><span>Kamis</span> <span class="text-danger">OFF</span></div>
+                    <div class="schedule-row"><span>Jumat</span> <span class="text-gold-dim">13:00 - 21:00</span></div>
+                    <div class="schedule-row"><span>Sabtu</span> <span class="text-gold-dim">10:00 - 19:00</span></div>
+                    <div class="schedule-row"><span>Minggu</span> <span class="text-gold-dim">14:00 - 21:00</span></div>
+                </div>
+
+                <button class="btn btn-outline-light w-100 mt-4 rounded-0" data-bs-dismiss="modal">TUTUP</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
 <script>
+// Logic untuk Modal Detail Barber
+function showBarberDetail(name, imgSrc) {
+    document.getElementById('modalBarberName').innerText = name;
+    document.getElementById('modalBarberImg').src = imgSrc;
+
+    var myModal = new bootstrap.Modal(document.getElementById('barberDetailModal'));
+    myModal.show();
+}
+
+// Logic Summary
 function updateSummary() {
     const summaryBar = document.getElementById('summaryBar');
     const priceLabel = document.getElementById('totalPrice');
@@ -416,11 +514,9 @@ function updateSummary() {
     if (selectedService) {
         summaryBar.style.display = 'block';
 
-        // Format Harga
         const price = parseInt(selectedService.getAttribute('data-price'));
         priceLabel.innerText = 'Rp ' + price.toLocaleString('id-ID');
 
-        // Format Teks Ringkasan
         let text = selectedService.getAttribute('data-name');
 
         if (selectedBarber && selectedBarber.value !== "") {
