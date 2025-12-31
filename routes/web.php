@@ -13,6 +13,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\BarberController;
 use App\Http\Controllers\SettingController; 
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
