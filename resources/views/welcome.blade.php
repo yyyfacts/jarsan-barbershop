@@ -66,7 +66,6 @@
     width: 0%;
     height: 100%;
     background: #fff;
-    /* Efek hover putih */
     transition: 0.4s;
     z-index: -1;
 }
@@ -120,28 +119,6 @@
 
 .glass-card:hover i {
     color: var(--luxury-gold) !important;
-}
-
-/* --- CAROUSEL --- */
-.carousel-fade .carousel-item {
-    opacity: 0;
-    transition-duration: 1s;
-    transition-property: opacity;
-}
-
-.carousel-fade .carousel-item.active,
-.carousel-fade .carousel-item-next.carousel-item-start,
-.carousel-fade .carousel-item-prev.carousel-item-end {
-    opacity: 1;
-}
-
-.carousel-fade .carousel-item-left,
-.carousel-fade .carousel-item-right {
-    opacity: 0;
-}
-
-.carousel-indicators [data-bs-target] {
-    background-color: var(--luxury-gold);
 }
 </style>
 @endpush
@@ -203,7 +180,7 @@
                     </div>
                     <h4 class="fw-bold text-white mb-3">Luxury Lounge</h4>
                     <p class="text-white-50 small mb-0">
-                        Menunggu bukan hal membosankan. Nikmati kopi premium di ruangan ber-AC dengan musik berkelas.
+                        Menunggu bukan hal membosankan. Nikmati kopi di ruangan ber-AC dengan musik berkelas.
                     </p>
                 </div>
             </div>
@@ -215,7 +192,7 @@
                     </div>
                     <h4 class="fw-bold text-white mb-3">Premium Products</h4>
                     <p class="text-white-50 small mb-0">
-                        Kami hanya menggunakan pomade dan produk perawatan rambut kualitas internasional terbaik.
+                        Kami hanya menggunakan pomade dan produk perawatan rambut kualitas terbaik.
                     </p>
                 </div>
             </div>
@@ -223,65 +200,19 @@
     </div>
 </section>
 
-{{-- 3. TESTIMONIALS --}}
+{{-- 3. TESTIMONIALS (GOOGLE REVIEWS WIDGET) --}}
 <section class="py-5" style="background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);">
     <div class="container py-5 text-center">
         <h3 class="mb-5 text-gold letter-spacing-3 fw-bold fs-6">VOICE OF GENTLEMEN</h3>
 
-        <div id="testi" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4000">
-            <div class="carousel-inner pb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10" data-aos="fade-up">
 
-                <div class="carousel-item active">
-                    <div class="quote-content mx-auto" style="max-width: 800px;">
-                        <div class="mb-4">
-                            <i class="bi bi-quote fs-1 text-gold"></i>
-                        </div>
-                        <h3 class="display-6 fst-italic text-white fw-light mb-4"
-                            style="font-family: 'Playfair Display', serif;">
-                            "Fade paling rapi yang pernah saya dapatkan. Pelayanannya benar-benar next level."
-                        </h3>
-                        <div>
-                            <span class="text-white fw-bold text-uppercase letter-spacing-2 fs-6">Zain</span>
-                            <span class="text-gold mx-2">|</span>
-                            <small class="text-gold">Entrepreneur</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="carousel-item">
-                    <div class="quote-content mx-auto" style="max-width: 800px;">
-                        <div class="mb-4">
-                            <i class="bi bi-quote fs-1 text-gold"></i>
-                        </div>
-                        <h3 class="display-6 fst-italic text-white fw-light mb-4"
-                            style="font-family: 'Playfair Display', serif;">
-                            "Vibes-nya dapet banget, serasa jadi bos setiap kali cukur di sini. Definisi ganteng
-                            maksimal."
-                        </h3>
-                        <div>
-                            <span class="text-white fw-bold text-uppercase letter-spacing-2 fs-6">Aga</span>
-                            <span class="text-gold mx-2">|</span>
-                            <small class="text-gold">Creative Director</small>
-                        </div>
-                    </div>
-                </div>
+                {{-- WIDGET ELFSIGHT --}}
+                <script src="https://elfsightcdn.com/platform.js" async></script>
+                <div class="elfsight-app-93067b61-ef61-4ae5-9ee5-08877c5d93c9" data-elfsight-app-lazy></div>
 
             </div>
-
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#testi" data-bs-slide-to="0" class="active"
-                    aria-current="true"></button>
-                <button type="button" data-bs-target="#testi" data-bs-slide-to="1"></button>
-            </div>
-
-            <button class="carousel-control-prev" type="button" data-bs-target="#testi" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon opacity-25" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#testi" data-bs-slide="next">
-                <span class="carousel-control-next-icon opacity-25" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
         </div>
     </div>
 </section>
