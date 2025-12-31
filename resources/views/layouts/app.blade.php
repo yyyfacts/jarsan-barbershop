@@ -20,11 +20,9 @@
         --matte-black: #121212;
         --luxury-gold: #D4AF37;
         --gold-accent: rgba(212, 175, 55, 0.5);
-        /* Aksen lebih terang */
         --metallic-red: #960018;
         --glass-bg: rgba(255, 255, 255, 0.05);
         --text-light: #ffffff;
-        /* UBAH KE PUTIH MURNI */
         --font-main: 'Montserrat', sans-serif;
         --font-heading: 'Playfair Display', serif;
     }
@@ -32,12 +30,10 @@
     body {
         background-color: var(--deep-charcoal);
         color: var(--text-light) !important;
-        /* Paksa semua teks jadi putih */
         font-family: var(--font-main);
         overflow-x: hidden;
     }
 
-    /* MENGHILANGKAN WARNA ABU-ABU/HITAM BAWAAN BOOTSTRAP */
     p,
     h1,
     h2,
@@ -51,10 +47,8 @@
         color: var(--text-light);
     }
 
-    /* Override class text-muted agar tidak jadi abu-abu gelap */
     .text-muted {
         color: #e0e0e0 !important;
-        /* Ubah ke abu-abu sangat terang (hampir putih) */
     }
 
     h1,
@@ -131,7 +125,6 @@
         100% {
             transform: scale(0.95);
             opacity: 0.9;
-            /* Opacity lebih terang */
         }
 
         50% {
@@ -161,7 +154,6 @@
 
     .nav-link {
         color: #ffffff !important;
-        /* Pastikan Putih */
         font-weight: 500;
         letter-spacing: 1px;
         transition: 0.3s;
@@ -190,7 +182,7 @@
         color: var(--luxury-gold) !important;
     }
 
-    /* --- NEW: USER DROPDOWN LUXURY STYLE --- */
+    /* --- USER DROPDOWN --- */
     .user-dropdown-toggle {
         display: flex;
         align-items: center;
@@ -248,7 +240,7 @@
         color: black;
     }
 
-    /* --- MOBILE FLOATING DOCK --- */
+    /* --- MOBILE DOCK (HANYA DI HP) --- */
     @media (max-width: 991px) {
         .mobile-dock {
             position: fixed;
@@ -256,7 +248,6 @@
             left: 50%;
             transform: translateX(-50%);
             background: rgba(30, 30, 30, 0.98);
-            /* Background sedikit lebih terang agar kontras */
             backdrop-filter: blur(20px);
             border: 1px solid var(--luxury-gold);
             border-radius: 50px;
@@ -269,7 +260,6 @@
 
         .mobile-dock a {
             color: #ffffff;
-            /* Icon Putih Cerah */
             font-size: 1.3rem;
             transition: 0.3s;
             display: flex;
@@ -289,10 +279,8 @@
 
     .btn-gold-luxury {
         background: linear-gradient(45deg, var(--luxury-gold), #fff0d1);
-        /* Gradasi lebih terang */
         border: none;
         color: #000000;
-        /* Teks tombol tetap hitam agar terbaca di background emas */
         font-weight: 700;
         letter-spacing: 1px;
         border-radius: 2px;
@@ -305,7 +293,6 @@
         color: #000;
     }
 
-    /* Hover effects for footer icons */
     .hover-gold:hover {
         color: var(--luxury-gold) !important;
     }
@@ -340,6 +327,8 @@
                         style="font-size: 0.6rem; font-family: var(--font-main);">BARBERSHOP</span>
                 </div>
             </a>
+
+            {{-- MENU DESKTOP --}}
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto gap-3 align-items-center">
                     <li class="nav-item"><a class="nav-link {{ Request::is('/') ? 'active' : '' }}"
@@ -353,7 +342,6 @@
                     <li class="nav-item"><a class="nav-link {{ Request::is('contact') ? 'active' : '' }}"
                             href="{{ route('contact') }}">KONTAK</a></li>
 
-                    {{-- MENU LOGIN / USER DROPDOWN --}}
                     @guest
                     <li class="nav-item ms-lg-2">
                         <a href="{{ route('login') }}" class="btn btn-outline-light rounded-0 px-4 py-2"
@@ -363,15 +351,11 @@
                         <a href="{{ route('reservasi') }}" class="btn btn-gold-luxury px-4 py-2">BOOK NOW</a>
                     </li>
                     @else
-                    {{-- Dropdown User --}}
                     <li class="nav-item dropdown ms-lg-2">
                         <a class="nav-link user-dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-
-                            {{-- UPDATE: Mengambil gambar dari BLOB Database --}}
                             <img src="{{ Auth::user()->avatar_blob ?? 'https://ui-avatars.com/api/?name=' . urlencode(Auth::user()->name) . '&background=D4AF37&color=000' }}"
                                 class="user-avatar-small" alt="Profile">
-
                             <span
                                 class="small fw-bold text-uppercase ms-1">{{ Str::limit(Auth::user()->name, 10) }}</span>
                             <i class="bi bi-chevron-down small ms-1" style="font-size: 0.7rem;"></i>
@@ -379,17 +363,10 @@
 
                         <ul class="dropdown-menu custom-dropdown-menu dropdown-menu-end"
                             aria-labelledby="navbarDropdown">
-                            <li>
-                                <a class="dropdown-item custom-dropdown-item" href="{{ route('dashboard') }}">
-                                    <i class="bi bi-speedometer2"></i> Dashboard
-                                </a>
-                            </li>
-                            {{-- MENU BARU: Edit Profile --}}
-                            <li>
-                                <a class="dropdown-item custom-dropdown-item" href="{{ route('profile.edit') }}">
-                                    <i class="bi bi-person-gear"></i> Edit Profile
-                                </a>
-                            </li>
+                            <li><a class="dropdown-item custom-dropdown-item" href="{{ route('dashboard') }}"><i
+                                        class="bi bi-speedometer2"></i> Dashboard</a></li>
+                            <li><a class="dropdown-item custom-dropdown-item" href="{{ route('profile.edit') }}"><i
+                                        class="bi bi-person-gear"></i> Edit Profile</a></li>
                             <li>
                                 <hr class="dropdown-divider bg-secondary">
                             </li>
@@ -403,7 +380,6 @@
                             </li>
                         </ul>
                     </li>
-                    {{-- Tombol Book tetap ada untuk kemudahan --}}
                     <li class="nav-item">
                         <a href="{{ route('reservasi') }}" class="btn btn-gold-luxury px-4 py-2">BOOK</a>
                     </li>
@@ -413,12 +389,12 @@
         </div>
     </nav>
 
+    {{-- MENU MOBILE (Hanya Muncul di Layar Kecil) --}}
     <div class="mobile-dock d-lg-none">
         <a href="{{ route('welcome') }}" class="{{ Request::is('/') ? 'active' : '' }}"><i class="bi bi-house"></i></a>
         <a href="{{ route('pricelist') }}" class="{{ Request::is('pricelist') ? 'active' : '' }}"><i
                 class="bi bi-scissors"></i></a>
 
-        {{-- Tombol Reservasi Tengah Mobile --}}
         @auth
         <a href="{{ route('reservasi') }}" class="{{ Request::is('reservasi') ? 'active' : '' }}"><i
                 class="bi bi-calendar-plus-fill fs-4 text-gold"></i></a>
@@ -450,16 +426,13 @@
                 <a href="https://www.tiktok.com/@jarsan_barbershop" target="_blank"
                     class="text-white fs-4 hover-gold"><i class="bi bi-tiktok"></i></a>
             </div>
-            {{-- Mengubah text-muted menjadi text-white untuk tulisan copyright --}}
             <p class="text-white small mb-0">© {{ date('Y') }} {{ $setting->app_name ?? 'Jarsan Barbershop' }}. <br
                     class="d-md-none">Luxury Grooming for Every Gentleman.</p>
         </div>
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    {{-- WAJIB: Bootstrap Bundle JS (termasuk Popper) untuk Dropdown --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
     <script>
