@@ -4,44 +4,32 @@
 
 @push('styles')
 <style>
-/* Table Styling Override for Dark Theme */
+/* --- FIX MODAL ERROR (Tambahkan Ini) --- */
+.modal-backdrop {
+    /* Sembunyikan backdrop bawaan yang bikin error */
+    display: none !important;
+    z-index: -1 !important;
+}
+
+.modal {
+    /* Ganti backdrop dengan background manual di wrapper modal */
+    background-color: rgba(0, 0, 0, 0.85) !important;
+}
+
+.modal-dialog {
+    /* Pastikan dialog muncul paling depan */
+    z-index: 10000 !important;
+    margin-top: 10vh;
+    /* Sedikit turun biar enak dilihat */
+}
+
+/* --- Style Lainnya (Tetap Biarkan) --- */
 .table-luxury {
     background-color: transparent !important;
     color: white !important;
 }
 
-.table-luxury th {
-    background-color: transparent !important;
-    color: var(--luxury-gold) !important;
-    border-bottom: 1px solid var(--luxury-gold) !important;
-    font-weight: 600;
-    letter-spacing: 1px;
-    padding-bottom: 15px;
-}
-
-.table-luxury td {
-    background-color: transparent !important;
-    color: white !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-    padding-top: 15px;
-    padding-bottom: 15px;
-}
-
-.table-luxury tr:hover td {
-    background-color: rgba(212, 175, 55, 0.05) !important;
-    /* Efek hover emas tipis */
-    color: white !important;
-}
-
-/* Stats Box Hover Effect */
-.stats-box {
-    transition: transform 0.3s;
-}
-
-.stats-box:hover {
-    transform: translateY(-5px);
-    border-color: var(--luxury-gold) !important;
-}
+/* ... kode css lainnya ... */
 </style>
 @endpush
 
