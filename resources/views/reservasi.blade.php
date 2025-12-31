@@ -79,7 +79,6 @@ body {
 
 .selection-input:checked+.selection-card::after {
     content: '\F26E';
-    /* Icon Check */
     font-family: 'bootstrap-icons';
     position: absolute;
     top: 10px;
@@ -370,14 +369,14 @@ body {
 
                         {{-- TOMBOL LIHAT DETAIL (Mengirim Data ke JS) --}}
                         <button type="button" class="btn-detail" onclick="event.stopPropagation(); showBarberDetail(
-                                    '{{ $barber->name }}', 
-                                    '{{ $imgSrc }}', 
-                                    '{{ $barber->bio ?? 'Profesional Barber at Jarsan' }}', 
-                                    {{ $scheduleJson }}, 
-                                    {{ $reviewsJson }}, 
-                                    '{{ $avgRatingFormat }}', 
-                                    {{ $ratingCount }}
-                                )">
+                                        '{{ $barber->name }}', 
+                                        '{{ $imgSrc }}', 
+                                        '{{ $barber->bio ?? 'Profesional Barber at Jarsan' }}', 
+                                        {{ $scheduleJson }}, 
+                                        {{ $reviewsJson }}, 
+                                        '{{ $avgRatingFormat }}', 
+                                        {{ $ratingCount }}
+                                    )">
                             Lihat Detail
                         </button>
                     </label>
@@ -419,12 +418,17 @@ body {
             </div>
         </div>
 
-        {{-- 4. PILIH WAKTU --}}
+        {{-- 4. PILIH WAKTU (30 MENITAN) --}}
         <div class="mb-5" data-aos="fade-up">
             <h4 class="section-title">04. PILIH WAKTU</h4>
             <div class="row g-2 justify-content-center">
-                @php $start = strtotime('10:00'); $end = strtotime('21:00'); @endphp
-                @for ($t = $start; $t <= $end; $t +=60 * 60) @php $timeVal=date('H:i', $t); @endphp <div
+                @php
+                $start = strtotime('10:00');
+                $end = strtotime('21:00');
+                @endphp
+
+                {{-- LOOPING PER 30 MENIT (+1800 detik) --}}
+                @for ($t = $start; $t <= $end; $t +=1800) @php $timeVal=date('H:i', $t); @endphp <div
                     class="col-4 col-md-2">
                     <input type="radio" name="time" id="time_{{ $timeVal }}" value="{{ $timeVal }}"
                         class="selection-input" onchange="updateSummary()" required>
