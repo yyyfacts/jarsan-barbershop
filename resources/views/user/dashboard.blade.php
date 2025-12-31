@@ -86,12 +86,24 @@
                     </div>
                 </div>
 
-                <form action="{{ route('logout') }}" method="POST" class="mt-5">
-                    @csrf
-                    <button class="btn btn-outline-danger w-100 rounded-0 py-2 fw-bold letter-spacing-1 hover-shadow">
-                        <i class="bi bi-box-arrow-right me-2"></i> LOGOUT SYSTEM
-                    </button>
-                </form>
+                {{-- TOMBOL LAMA (LOGOUT) DIHAPUS, GANTI DENGAN INI: --}}
+
+                <div class="mt-4">
+                    <a href="#"
+                        class="btn btn-outline-light w-100 rounded-0 py-2 fw-bold letter-spacing-1 hover-gold-border"
+                        style="opacity: 0.8;">
+                        <i class="bi bi-pencil-square me-2"></i> EDIT PROFILE
+                    </a>
+                </div>
+
+                {{-- Tambahan CSS kecil inline agar hovernya bagus (opsional, bisa ditaruh di style atas) --}}
+                <style>
+                .hover-gold-border:hover {
+                    border-color: var(--luxury-gold) !important;
+                    color: var(--luxury-gold) !important;
+                    opacity: 1 !important;
+                }
+                </style>
             </div>
         </div>
 
