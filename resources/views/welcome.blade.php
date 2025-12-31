@@ -3,16 +3,20 @@
 @section('content')
 @push('styles')
 <style>
+/* --- THEME VARIABLES --- */
 :root {
     --metallic-red: #a80017;
     --bright-red: #dc143c;
+    --luxury-gold: #D4AF37;
 }
 
-/* Hero Section dengan Gradient Gelap + Sedikit Merah */
+/* --- HERO SECTION REVISED --- */
 .hero-vintage {
-    height: 95vh;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(10, 5, 5, 1)),
-    url('{{ asset('images/banner.webp') }}') fixed center/cover;
+    height: 100vh;
+    /* Full layar */
+    /* Gradient lebih gelap supaya tulisan JELAS terbaca */
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8), #0a0a0a),
+    url('{{ asset('images/banner.webp') }}') no-repeat center center/cover fixed;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,173 +24,274 @@
     position: relative;
 }
 
-/* Animasi Teks */
-.text-reveal {
-    overflow: hidden;
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    padding: 0 20px;
 }
 
-.text-reveal span {
-    display: block;
-    transform: translateY(100%);
-    animation: reveal 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+.hero-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+    /* Shadow agar tulisan tidak tabrakan dengan gambar */
 }
 
-@keyframes reveal {
-    to {
-        transform: translateY(0);
-    }
+.hero-subtitle {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
 }
 
-/* Glass Card Transparan */
-.glass-card {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 40px;
-    transition: 0.5s;
-    text-align: center;
-    height: 100%;
-}
-
-/* Hover Card: Border Emas, Shadow Merah */
-.glass-card:hover {
-    border-color: var(--luxury-gold);
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(168, 0, 23, 0.2);
-    /* Glow Merah */
-}
-
-/* Tombol Utama Merah */
+/* --- BUTTON STYLING --- */
 .btn-red-pulse {
     background: linear-gradient(135deg, var(--metallic-red) 0%, #600000 100%);
     border: 1px solid var(--metallic-red);
     color: white;
-    letter-spacing: 2px;
-    font-weight: bold;
+    letter-spacing: 3px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 15px 40px;
     transition: all 0.4s ease;
-    box-shadow: 0 0 20px rgba(168, 0, 23, 0.4);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-red-pulse::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background: var(--luxury-gold);
+    /* Efek hover emas */
+    transition: 0.4s;
+    z-index: -1;
+}
+
+.btn-red-pulse:hover::before {
+    width: 100%;
 }
 
 .btn-red-pulse:hover {
-    background: var(--bright-red);
-    box-shadow: 0 0 40px rgba(220, 20, 60, 0.8);
-    transform: scale(1.05);
-    color: white;
+    color: black;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+    border-color: var(--luxury-gold);
+}
+
+/* --- GLASS CARDS --- */
+.glass-card {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 40px 30px;
+    transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
+    height: 100%;
+}
+
+.glass-card:hover {
+    border-color: var(--luxury-gold);
+    background: rgba(10, 10, 10, 0.8);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.icon-circle {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    margin: 0 auto 25px;
+    transition: 0.4s;
+}
+
+.glass-card:hover .icon-circle {
+    border-color: var(--metallic-red);
+    background: rgba(168, 0, 23, 0.1);
+}
+
+/* --- AESTHETIC CAROUSEL (FADE & SLIDE UP) --- */
+.carousel-fade .carousel-item {
+    opacity: 0;
+    transition-duration: 1s;
+    /* Durasi fade lebih lama (halus) */
+    transition-property: opacity;
+}
+
+.carousel-fade .carousel-item.active,
+.carousel-fade .carousel-item-next.carousel-item-start,
+.carousel-fade .carousel-item-prev.carousel-item-end {
+    opacity: 1;
+}
+
+.carousel-fade .carousel-item-left,
+.carousel-fade .carousel-item-right {
+    opacity: 0;
+}
+
+/* Animasi Teks dalam Slider */
+.carousel-item .quote-content {
+    transform: translateY(30px);
+    opacity: 0;
+    transition: all 1s ease-out;
+}
+
+.carousel-item.active .quote-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.carousel-indicators [data-bs-target] {
+    background-color: var(--luxury-gold);
 }
 </style>
 @endpush
 
+{{-- 1. HERO SECTION --}}
 <section class="hero-vintage">
-    <div class="container">
-        <div class="text-reveal">
-            <span class="text-gold fw-bold letter-spacing-5 mb-3 d-block">ESTABLISHED 2025</span>
-        </div>
+    <div class="hero-content">
 
-        <h1 class="display-1 fw-bold text-white mb-4" data-aos="zoom-in">
-            QUALITY <br>
-            <span class="fst-italic"
-                style="color: var(--bright-red); font-family: 'Playfair Display', serif;">Over</span>
+        <h1 class="hero-title display-3 fw-bold text-white mb-3" data-aos="fade-up" data-aos-duration="1200">
+            QUALITY <span class="fst-italic text-danger" style="font-family: 'Playfair Display', serif;">Over</span>
             QUANTITY
         </h1>
 
-        <p class="lead mb-5 text-white-50 mx-auto fs-5" style="max-width: 700px;" data-aos="fade-up">
-            Grooming ritual premium untuk pria yang menghargai detail, presisi tinggi, dan gaya hidup eksklusif.
+        <p class="hero-subtitle text-white-50 fs-5 mb-5 mx-auto" style="max-width: 600px; line-height: 1.8;"
+            data-aos="fade-up" data-aos-delay="200">
+            Sebuah ritual grooming premium. <br>
+            Presisi tinggi untuk pria yang menghargai detail.
         </p>
 
-        <div data-aos="fade-up" data-aos-delay="200">
+        <div data-aos="fade-up" data-aos-delay="400">
             @auth
-            <a href="{{ route('reservasi') }}" class="btn btn-red-pulse btn-lg px-5 py-3 rounded-0">
-                MULAI RITUAL ANDA
+            <a href="{{ route('reservasi') }}" class="btn btn-red-pulse rounded-0 text-decoration-none">
+                BOOK APPOINTMENT
             </a>
             @else
-            <a href="{{ route('login') }}" class="btn btn-red-pulse btn-lg px-5 py-3 rounded-0">
-                LOGIN UNTUK BOOKING
+            <a href="{{ route('login') }}" class="btn btn-red-pulse rounded-0 text-decoration-none">
+                LOGIN TO BOOK
             </a>
             @endauth
         </div>
     </div>
 </section>
 
-<section class="py-5" style="background-color: #0a0a0a;">
+{{-- 2. SERVICES SECTION --}}
+<section class="py-5" style="background-color: #050505;">
     <div class="container py-5">
         <div class="text-center mb-5" data-aos="fade-down">
-            <h5 class="text-gold letter-spacing-2">WHAT WE OFFER</h5>
-            <h2 class="display-4 fw-bold text-white">EXCLUSIVE SERVICES</h2>
-            <div class="mx-auto mt-3" style="width: 60px; height: 3px; background: var(--metallic-red);"></div>
+            <h6 class="text-gold letter-spacing-3 small fw-bold">WHAT WE OFFER</h6>
+            <h2 class="display-5 fw-bold text-white" style="font-family: 'Playfair Display', serif;">EXCLUSIVE SERVICES
+            </h2>
         </div>
 
-        <div class="row g-4">
+        <div class="row g-4 px-2">
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
                 <div class="glass-card">
-                    <div class="mb-4 d-inline-block p-3 rounded-circle border border-danger">
-                        <i class="bi bi-scissors fs-1 text-gold"></i>
+                    <div class="icon-circle">
+                        <i class="bi bi-scissors fs-2 text-white"></i>
                     </div>
-                    <h4 class="fw-bold text-white">Expert Barber</h4>
-                    <p class="text-white-50">Ditangani oleh seniman rambut berpengalaman tinggi dengan teknik fading
-                        modern.</p>
+                    <h4 class="fw-bold text-white mb-3">Expert Barber</h4>
+                    <p class="text-white-50 small mb-0">
+                        Ditangani oleh seniman rambut berpengalaman tinggi dengan teknik fading presisi dan gaya modern.
+                    </p>
                 </div>
             </div>
+
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
                 <div class="glass-card">
-                    <div class="mb-4 d-inline-block p-3 rounded-circle border border-danger">
-                        <i class="bi bi-cup-hot fs-1 text-gold"></i>
+                    <div class="icon-circle">
+                        <i class="bi bi-cup-hot fs-2 text-white"></i>
                     </div>
-                    <h4 class="fw-bold text-white">Luxury Lounge</h4>
-                    <p class="text-white-50">Ruangan full AC, musik berkelas, dan kopi premium saat Anda menunggu.</p>
+                    <h4 class="fw-bold text-white mb-3">Luxury Lounge</h4>
+                    <p class="text-white-50 small mb-0">
+                        Menunggu bukan hal membosankan. Nikmati kopi premium di ruangan ber-AC dengan musik berkelas.
+                    </p>
                 </div>
             </div>
+
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
                 <div class="glass-card">
-                    <div class="mb-4 d-inline-block p-3 rounded-circle border border-danger">
-                        <i class="bi bi-gem fs-1 text-gold"></i>
+                    <div class="icon-circle">
+                        <i class="bi bi-gem fs-2 text-white"></i>
                     </div>
-                    <h4 class="fw-bold text-white">Premium Quality</h4>
-                    <p class="text-white-50">Produk styling terbaik dan layanan bintang lima yang dapat dinikmati semua
-                        kalangan.</p>
+                    <h4 class="fw-bold text-white mb-3">Premium Products</h4>
+                    <p class="text-white-50 small mb-0">
+                        Kami hanya menggunakan pomade dan produk perawatan rambut kualitas internasional terbaik.
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="py-5" style="background: linear-gradient(to top, #000000, #0a0a0a);">
+{{-- 3. TESTIMONIALS (AESTHETIC SLIDER) --}}
+<section class="py-5" style="background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);">
     <div class="container py-5 text-center">
-        <h3 class="mb-5 text-gold letter-spacing-2 fw-bold">VOICE OF GENTLEMEN</h3>
+        <h3 class="mb-5 text-gold letter-spacing-3 fw-bold fs-6">VOICE OF GENTLEMEN</h3>
 
-        <div id="testi" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
+        <div id="testi" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4000">
+
+            <div class="carousel-inner pb-5">
+
                 <div class="carousel-item active">
-                    <div class="d-flex justify-content-center mb-4">
-                        <i class="bi bi-quote fs-1 text-danger opacity-50"></i>
+                    <div class="quote-content mx-auto" style="max-width: 800px;">
+                        <div class="mb-4">
+                            <i class="bi bi-quote fs-1 text-danger"></i>
+                        </div>
+                        <h3 class="display-6 fst-italic text-white fw-light mb-4"
+                            style="font-family: 'Playfair Display', serif;">
+                            "Fade paling rapi yang pernah saya dapatkan. Pelayanannya benar-benar next level."
+                        </h3>
+                        <div>
+                            <span class="text-gold fw-bold text-uppercase letter-spacing-2 fs-6">Zain</span>
+                            <span class="text-white-50 mx-2">|</span>
+                            <small class="text-white-50">Entrepreneur</small>
+                        </div>
                     </div>
-                    <p class="fs-2 fst-italic text-white fw-light">"Fade paling rapi yang pernah saya dapatkan.
-                        Pelayanannya benar-benar next level."</p>
-                    <footer class="mt-4">
-                        <span class="text-white fw-bold text-uppercase letter-spacing-1">Zain</span>
-                        <br>
-                        <small class="text-danger">Entrepreneur</small>
-                    </footer>
                 </div>
+
                 <div class="carousel-item">
-                    <div class="d-flex justify-content-center mb-4">
-                        <i class="bi bi-quote fs-1 text-danger opacity-50"></i>
+                    <div class="quote-content mx-auto" style="max-width: 800px;">
+                        <div class="mb-4">
+                            <i class="bi bi-quote fs-1 text-danger"></i>
+                        </div>
+                        <h3 class="display-6 fst-italic text-white fw-light mb-4"
+                            style="font-family: 'Playfair Display', serif;">
+                            "Vibes-nya dapet banget, serasa jadi bos setiap kali cukur di sini. Definisi ganteng
+                            maksimal."
+                        </h3>
+                        <div>
+                            <span class="text-gold fw-bold text-uppercase letter-spacing-2 fs-6">Aga</span>
+                            <span class="text-white-50 mx-2">|</span>
+                            <small class="text-white-50">Creative Director</small>
+                        </div>
                     </div>
-                    <p class="fs-2 fst-italic text-white fw-light">"Vibes-nya dapet banget, serasa jadi bos setiap kali
-                        cukur di sini."</p>
-                    <footer class="mt-4">
-                        <span class="text-white fw-bold text-uppercase letter-spacing-1">Aga</span>
-                        <br>
-                        <small class="text-danger">Creative Director</small>
-                    </footer>
                 </div>
+
+            </div>
+
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#testi" data-bs-slide-to="0" class="active"
+                    aria-current="true"></button>
+                <button type="button" data-bs-target="#testi" data-bs-slide-to="1"></button>
             </div>
 
             <button class="carousel-control-prev" type="button" data-bs-target="#testi" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="carousel-control-prev-icon opacity-25" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
             <button class="carousel-control-next" type="button" data-bs-target="#testi" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="carousel-control-next-icon opacity-25" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
