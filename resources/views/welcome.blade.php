@@ -5,17 +5,14 @@
 <style>
 /* --- THEME VARIABLES --- */
 :root {
-    --metallic-red: #a80017;
-    --bright-red: #dc143c;
     --luxury-gold: #D4AF37;
+    --gold-dim: #c5a028;
 }
 
-/* --- HERO SECTION REVISED --- */
+/* --- HERO SECTION --- */
 .hero-vintage {
     height: 100vh;
-    /* Full layar */
-    /* Gradient lebih gelap supaya tulisan JELAS terbaca */
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8), #0a0a0a),
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.9), #0a0a0a),
     url('{{ asset('images/banner.webp') }}') no-repeat center center/cover fixed;
     display: flex;
     align-items: center;
@@ -36,7 +33,6 @@
     font-weight: 700;
     letter-spacing: 2px;
     text-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
-    /* Shadow agar tulisan tidak tabrakan dengan gambar */
 }
 
 .hero-subtitle {
@@ -46,42 +42,44 @@
     text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
 }
 
-/* --- BUTTON STYLING --- */
-.btn-red-pulse {
-    background: linear-gradient(135deg, var(--metallic-red) 0%, #600000 100%);
-    border: 1px solid var(--metallic-red);
-    color: white;
+/* --- NEW GOLD BUTTON STYLING --- */
+.btn-gold-hero {
+    background: linear-gradient(135deg, var(--luxury-gold) 0%, #8a7018 100%);
+    border: 1px solid var(--luxury-gold);
+    color: #000;
     letter-spacing: 3px;
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 700;
     padding: 15px 40px;
     transition: all 0.4s ease;
     position: relative;
     overflow: hidden;
     z-index: 1;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
 }
 
-.btn-red-pulse::before {
+.btn-gold-hero::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: 0%;
     height: 100%;
-    background: var(--luxury-gold);
-    /* Efek hover emas */
+    background: #fff;
+    /* Efek hover putih */
     transition: 0.4s;
     z-index: -1;
 }
 
-.btn-red-pulse:hover::before {
+.btn-gold-hero:hover::before {
     width: 100%;
 }
 
-.btn-red-pulse:hover {
-    color: black;
-    box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
-    border-color: var(--luxury-gold);
+.btn-gold-hero:hover {
+    color: #000;
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.6);
+    border-color: #fff;
+    transform: scale(1.05);
 }
 
 /* --- GLASS CARDS --- */
@@ -115,15 +113,19 @@
 }
 
 .glass-card:hover .icon-circle {
-    border-color: var(--metallic-red);
-    background: rgba(168, 0, 23, 0.1);
+    border-color: var(--luxury-gold);
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--luxury-gold);
 }
 
-/* --- AESTHETIC CAROUSEL (FADE & SLIDE UP) --- */
+.glass-card:hover i {
+    color: var(--luxury-gold) !important;
+}
+
+/* --- CAROUSEL --- */
 .carousel-fade .carousel-item {
     opacity: 0;
     transition-duration: 1s;
-    /* Durasi fade lebih lama (halus) */
     transition-property: opacity;
 }
 
@@ -138,18 +140,6 @@
     opacity: 0;
 }
 
-/* Animasi Teks dalam Slider */
-.carousel-item .quote-content {
-    transform: translateY(30px);
-    opacity: 0;
-    transition: all 1s ease-out;
-}
-
-.carousel-item.active .quote-content {
-    transform: translateY(0);
-    opacity: 1;
-}
-
 .carousel-indicators [data-bs-target] {
     background-color: var(--luxury-gold);
 }
@@ -159,9 +149,8 @@
 {{-- 1. HERO SECTION --}}
 <section class="hero-vintage">
     <div class="hero-content">
-
         <h1 class="hero-title display-3 fw-bold text-white mb-3" data-aos="fade-up" data-aos-duration="1200">
-            QUALITY <span class="fst-italic text-danger" style="font-family: 'Playfair Display', serif;">Over</span>
+            QUALITY <span class="fst-italic text-gold" style="font-family: 'Playfair Display', serif;">Over</span>
             QUANTITY
         </h1>
 
@@ -173,11 +162,11 @@
 
         <div data-aos="fade-up" data-aos-delay="400">
             @auth
-            <a href="{{ route('reservasi') }}" class="btn btn-red-pulse rounded-0 text-decoration-none">
+            <a href="{{ route('reservasi') }}" class="btn btn-gold-hero rounded-0 text-decoration-none">
                 BOOK APPOINTMENT
             </a>
             @else
-            <a href="{{ route('login') }}" class="btn btn-red-pulse rounded-0 text-decoration-none">
+            <a href="{{ route('login') }}" class="btn btn-gold-hero rounded-0 text-decoration-none">
                 LOGIN TO BOOK
             </a>
             @endauth
@@ -234,28 +223,27 @@
     </div>
 </section>
 
-{{-- 3. TESTIMONIALS (AESTHETIC SLIDER) --}}
+{{-- 3. TESTIMONIALS --}}
 <section class="py-5" style="background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);">
     <div class="container py-5 text-center">
         <h3 class="mb-5 text-gold letter-spacing-3 fw-bold fs-6">VOICE OF GENTLEMEN</h3>
 
         <div id="testi" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4000">
-
             <div class="carousel-inner pb-5">
 
                 <div class="carousel-item active">
                     <div class="quote-content mx-auto" style="max-width: 800px;">
                         <div class="mb-4">
-                            <i class="bi bi-quote fs-1 text-danger"></i>
+                            <i class="bi bi-quote fs-1 text-gold"></i>
                         </div>
                         <h3 class="display-6 fst-italic text-white fw-light mb-4"
                             style="font-family: 'Playfair Display', serif;">
                             "Fade paling rapi yang pernah saya dapatkan. Pelayanannya benar-benar next level."
                         </h3>
                         <div>
-                            <span class="text-gold fw-bold text-uppercase letter-spacing-2 fs-6">Zain</span>
-                            <span class="text-white-50 mx-2">|</span>
-                            <small class="text-white-50">Entrepreneur</small>
+                            <span class="text-white fw-bold text-uppercase letter-spacing-2 fs-6">Zain</span>
+                            <span class="text-gold mx-2">|</span>
+                            <small class="text-gold">Entrepreneur</small>
                         </div>
                     </div>
                 </div>
@@ -263,7 +251,7 @@
                 <div class="carousel-item">
                     <div class="quote-content mx-auto" style="max-width: 800px;">
                         <div class="mb-4">
-                            <i class="bi bi-quote fs-1 text-danger"></i>
+                            <i class="bi bi-quote fs-1 text-gold"></i>
                         </div>
                         <h3 class="display-6 fst-italic text-white fw-light mb-4"
                             style="font-family: 'Playfair Display', serif;">
@@ -271,9 +259,9 @@
                             maksimal."
                         </h3>
                         <div>
-                            <span class="text-gold fw-bold text-uppercase letter-spacing-2 fs-6">Aga</span>
-                            <span class="text-white-50 mx-2">|</span>
-                            <small class="text-white-50">Creative Director</small>
+                            <span class="text-white fw-bold text-uppercase letter-spacing-2 fs-6">Aga</span>
+                            <span class="text-gold mx-2">|</span>
+                            <small class="text-gold">Creative Director</small>
                         </div>
                     </div>
                 </div>
