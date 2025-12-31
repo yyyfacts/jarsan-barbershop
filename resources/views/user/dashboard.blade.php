@@ -4,39 +4,75 @@
 
 @push('styles')
 <style>
-/* --- FIX MODAL ERROR (Tambahkan Ini) --- */
+/* --- FIX MODAL ERROR (Supaya tidak layar hitam/freeze) --- */
 .modal-backdrop {
-    /* Sembunyikan backdrop bawaan yang bikin error */
     display: none !important;
     z-index: -1 !important;
 }
 
 .modal {
-    /* Ganti backdrop dengan background manual di wrapper modal */
     background-color: rgba(0, 0, 0, 0.85) !important;
 }
 
 .modal-dialog {
-    /* Pastikan dialog muncul paling depan */
     z-index: 10000 !important;
     margin-top: 10vh;
-    /* Sedikit turun biar enak dilihat */
 }
 
-/* --- Style Lainnya (Tetap Biarkan) --- */
+/* --- TABLE LUXURY STYLE --- */
 .table-luxury {
     background-color: transparent !important;
-    color: white !important;
+    color: #fff !important;
+    /* Pastikan teks putih */
 }
 
-/* ... kode css lainnya ... */
+/* Header Tabel Gelap dengan Garis Emas */
+.table-luxury thead th {
+    background-color: #1a1a1a !important;
+    /* Latar belakang gelap */
+    color: var(--luxury-gold) !important;
+    /* Teks Emas */
+    border-bottom: 1px solid var(--luxury-gold) !important;
+    font-weight: 600;
+    letter-spacing: 1px;
+    padding: 15px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+/* Body Tabel Transparan */
+.table-luxury tbody td {
+    background-color: transparent !important;
+    color: #e0e0e0 !important;
+    /* Putih agak abu biar mata nyaman */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 20px 15px;
+    vertical-align: middle;
+}
+
+/* Hover Baris */
+.table-luxury tbody tr:hover td {
+    background-color: rgba(212, 175, 55, 0.05) !important;
+    /* Efek hover emas tipis */
+    color: #fff !important;
+}
+
+/* Stats Box Hover Effect */
+.stats-box {
+    transition: transform 0.3s;
+}
+
+.stats-box:hover {
+    transform: translateY(-5px);
+    border-color: var(--luxury-gold) !important;
+}
 </style>
 @endpush
 
 @section('content')
 <div class="container py-5" style="margin-bottom: 100px;">
 
-    {{-- ALERT SUKSES / ERROR (UNTUK FEEDBACK REVIEW) --}}
+    {{-- ALERT FEEDBACK --}}
     @if(session('success'))
     <div class="alert alert-success border-0 bg-success bg-opacity-25 text-white mb-4">
         <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
@@ -53,13 +89,11 @@
         {{-- BAGIAN KIRI: PROFIL CARD --}}
         <div class="col-lg-4" data-aos="fade-right">
             <div class="mb-4 position-relative d-inline-block">
-                {{-- Mengambil gambar dari Database (BLOB) --}}
                 <img src="{{ Auth::user()->avatar_blob ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=D4AF37&color=000' }}"
                     class="rounded-circle shadow-lg"
                     style="width: 120px; height: 120px; object-fit: cover; border: 3px solid var(--luxury-gold); padding: 3px;"
                     alt="Foto Profil">
 
-                {{-- Badge Status Active --}}
                 <span
                     class="position-absolute bottom-0 end-0 badge rounded-pill bg-success border border-dark px-3 py-2">
                     Active
@@ -109,7 +143,7 @@
         {{-- BAGIAN KANAN: RIWAYAT CARD --}}
         <div class="col-lg-8" data-aos="fade-left">
             <div class="p-4 rounded-0 bg-matte h-100"
-                style="border: 1px solid var(--luxury-gold); box-shadow: 0 0 20px rgba(0,0,0,0.5);">
+                style="border: 1px solid var(--luxury-gold); box-shadow: 0 0 20px rgba(0,0,0,0.5); background-color: #0f0f0f;">
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h4 class="fw-bold text-white m-0">
@@ -119,7 +153,8 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-luxury align-middle">
+                    {{-- HAPUS class 'table-hover', Ganti dengan class custom 'table-luxury' --}}
+                    <table class="table table-luxury align-middle mb-0">
                         <thead>
                             <tr>
                                 <th>TANGGAL</th>
@@ -131,10 +166,10 @@
                         <tbody>
                             @forelse(Auth::user()->reservations()->with('barber')->latest()->get() as $res)
                             <tr>
-                                <td class="text-white small">
-                                    <div class="d-flex align-items-center gap-2">
+                                <td>
+                                    <div class="d-flex align-items-center gap-2 text-white">
                                         <i class="bi bi-calendar-event text-white-50"></i>
-                                        {{ \Carbon\Carbon::parse($res->date)->translatedFormat('d F Y') }}
+                                        {{ \Carbon\Carbon::parse($res->date)->translatedFormat('d M Y') }}
                                     </div>
                                     <div class="small text-gold ps-4">
                                         {{ \Carbon\Carbon::parse($res->time)->format('H:i') }} WIB
@@ -144,8 +179,9 @@
                                 <td>
                                     <span
                                         class="fw-bold text-white d-block">{{ $res->service->name ?? 'Layanan' }}</span>
-                                    <small class="text-white-50">Barber:
-                                        {{ $res->barber->name ?? 'Any Barber' }}</small>
+                                    <small class="text-white-50" style="font-size: 0.8rem;">
+                                        <i class="bi bi-person me-1"></i> {{ $res->barber->name ?? 'Any Barber' }}
+                                    </small>
                                 </td>
 
                                 <td class="text-gold fw-bold">
@@ -155,27 +191,24 @@
                                 <td class="text-end">
                                     @php
                                     $status = strtolower($res->status);
-                                    // Cek apakah user sudah memberi review untuk reservasi ini
                                     $hasReview = \App\Models\Review::where('reservation_id', $res->id)->exists();
                                     @endphp
 
                                     @if($status == 'done' || $status == 'selesai')
-                                    {{-- STATUS SELESAI --}}
                                     <span class="badge bg-success bg-opacity-75 text-white px-3 py-2 rounded-1 mb-2">
                                         <i class="bi bi-check-circle-fill me-1"></i> SELESAI
                                     </span>
 
-                                    {{-- LOGIC TOMBOL REVIEW (Hanya jika Selesai & Ada Barber & Belum Review) --}}
                                     @if(!$hasReview && $res->barber_id)
                                     <div class="mt-2">
                                         <button class="btn btn-sm btn-outline-warning text-gold border-warning"
                                             data-bs-toggle="modal" data-bs-target="#reviewModal{{ $res->id }}"
-                                            style="font-size: 0.7rem; padding: 2px 8px;">
+                                            style="font-size: 0.7rem; padding: 4px 10px;">
                                             <i class="bi bi-star-fill me-1"></i> Beri Ulasan
                                         </button>
                                     </div>
 
-                                    {{-- MODAL REVIEW (Per Item) --}}
+                                    {{-- MODAL REVIEW --}}
                                     <div class="modal fade" id="reviewModal{{ $res->id }}" tabindex="-1"
                                         aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
@@ -194,10 +227,8 @@
                                                             <strong
                                                                 class="text-gold">{{ $res->barber->name ?? 'Barber' }}</strong>?
                                                         </p>
-
                                                         <div class="mb-3">
-                                                            <label class="text-white small fw-bold mb-2">Rating
-                                                                Bintang</label>
+                                                            <label class="text-white small fw-bold mb-2">Rating</label>
                                                             <select name="rating"
                                                                 class="form-select bg-dark text-white border-secondary"
                                                                 required>
@@ -209,12 +240,11 @@
                                                             </select>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label class="text-white small fw-bold mb-2">Komentar
-                                                                (Opsional)</label>
+                                                            <label
+                                                                class="text-white small fw-bold mb-2">Komentar</label>
                                                             <textarea name="comment"
                                                                 class="form-control bg-dark text-white border-secondary"
-                                                                rows="3"
-                                                                placeholder="Ceritakan pengalamanmu..."></textarea>
+                                                                rows="3"></textarea>
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer border-top border-secondary">
@@ -234,12 +264,11 @@
                                     @endif
 
                                     @elseif($status == 'approved' || $status == 'dikonfirmasi')
-                                    {{-- STATUS BARU: DIKONFIRMASI / ACC --}}
                                     <span class="badge bg-info bg-opacity-75 text-white px-3 py-2 rounded-1">
                                         <i class="bi bi-calendar-check me-1"></i> DIKONFIRMASI
                                     </span>
                                     <div class="mt-1">
-                                        <small class="text-white-50" style="font-size: 0.65rem;">Silahkan datang sesuai
+                                        <small class="text-white-50" style="font-size: 0.65rem;">Datang sesuai
                                             jadwal.</small>
                                     </div>
 
@@ -265,7 +294,6 @@
                                         <i class="bi bi-scissors display-4 text-white-50 mb-3"
                                             style="opacity: 0.3;"></i>
                                         <p class="text-white mb-0 fs-5">Belum Ada Riwayat</p>
-                                        <p class="text-white-50 small">Anda belum melakukan reservasi cukur rambut.</p>
                                         <a href="{{ route('reservasi') }}" class="btn btn-sm btn-gold-luxury mt-3 px-4">
                                             BOOK NOW
                                         </a>
