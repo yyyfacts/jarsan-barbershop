@@ -60,12 +60,13 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
 
     // Dashboard User (Otomatis lempar ke admin jika emailnya admin)
-    Route::get('/dashboard', function () {
-        if (Auth::user()->email === 'admin@jarsan.com') {
-            return redirect()->route('admin.dashboard');
-        }
-        return view('user.dashboard');
-    })->name('dashboard');
+   Route::get('/dashboard', function () {
+    // Cek Role dari Database
+    if (Auth::user()->role === 'admin') { 
+        return redirect()->route('admin.dashboard');
+    }
+    return view('user.dashboard');
+})->name('dashboard');
 
     // Reservasi User
     Route::get('/reservasi', [ReservationController::class, 'create'])->name('reservasi');

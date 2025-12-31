@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Laravel\Socialite\Facades\Socialite; // WAJIB ADA
-use Illuminate\Support\Str; // WAJIB ADA
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -21,55 +21,55 @@ class AuthController extends Controller
     public function handleGoogleCallback()
     {
         try {
-            $googleUser = Socialite::driver('google')->user();
+            // Menggunakan stateless() agar lebih stabil di beberapa hosting
+            $googleUser = Socialite::driver('google')->stateless()->user();
 
-            // Cek apakah user sudah ada berdasarkan email
-            $finduser = User::where('email', $googleUser->getEmail())->first();
+            // Cek user berdasarkan email
+            $user = User::where('email', $googleUser->getEmail())->first();
 
-            if ($finduser) {
-                // Jika user ada, update google_id jika belum punya
-                if (empty($finduser->google_id)) {
-                    $finduser->update(['google_id' => $googleUser->getId()]);
-                }
-                
-                Auth::login($finduser);
-
-                // Cek Admin atau User Biasa
-                if (Auth::user()->email === 'admin@jarsan.com') {
-                    return redirect()->route('admin.dashboard');
-                }
-                return redirect()->route('welcome');
-
+            if ($user) {
+                // Jika user sudah ada, update datanya
+                $user->update([
+                    'google_id' => $googleUser->getId(),
+                    'avatar_blob' => $googleUser->getAvatar(),
+                ]);
             } else {
-                // Jika user belum ada, buat baru
-                $newUser = User::create([
+                // Jika user belum ada, BUAT BARU
+                $user = User::create([
                     'name' => $googleUser->getName(),
                     'email' => $googleUser->getEmail(),
                     'google_id' => $googleUser->getId(),
-                    'password' => Hash::make(Str::random(16)) // Password acak
+                    'avatar_blob' => $googleUser->getAvatar(),
+                    'password' => Hash::make(Str::random(24)), // Password acak agar database tidak menolak
+                    'role' => 'user' // Google login defaultnya user
                 ]);
-
-                Auth::login($newUser);
-                return redirect()->route('welcome');
             }
 
+            // Login-kan User
+            Auth::login($user);
+
+            // Google Login PASTI User biasa, jadi lempar ke Dashboard User
+            return redirect()->route('dashboard');
+
         } catch (\Exception $e) {
-            return redirect()->route('login')->withErrors(['email' => 'Gagal login dengan Google.']);
+            // Jika error, tampilkan pesan errornya (biar ketahuan kenapa mental)
+            return redirect()->route('login')->with('error', 'Login Google Gagal: ' . $e->getMessage());
         }
     }
 
-    // --- LOGIN FORM ---
+    // --- 3. LOGIN FORM ---
     public function showLoginForm() {
         if (Auth::check()) {
+            // Cek manual email admin
             if (Auth::user()->email === 'admin@jarsan.com') {
                 return redirect()->route('admin.dashboard');
             }
-            return redirect()->route('welcome');
+            return redirect()->route('dashboard');
         }
         return view('auth.login');
     }
 
-    // --- PROSES LOGIN BIASA ---
+    // --- 4. PROSES LOGIN MANUAL (Khusus Admin & User yg punya password) ---
     public function login(Request $request) {
         $credentials = $request->validate([
             'email' => 'required|email',
@@ -78,10 +78,13 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
+
+            // LOGIKA KHUSUS ADMIN
             if (Auth::user()->email === 'admin@jarsan.com') {
                 return redirect()->route('admin.dashboard');
             }
-            return redirect()->route('welcome');
+
+            return redirect()->route('dashboard');
         }
 
         return back()->withErrors([
@@ -89,12 +92,12 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    // --- REGISTER FORM ---
+    // --- 5. REGISTER FORM (Untuk User Biasa) ---
     public function showRegisterForm() {
         return view('auth.register');
     }
 
-    // --- PROSES REGISTER BIASA ---
+    // --- 6. PROSES REGISTER ---
     public function register(Request $request) {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -106,12 +109,13 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'user'
         ]);
 
         return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
     }
 
-    // --- LOGOUT ---
+    // --- 7. LOGOUT ---
     public function logout(Request $request) {
         Auth::logout();
         $request->session()->invalidate();
