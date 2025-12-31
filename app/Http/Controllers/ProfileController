@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -22,7 +23,7 @@ class ProfileController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB agar DB tidak berat
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Update Nama
@@ -35,7 +36,7 @@ class ProfileController extends Controller
             // Ubah gambar jadi string Base64
             $imageData = base64_encode(file_get_contents($image));
             
-            // Format data agar bisa dibaca browser: "data:image/jpeg;base64,..."
+            // Format data agar bisa dibaca browser
             $src = 'data:'. $image->getMimeType() . ';base64,' . $imageData;
 
             // Simpan ke kolom avatar_blob
