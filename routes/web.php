@@ -12,7 +12,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\BarberController;
-use App\Http\Controllers\SettingController; 
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ProfileController;
 
 /*
@@ -39,11 +39,11 @@ Route::middleware('guest')->group(function () {
     // Login
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.process');
-    
+
     // Register
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.process');
-    
+
     // Google Auth
     Route::get('auth/google', [AuthController::class, 'redirectToGoogle'])->name('google.login');
     Route::get('auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
@@ -57,10 +57,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // 3. HALAMAN USER (Harus Login)
 // ====================================================
 Route::middleware(['auth'])->group(function () {
-    
+
     // Dashboard User (Otomatis lempar ke admin jika emailnya admin)
     Route::get('/dashboard', function () {
-        if (Auth::user()->email === 'admin@jarsan.com') { 
+        if (Auth::user()->email === 'admin@jarsan.com') {
             return redirect()->route('admin.dashboard');
         }
         return view('user.dashboard');
@@ -69,6 +69,10 @@ Route::middleware(['auth'])->group(function () {
     // Reservasi User
     Route::get('/reservasi', [ReservationController::class, 'create'])->name('reservasi');
     Route::post('/reservasi', [ReservationController::class, 'store'])->name('reservasi.store');
+    // EDIT PROFILE
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
 });
 
 
@@ -76,22 +80,22 @@ Route::middleware(['auth'])->group(function () {
 // 4. HALAMAN ADMIN (Harus Login & Role Admin)
 // ====================================================
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
-    
+
     // Dashboard Admin
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-    
+
     // Services (Layanan & Harga)
-    Route::get('/services', [ServiceController::class, 'adminIndex'])->name('services.index');       
-    Route::post('/services', [ServiceController::class, 'store'])->name('services.store');     
-    Route::put('/services/{id}', [ServiceController::class, 'update'])->name('services.update'); 
-    Route::delete('/services/{id}', [ServiceController::class, 'destroy'])->name('services.destroy'); 
+    Route::get('/services', [ServiceController::class, 'adminIndex'])->name('services.index');
+    Route::post('/services', [ServiceController::class, 'store'])->name('services.store');
+    Route::put('/services/{id}', [ServiceController::class, 'update'])->name('services.update');
+    Route::delete('/services/{id}', [ServiceController::class, 'destroy'])->name('services.destroy');
 
     // Barbers (Barberman)
-    Route::get('/barbers', [BarberController::class, 'index'])->name('barbers.index');         
-    Route::post('/barbers', [BarberController::class, 'store'])->name('barbers.store');        
-    Route::put('/barbers/{id}', [BarberController::class, 'update'])->name('barbers.update');  
-    Route::delete('/barbers/{id}', [BarberController::class, 'destroy'])->name('barbers.destroy'); 
-    
+    Route::get('/barbers', [BarberController::class, 'index'])->name('barbers.index');
+    Route::post('/barbers', [BarberController::class, 'store'])->name('barbers.store');
+    Route::put('/barbers/{id}', [BarberController::class, 'update'])->name('barbers.update');
+    Route::delete('/barbers/{id}', [BarberController::class, 'destroy'])->name('barbers.destroy');
+
     // About (Tentang Kami)
     Route::get('/about', [AboutController::class, 'edit'])->name('about.index');
     Route::put('/about/update', [AboutController::class, 'update'])->name('about.update');
@@ -101,7 +105,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
     Route::put('/reservations/{id}/status', [ReservationController::class, 'updateStatus'])->name('reservations.status');
     Route::delete('/reservations/{id}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
-    
+
     // Contacts (Pesan Masuk dari Form Contact)
     Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
     Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
@@ -109,8 +113,5 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     // Settings (Logo, Nama App, dll)
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
-    
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
 });
