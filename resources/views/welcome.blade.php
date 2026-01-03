@@ -126,25 +126,26 @@
 {{-- 1. HERO SECTION --}}
 <section class="hero-vintage">
     <div class="hero-content">
+        {{-- JUDUL DINAMIS (Pakai {!! !!} agar HTML terbaca) --}}
         <h1 class="hero-title display-3 fw-bold text-white mb-3" data-aos="fade-up" data-aos-duration="1200">
-            QUALITY <span class="fst-italic text-gold" style="font-family: 'Playfair Display', serif;">Over</span>
-            QUANTITY
+            {!! $setting->hero_title ?? 'QUALITY <span class="fst-italic text-gold"
+                style="font-family: \'Playfair Display\', serif;">Over</span> QUANTITY' !!}
         </h1>
 
+        {{-- SUBTITLE DINAMIS --}}
         <p class="hero-subtitle text-white-50 fs-5 mb-5 mx-auto" style="max-width: 600px; line-height: 1.8;"
             data-aos="fade-up" data-aos-delay="200">
-            Sebuah ritual grooming premium. <br>
-            Presisi tinggi untuk pria yang menghargai detail.
+            {{ $setting->hero_subtitle ?? 'Sebuah ritual grooming premium. Presisi tinggi untuk pria yang menghargai detail.' }}
         </p>
 
         <div data-aos="fade-up" data-aos-delay="400">
             @auth
             <a href="{{ route('reservasi') }}" class="btn btn-gold-hero rounded-0 text-decoration-none">
-                BOOK APPOINTMENT
+                {{ $setting->hero_btn_text ?? 'BOOK APPOINTMENT' }}
             </a>
             @else
             <a href="{{ route('login') }}" class="btn btn-gold-hero rounded-0 text-decoration-none">
-                LOGIN TO BOOK
+                {{ $setting->hero_btn_text ?? 'LOGIN TO BOOK' }}
             </a>
             @endauth
         </div>
@@ -155,44 +156,58 @@
 <section class="py-5" style="background-color: #050505;">
     <div class="container py-5">
         <div class="text-center mb-5" data-aos="fade-down">
-            <h6 class="text-gold letter-spacing-3 small fw-bold">WHAT WE OFFER</h6>
-            <h2 class="display-5 fw-bold text-white" style="font-family: 'Playfair Display', serif;">EXCLUSIVE SERVICES
+            {{-- SUBTEXT LAYANAN --}}
+            <h6 class="text-gold letter-spacing-3 small fw-bold">
+                {{ $setting->services_subtext ?? 'WHAT WE OFFER' }}
+            </h6>
+            {{-- JUDUL LAYANAN --}}
+            <h2 class="display-5 fw-bold text-white" style="font-family: 'Playfair Display', serif;">
+                {{ $setting->services_title ?? 'EXCLUSIVE SERVICES' }}
             </h2>
         </div>
 
         <div class="row g-4 px-2">
+            {{-- CARD 1 --}}
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
                 <div class="glass-card">
                     <div class="icon-circle">
                         <i class="bi bi-scissors fs-2 text-white"></i>
                     </div>
-                    <h4 class="fw-bold text-white mb-3">Expert Barber</h4>
+                    <h4 class="fw-bold text-white mb-3">
+                        {{ $setting->service_1_title ?? 'Expert Barber' }}
+                    </h4>
                     <p class="text-white-50 small mb-0">
-                        Ditangani oleh seniman rambut berpengalaman tinggi dengan teknik fading presisi dan gaya modern.
+                        {{ $setting->service_1_desc ?? 'Ditangani oleh seniman rambut berpengalaman tinggi dengan teknik fading presisi dan gaya modern.' }}
                     </p>
                 </div>
             </div>
 
+            {{-- CARD 2 --}}
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
                 <div class="glass-card">
                     <div class="icon-circle">
                         <i class="bi bi-cup-hot fs-2 text-white"></i>
                     </div>
-                    <h4 class="fw-bold text-white mb-3">Luxury Lounge</h4>
+                    <h4 class="fw-bold text-white mb-3">
+                        {{ $setting->service_2_title ?? 'Luxury Lounge' }}
+                    </h4>
                     <p class="text-white-50 small mb-0">
-                        Menunggu bukan hal membosankan. Nikmati kopi di ruangan ber-AC dengan musik berkelas.
+                        {{ $setting->service_2_desc ?? 'Menunggu bukan hal membosankan. Nikmati kopi di ruangan ber-AC dengan musik berkelas.' }}
                     </p>
                 </div>
             </div>
 
+            {{-- CARD 3 --}}
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
                 <div class="glass-card">
                     <div class="icon-circle">
                         <i class="bi bi-gem fs-2 text-white"></i>
                     </div>
-                    <h4 class="fw-bold text-white mb-3">Premium Products</h4>
+                    <h4 class="fw-bold text-white mb-3">
+                        {{ $setting->service_3_title ?? 'Premium Products' }}
+                    </h4>
                     <p class="text-white-50 small mb-0">
-                        Kami hanya menggunakan pomade dan produk perawatan rambut kualitas terbaik.
+                        {{ $setting->service_3_desc ?? 'Kami hanya menggunakan pomade dan produk perawatan rambut kualitas terbaik.' }}
                     </p>
                 </div>
             </div>
@@ -203,7 +218,10 @@
 {{-- 3. TESTIMONIALS (GOOGLE REVIEWS WIDGET) --}}
 <section class="py-5" style="background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);">
     <div class="container py-5 text-center">
-        <h3 class="mb-5 text-gold letter-spacing-3 fw-bold fs-6">VOICE OF GENTLEMEN</h3>
+        {{-- JUDUL TESTIMONIAL --}}
+        <h3 class="mb-5 text-gold letter-spacing-3 fw-bold fs-6">
+            {{ $setting->testimonial_title ?? 'VOICE OF GENTLEMEN' }}
+        </h3>
 
         <div class="row justify-content-center">
             <div class="col-md-10" data-aos="fade-up">

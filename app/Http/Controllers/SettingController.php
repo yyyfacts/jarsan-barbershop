@@ -15,40 +15,59 @@ class SettingController extends Controller
     }
 
     public function update(Request $request)
-{
-    $request->validate([
-        'app_name'        => 'required|string|max:255',
-        'logo'            => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        'instagram_link'  => 'nullable|url',
-        'tiktok_link'     => 'nullable|url',
-        'whatsapp_number' => 'nullable|numeric',
-        'maps_embed'      => 'nullable|string',
-        // VALIDASI BARU
-        'hero_title'      => 'nullable|string|max:100',
-        'hero_subtitle'   => 'nullable|string|max:500',
-    ]);
+    {
+        // 1. Validasi Input (Menyesuaikan dengan kolom baru di database)
+        $request->validate([
+            // Identitas & Kontak
+            'app_name'          => 'required|string|max:255',
+            'logo'              => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'instagram_link'    => 'nullable|url',
+            'tiktok_link'       => 'nullable|url',
+            'whatsapp_number'   => 'nullable|numeric',
+            'maps_embed'        => 'nullable|string',
 
-    $dataToUpdate = [
-        'app_name'        => $request->app_name,
-        'instagram_link'  => $request->instagram_link,
-        'tiktok_link'     => $request->tiktok_link,
-        'whatsapp_number' => $request->whatsapp_number,
-        'maps_embed'      => $request->maps_embed,
-        // DATA BARU
-        'hero_title'      => $request->hero_title,
-        'hero_subtitle'   => $request->hero_subtitle,
-    ];
+            // Hero Section (Banner Utama)
+            'hero_title'        => 'nullable|string',
+            'hero_subtitle'     => 'nullable|string',
+            'hero_btn_text'     => 'nullable|string|max:50',
 
-    if ($request->hasFile('logo')) {
-        $file = $request->file('logo');
-        $path = $file->getRealPath();
-        $image = file_get_contents($path);
-        $base64 = base64_encode($image);
-        $dataToUpdate['logo_path'] = 'data:' . $file->getMimeType() . ';base64,' . $base64;
+            // Services Section (Layanan)
+            'services_subtext'  => 'nullable|string|max:100',
+            'services_title'    => 'nullable|string|max:100',
+            
+            'service_1_title'   => 'nullable|string|max:100',
+            'service_1_desc'    => 'nullable|string',
+            
+            'service_2_title'   => 'nullable|string|max:100',
+            'service_2_desc'    => 'nullable|string',
+            
+            'service_3_title'   => 'nullable|string|max:100',
+            'service_3_desc'    => 'nullable|string',
+
+            // Testimonial Section
+            'testimonial_title' => 'nullable|string|max:100',
+        ]);
+
+        // 2. Siapkan Data
+        // Mengambil semua input form KECUALI file logo, token CSRF, dan method PUT.
+        // Cara ini otomatis menangkap semua field baru (hero, services, dll) tanpa perlu ditulis manual satu-satu.
+        $dataToUpdate = $request->except(['logo', '_token', '_method']);
+
+        // 3. Proses Upload Logo (Konversi ke Base64)
+        if ($request->hasFile('logo')) {
+            $file = $request->file('logo');
+            $path = $file->getRealPath();
+            $image = file_get_contents($path);
+            $base64 = base64_encode($image);
+            
+            // Masukkan string base64 ke array data
+            $dataToUpdate['logo_path'] = 'data:' . $file->getMimeType() . ';base64,' . $base64;
+        }
+
+        // 4. Simpan ke Database
+        // Update data pada ID 1, atau buat baru jika belum ada
+        Setting::updateOrCreate(['id' => 1], $dataToUpdate);
+
+        return redirect()->back()->with('success', 'Semua konten website berhasil diperbarui!');
     }
-
-    Setting::updateOrCreate(['id' => 1], $dataToUpdate);
-
-    return redirect()->back()->with('success', 'Pengaturan berhasil disimpan!');
-}
 }

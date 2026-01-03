@@ -9,15 +9,38 @@ class Setting extends Model
 {
     use HasFactory;
 
-    // Kita gunakan $fillable agar lebih aman dan jelas
+    // Menentukan kolom mana saja yang boleh diisi (Mass Assignment)
     protected $fillable = [
+        // 1. Identitas & Kontak
         'app_name',
         'logo_path',
-        'instagram_link', // Kolom baru untuk Instagram
-        'tiktok_link',    // Kolom baru untuk TikTok
-        'maps_embed',  
-        'whatsapp_number',  
+        'instagram_link',
+        'tiktok_link',
+        'whatsapp_number',
+        'maps_embed',
+
+        // 2. Hero Section (Banner Utama)
         'hero_title',
-    'hero_subtitle', // Kolom baru untuk Google Maps
+        'hero_subtitle',
+        'hero_btn_text', // Tombol (misal: Book Now)
+
+        // 3. Services Section (Judul Bagian Layanan)
+        'services_subtext', // Teks kecil (misal: WHAT WE OFFER)
+        'services_title',   // Judul besar (misal: EXCLUSIVE SERVICES)
+
+        // 4. Service Card 1
+        'service_1_title',
+        'service_1_desc',
+
+        // 5. Service Card 2
+        'service_2_title',
+        'service_2_desc',
+
+        // 6. Service Card 3
+        'service_3_title',
+        'service_3_desc',
+
+        // 7. Testimonial Section
+        'testimonial_title',
     ];
 }
