@@ -33,14 +33,16 @@ Route::get('/', [PublicController::class, 'welcome'])->name('welcome');
 Route::get('/about', [AboutController::class, 'index'])->name('about'); 
 
 // Halaman Tim Barber (Meet The Artists)
-// FIXED: Nama route disesuaikan jadi 'barberman' agar Navbar tidak error
 Route::get('/barberman', [BarberController::class, 'index'])->name('barberman');
 
 // Halaman Harga & Layanan
 Route::get('/pricelist', [PublicController::class, 'pricelist'])->name('pricelist');
 
-// Halaman Kontak
+// Halaman Kontak (Formulir & Info)
+// Jika Anda ingin info kontak dinamis, pastikan PublicController mengirim $config ke view ini
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
+
+// Proses Kirim Pesan (Public)
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 
@@ -112,7 +114,6 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::delete('/barbers/{id}', [BarberController::class, 'destroy'])->name('barbers.destroy');
 
     // --- MANAJEMEN ABOUT US (TENTANG KAMI) ---
-    // FIXED: Nama route diganti jadi 'about.index' agar Sidebar Admin tidak error
     Route::get('/about', [AboutController::class, 'edit'])->name('about.index');
     Route::put('/about', [AboutController::class, 'update'])->name('about.update');
 
@@ -122,11 +123,17 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::put('/reservations/{id}/status', [ReservationController::class, 'updateStatus'])->name('reservations.status');
     Route::delete('/reservations/{id}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
 
-    // --- MANAJEMEN PESAN KONTAK ---
-    Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
-    Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
+    // --- MANAJEMEN PESAN KONTAK & INFO (UPDATED) ---
+    // Halaman Utama (Tabel Pesan + Form Setting)
+    Route::get('/contact', [ContactController::class, 'index'])->name('contact'); 
+    
+    // Proses Update Info Kontak (Form Bagian Atas)
+    Route::post('/contact/update', [ContactController::class, 'updateDetails'])->name('contact.update');
+    
+    // Hapus Pesan Masuk (Tabel Bagian Bawah)
+    Route::delete('/contact/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
 
-    // --- PENGATURAN WEBSITE (SETTINGS) ---
+    // --- PENGATURAN WEBSITE (SETTINGS LAINNYA) ---
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
 

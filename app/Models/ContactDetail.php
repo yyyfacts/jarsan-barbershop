@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ContactDetail extends Model // <--- Nama Class Ganti Jadi Ini
+class ContactDetail extends Model
 {
     use HasFactory;
 
-    // Arahkan ke tabel contact_details
+    // Tabel: 'contact_details' (harus ditulis manual karena nama tabelnya beda)
     protected $table = 'contact_details';
 
     protected $fillable = [
