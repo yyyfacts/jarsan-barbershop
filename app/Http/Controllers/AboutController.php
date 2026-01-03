@@ -12,7 +12,7 @@ class AboutController extends Controller
     {
         // Ambil data pertama
         $about = About::first();
-        return view('user.about', compact('about'));
+        return view('about', compact('about'));
     }
 
     // ADMIN EDIT (FORM)
