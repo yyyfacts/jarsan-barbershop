@@ -26,14 +26,15 @@ use App\Http\Controllers\ReviewController;
 // 1. HALAMAN PUBLIK (Bisa diakses siapa saja)
 // ====================================================
 
-// Halaman Utama (Home) - Menggunakan PublicController atau HomeController
+// Halaman Utama (Home)
 Route::get('/', [PublicController::class, 'welcome'])->name('welcome');
 
 // Halaman About Us (Tentang Kami)
 Route::get('/about', [AboutController::class, 'index'])->name('about'); 
 
 // Halaman Tim Barber (Meet The Artists)
-Route::get('/barber', [BarberController::class, 'index'])->name('barber');
+// PERBAIKAN: Menggunakan URL '/barberman' dan nama route 'barberman' agar sesuai Navbar
+Route::get('/barberman', [BarberController::class, 'index'])->name('barberman');
 
 // Halaman Harga & Layanan
 Route::get('/pricelist', [PublicController::class, 'pricelist'])->name('pricelist');
@@ -55,12 +56,12 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.process');
 
-    // Google Auth (Jika dipakai)
+    // Google Auth
     Route::get('auth/google', [AuthController::class, 'redirectToGoogle'])->name('google.login');
     Route::get('auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
 });
 
-// Logout (Bisa diakses user login)
+// Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
@@ -107,15 +108,14 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::delete('/services/{id}', [ServiceController::class, 'destroy'])->name('services.destroy');
 
     // --- MANAJEMEN BARBER (TIM & JADWAL) ---
-    // Perhatikan: Menggunakan method indexAdmin, bukan index biasa
     Route::get('/barbers', [BarberController::class, 'indexAdmin'])->name('barbers.index');
     Route::post('/barbers', [BarberController::class, 'store'])->name('barbers.store');
     Route::put('/barbers/{id}', [BarberController::class, 'update'])->name('barbers.update');
     Route::delete('/barbers/{id}', [BarberController::class, 'destroy'])->name('barbers.destroy');
 
     // --- MANAJEMEN ABOUT US (TENTANG KAMI) ---
-    Route::get('/about', [AboutController::class, 'edit'])->name('about.edit'); // Halaman Form Edit
-    Route::put('/about', [AboutController::class, 'update'])->name('about.update'); // Proses Simpan
+    Route::get('/about', [AboutController::class, 'edit'])->name('about.edit');
+    Route::put('/about', [AboutController::class, 'update'])->name('about.update');
 
     // --- MANAJEMEN RESERVASI ---
     Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
