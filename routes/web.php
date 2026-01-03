@@ -39,7 +39,6 @@ Route::get('/barberman', [BarberController::class, 'index'])->name('barberman');
 Route::get('/pricelist', [PublicController::class, 'pricelist'])->name('pricelist');
 
 // Halaman Kontak (Formulir & Info)
-// Jika Anda ingin info kontak dinamis, pastikan PublicController mengirim $config ke view ini
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
 
 // Proses Kirim Pesan (Public)
@@ -123,15 +122,15 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::put('/reservations/{id}/status', [ReservationController::class, 'updateStatus'])->name('reservations.status');
     Route::delete('/reservations/{id}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
 
-    // --- MANAJEMEN PESAN KONTAK & INFO (UPDATED) ---
-    // Halaman Utama (Tabel Pesan + Form Setting)
-    Route::get('/contact', [ContactController::class, 'index'])->name('contact'); 
+    // --- MANAJEMEN PESAN KONTAK & INFO (FIXED) ---
+    // SAYA UBAH INI: Dari 'contact' menjadi 'contacts.index' agar sidebar tidak error
+    Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index'); 
     
-    // Proses Update Info Kontak (Form Bagian Atas)
+    // Proses Update Info Kontak
     Route::post('/contact/update', [ContactController::class, 'updateDetails'])->name('contact.update');
     
-    // Hapus Pesan Masuk (Tabel Bagian Bawah)
-    Route::delete('/contact/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
+    // Hapus Pesan Masuk
+    Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
 
     // --- PENGATURAN WEBSITE (SETTINGS LAINNYA) ---
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
