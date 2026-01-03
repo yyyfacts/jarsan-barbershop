@@ -13,7 +13,6 @@ class Barber extends Model
 
     /**
      * KHUSUS DATA ORANG/KAPSTER
-     * Jangan masukkan judul halaman web di sini.
      */
     protected $fillable = [
         'name',
@@ -29,11 +28,11 @@ class Barber extends Model
         'is_active' => 'boolean',
     ];
 
-    // Relasi Review (Opsional)
-    /*
+    // --- PERBAIKAN DI SINI ---
+    // Fungsi ini WAJIB ada dan tidak boleh dikomentari 
+    // agar 'with([reviews])' di Controller bisa jalan.
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }
-    */
 }
