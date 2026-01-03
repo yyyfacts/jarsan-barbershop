@@ -10,6 +10,7 @@ class AboutController extends Controller
     // USER LIHAT (FRONTEND)
     public function index()
     {
+        // Ambil data pertama
         $about = About::first();
         return view('about', compact('about'));
     }
@@ -18,44 +19,78 @@ class AboutController extends Controller
     public function edit()
     {
         // Ambil data pertama, atau buat objek baru jika kosong
-        $about = About::first() ?? new About();
-        return view('admin.tentangkami', compact('about'));
+        // (Supaya form tidak error saat database masih kosong)
+        $about = About::firstOrCreate([], [
+            'hero_title' => 'CRAFTING CONFIDENCE',
+            'history' => 'Isi sejarah default...',
+        ]);
+        
+        return view('admin.about', compact('about'));
     }
 
     // ADMIN UPDATE (SIMPAN)
     public function update(Request $request)
     {
+        // 1. VALIDASI DATA
         $request->validate([
-            'history' => 'nullable|string',
-            'mission' => 'nullable|string',
-            'history_image' => 'nullable|image|max:1024', // Max 1MB
-            'mission_image' => 'nullable|image|max:1024', // Max 1MB
+            // Gambar (Max 2MB)
+            'history_image' => 'nullable|image|max:2048', 
+            'mission_image' => 'nullable|image|max:2048',
+
+            // Hero Section
+            'hero_title'    => 'nullable|string',
+            'hero_subtitle' => 'nullable|string',
+
+            // History Section
+            'history'       => 'nullable|string',
+            'founded_year'  => 'nullable|string',
+            'founded_text'  => 'nullable|string',
+
+            // Mission & Philosophy
+            'mission'           => 'nullable|string',
+            'philosophy_title'  => 'nullable|string',
+            'philosophy_quote'  => 'nullable|string',
+
+            // Why Choose Us
+            'why_title'     => 'nullable|string',
+            'why_1_title'   => 'nullable|string',
+            'why_1_desc'    => 'nullable|string',
+            'why_2_title'   => 'nullable|string',
+            'why_2_desc'    => 'nullable|string',
+            'why_3_title'   => 'nullable|string',
+            'why_3_desc'    => 'nullable|string',
         ]);
 
-        $about = About::firstOrNew();
+        // 2. SIAPKAN DATA
+        // Ambil semua input kecuali gambar dan token
+        $data = $request->except(['history_image', 'mission_image', '_token', '_method']);
 
-        // 1. UPDATE DATA TEKS
-        $about->history = $request->history;
-        $about->mission = $request->mission;
-
-        // 2. PROSES GAMBAR SEJARAH (BASE64)
+        // 3. PROSES GAMBAR SEJARAH (BASE64)
         if ($request->hasFile('history_image')) {
-            $path = $request->file('history_image')->getRealPath();
+            $file = $request->file('history_image');
+            $path = $file->getRealPath();
             $image = file_get_contents($path);
             $base64 = base64_encode($image);
-            $about->history_image = 'data:image/' . $request->file('history_image')->extension() . ';base64,' . $base64;
+            
+            // Masukkan ke array data
+            $data['history_image'] = 'data:' . $file->getMimeType() . ';base64,' . $base64;
         }
 
-        // 3. PROSES GAMBAR MISI (BASE64)
+        // 4. PROSES GAMBAR MISI (BASE64)
         if ($request->hasFile('mission_image')) {
-            $path = $request->file('mission_image')->getRealPath();
+            $file = $request->file('mission_image');
+            $path = $file->getRealPath();
             $image = file_get_contents($path);
             $base64 = base64_encode($image);
-            $about->mission_image = 'data:image/' . $request->file('mission_image')->extension() . ';base64,' . $base64;
+            
+            // Masukkan ke array data
+            $data['mission_image'] = 'data:' . $file->getMimeType() . ';base64,' . $base64;
         }
 
-        $about->save();
+        // 5. SIMPAN KE DATABASE
+        // Update ID 1, atau buat baru jika belum ada
+        About::updateOrCreate(['id' => 1], $data);
 
-        return redirect()->back()->with('success', 'Halaman Tentang Kami diperbarui!');
+        return redirect()->back()->with('success', 'Halaman Tentang Kami berhasil diperbarui!');
     }
 }
