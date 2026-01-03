@@ -46,7 +46,7 @@ class ContactController extends Controller
         }
 
         // PERUBAHAN DISINI: Nama view diganti jadi 'admin.contact'
-        return view('admin.hubungikami', compact('contacts', 'config'));
+        return view('admin.contact', compact('contacts', 'config'));
     }
 
     // 2. UPDATE INFO KONTAK (Alamat, WA, Jam Buka, dll)
