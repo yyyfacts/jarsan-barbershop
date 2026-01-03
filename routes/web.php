@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-// Import Semua Controller
+// --- IMPORT SEMUA CONTROLLER ---
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ReservationController;
@@ -25,10 +25,20 @@ use App\Http\Controllers\ReviewController;
 // ====================================================
 // 1. HALAMAN PUBLIK (Bisa diakses siapa saja)
 // ====================================================
+
+// Halaman Utama (Home) - Menggunakan PublicController atau HomeController
 Route::get('/', [PublicController::class, 'welcome'])->name('welcome');
-Route::get('/about', [PublicController::class, 'about'])->name('about');
-Route::get('/barberman', [PublicController::class, 'barberman'])->name('barberman');
+
+// Halaman About Us (Tentang Kami)
+Route::get('/about', [AboutController::class, 'index'])->name('about'); 
+
+// Halaman Tim Barber (Meet The Artists)
+Route::get('/barber', [BarberController::class, 'index'])->name('barber');
+
+// Halaman Harga & Layanan
 Route::get('/pricelist', [PublicController::class, 'pricelist'])->name('pricelist');
+
+// Halaman Kontak
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
@@ -45,12 +55,12 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.process');
 
-    // Google Auth
+    // Google Auth (Jika dipakai)
     Route::get('auth/google', [AuthController::class, 'redirectToGoogle'])->name('google.login');
     Route::get('auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
 });
 
-// Logout
+// Logout (Bisa diakses user login)
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
@@ -59,24 +69,26 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // ====================================================
 Route::middleware(['auth'])->group(function () {
 
-    // Dashboard User (Otomatis lempar ke admin jika emailnya admin)
-   Route::get('/dashboard', function () {
-    // Cek Role dari Database
-    if (Auth::user()->role === 'admin') { 
-        return redirect()->route('admin.dashboard');
-    }
-    return view('user.dashboard');
-})->name('dashboard');
+    // Dashboard User & Redirection Logic
+    Route::get('/dashboard', function () {
+        // Jika admin login, lempar ke dashboard admin
+        if (Auth::user()->role === 'admin') { 
+            return redirect()->route('admin.dashboard');
+        }
+        // Jika user biasa, ke dashboard user
+        return view('user.dashboard');
+    })->name('dashboard');
 
-    // Reservasi User
+    // Reservasi Booking
     Route::get('/reservasi', [ReservationController::class, 'create'])->name('reservasi');
     Route::post('/reservasi', [ReservationController::class, 'store'])->name('reservasi.store');
-    // EDIT PROFILE
+
+    // Edit Profile User
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
+    // Kirim Review/Ulasan
     Route::post('/review', [ReviewController::class, 'store'])->name('review.store');
-
 });
 
 
@@ -88,33 +100,34 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     // Dashboard Admin
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
-    // Services (Layanan & Harga)
+    // --- MANAJEMEN LAYANAN (SERVICES) ---
     Route::get('/services', [ServiceController::class, 'adminIndex'])->name('services.index');
     Route::post('/services', [ServiceController::class, 'store'])->name('services.store');
     Route::put('/services/{id}', [ServiceController::class, 'update'])->name('services.update');
     Route::delete('/services/{id}', [ServiceController::class, 'destroy'])->name('services.destroy');
 
-    // Barbers (Barberman)
-    Route::get('/barbers', [BarberController::class, 'index'])->name('barbers.index');
+    // --- MANAJEMEN BARBER (TIM & JADWAL) ---
+    // Perhatikan: Menggunakan method indexAdmin, bukan index biasa
+    Route::get('/barbers', [BarberController::class, 'indexAdmin'])->name('barbers.index');
     Route::post('/barbers', [BarberController::class, 'store'])->name('barbers.store');
     Route::put('/barbers/{id}', [BarberController::class, 'update'])->name('barbers.update');
     Route::delete('/barbers/{id}', [BarberController::class, 'destroy'])->name('barbers.destroy');
 
-    // About (Tentang Kami)
-    Route::get('/about', [AboutController::class, 'edit'])->name('about.index');
-    Route::put('/about/update', [AboutController::class, 'update'])->name('about.update');
+    // --- MANAJEMEN ABOUT US (TENTANG KAMI) ---
+    Route::get('/about', [AboutController::class, 'edit'])->name('about.edit'); // Halaman Form Edit
+    Route::put('/about', [AboutController::class, 'update'])->name('about.update'); // Proses Simpan
 
-    // Reservations (Daftar Booking & Export)
-    Route::get('/reservations/export', [ReservationController::class, 'exportExcel'])->name('reservations.export'); // Route Export Excel
+    // --- MANAJEMEN RESERVASI ---
     Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
+    Route::get('/reservations/export', [ReservationController::class, 'exportExcel'])->name('reservations.export');
     Route::put('/reservations/{id}/status', [ReservationController::class, 'updateStatus'])->name('reservations.status');
     Route::delete('/reservations/{id}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
 
-    // Contacts (Pesan Masuk dari Form Contact)
+    // --- MANAJEMEN PESAN KONTAK ---
     Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
     Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
 
-    // Settings (Logo, Nama App, dll)
+    // --- PENGATURAN WEBSITE (SETTINGS) ---
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::put('/settings', [SettingController::class, 'update'])->name('settings.update');
 
