@@ -8,7 +8,6 @@
 ::placeholder {
     color: rgba(255, 255, 255, 0.7) !important;
     opacity: 1;
-    /* Firefox */
 }
 
 /* Input autofill fix untuk background gelap */
@@ -29,6 +28,7 @@ input:-webkit-autofill:active {
         <div class="row g-0 shadow-lg rounded-0 overflow-hidden" data-aos="zoom-in"
             style="border: 1px solid var(--gold-accent);">
 
+            {{-- BAGIAN GAMBAR KIRI (Tampilan Tetap Sama) --}}
             <div class="col-lg-6 d-none d-lg-block position-relative">
                 <div
                     style="background: url('{{ asset('images/banner-login.webp') }}') center/cover; height: 100%; width: 100%; filter: grayscale(50%) sepia(20%);">
@@ -42,35 +42,43 @@ input:-webkit-autofill:active {
                     @endif
                     <h2 class="display-5 fw-bold text-white mb-2">{{ $setting->app_name ?? 'JARSAN' }}</h2>
                     <div style="width: 50px; height: 2px; background: var(--luxury-gold); margin: 20px auto;"></div>
-                    <p class="text-gold letter-spacing-2 fw-bold">PREMIUM MEMBER ACCESS</p>
+                    {{-- Teks diubah jadi lebih standar --}}
+                    <p class="text-gold letter-spacing-2 fw-bold">MEMBER LOGIN AREA</p>
                 </div>
             </div>
 
+            {{-- BAGIAN FORM KANAN --}}
             <div class="col-lg-6 p-5 bg-matte d-flex flex-column justify-content-center">
                 <div class="mb-5">
-                    <h3 class="luxury-font text-white fw-bold">AUTHENTICATE</h3>
-                    <p class="text-white small">Silakan masuk untuk mengakses layanan premium.</p>
+                    {{-- Judul diganti bahasa Indonesia yang ramah --}}
+                    <h3 class="luxury-font text-white fw-bold">SELAMAT DATANG</h3>
+                    <p class="text-white small">Silakan masuk dengan akun Anda untuk melanjutkan.</p>
                 </div>
 
                 <form action="{{ route('login.process') }}" method="POST">
                     @csrf
+
+                    {{-- Input Email --}}
                     <div class="mb-4 position-relative">
-                        <label class="form-label small text-gold fw-bold letter-spacing-2">EMAIL ADDRESS</label>
+                        <label class="form-label small text-gold fw-bold letter-spacing-2">ALAMAT EMAIL</label>
+                        {{-- Placeholder diganti standar --}}
                         <input type="email" name="email"
                             class="form-control bg-transparent border-0 border-bottom border-secondary text-white rounded-0 ps-0 py-2"
-                            placeholder="gentleman@example.com" required>
+                            placeholder="nama@email.com" required>
                         <i class="bi bi-envelope position-absolute bottom-0 end-0 pb-2 text-white"></i>
                     </div>
 
+                    {{-- Input Password --}}
                     <div class="mb-4 position-relative">
-                        <label class="form-label small text-gold fw-bold letter-spacing-2">PRIVATE KEY
-                            (PASSWORD)</label>
+                        <label class="form-label small text-gold fw-bold letter-spacing-2">PASSWORD</label>
+                        {{-- Placeholder diganti dots standar --}}
                         <input type="password" name="password"
                             class="form-control bg-transparent border-0 border-bottom border-secondary text-white rounded-0 ps-0 py-2"
                             placeholder="••••••••" required>
                         <i class="bi bi-key position-absolute bottom-0 end-0 pb-2 text-white"></i>
                     </div>
 
+                    {{-- Checkbox & Lupa Password --}}
                     <div class="d-flex justify-content-between align-items-center mb-5">
                         <div class="form-check">
                             <input class="form-check-input bg-transparent border-secondary" type="checkbox"
@@ -81,25 +89,32 @@ input:-webkit-autofill:active {
                             Password?</a>
                     </div>
 
-                    <button type="submit" class="btn btn-gold-luxury w-100 py-3 mb-4 fs-6">INITIALIZE LOGIN</button>
+                    {{-- Tombol Login --}}
+                    <button type="submit" class="btn btn-gold-luxury w-100 py-3 mb-4 fs-6 fw-bold letter-spacing-1">
+                        MASUK SEKARANG
+                    </button>
 
+                    {{-- Separator --}}
                     <div class="position-relative text-center my-4">
                         <hr class="border-secondary">
-                        <span
-                            class="position-absolute top-50 start-50 translate-middle px-3 bg-matte text-white small">ATAU
-                            AKSES DENGAN</span>
+                        <span class="position-absolute top-50 start-50 translate-middle px-3 bg-matte text-white small">
+                            ATAU MASUK DENGAN
+                        </span>
                     </div>
 
+                    {{-- Google Login --}}
                     <a href="{{ route('google.login') }}"
                         class="btn w-100 border border-secondary text-white rounded-0 py-2 d-flex align-items-center justify-content-center gap-3 hover-glass">
                         <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" alt="Google">
-                        <span class="small fw-bold letter-spacing-1">GOOGLE ACCOUNT</span>
+                        <span class="small fw-bold letter-spacing-1">AKUN GOOGLE</span>
                     </a>
 
+                    {{-- Link Register --}}
                     <p class="text-center text-white small mt-5 mb-0">
-                        Belum menjadi anggota? <a href="{{ route('register') }}"
-                            class="text-gold fw-bold text-decoration-none border-bottom border-warning pb-1">Daftar
-                            Sekarang
+                        Belum punya akun? <a href="{{ route('register') }}"
+                            class="text-gold fw-bold text-decoration-none border-bottom border-warning pb-1">
+                            Daftar Member Baru
+                        </a>
                     </p>
                 </form>
             </div>
