@@ -3,186 +3,251 @@
 @section('content')
 @push('styles')
 <style>
-/* --- THEME VARIABLES --- */
+/* --- 1. CORE VARIABLES --- */
 :root {
-    --luxury-gold: #D4AF37;
-    --gold-light: #FEE140;
+    --gold-primary: #D4AF37;
+    --gold-dark: #aa8420;
+    --bg-deep: #050505;
 }
 
-/* --- HERO WRAPPER --- */
+/* --- 2. CINEMATIC HERO WRAPPER --- */
 .hero-wrapper {
     position: relative;
     height: 100vh;
     width: 100%;
     overflow: hidden;
-    background: #000;
+    background: var(--bg-deep);
+    display: flex;
+    align-items: center;
 }
 
-/* --- CAROUSEL (SLIDING EFFECT) --- */
-/* Menghapus animasi Ken Burns (Zoom) dan menggunakan Slide bawaan Bootstrap */
-.carousel,
-.carousel-inner,
-.carousel-item {
-    height: 100%;
+/* Overlay Texture (Film Grain Effect) - Bikin kesan mahal */
+.hero-wrapper::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Vignette (Pinggiran Gelap) */
+.hero-overlay-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.2) 0%, #000000 90%);
+    z-index: 1;
+}
+
+/* --- 3. SLIDER BACKGROUND --- */
+.carousel-item {
+    height: 100vh;
 }
 
 .carousel-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Filter brightness agar tulisan putih tetap kontras */
-    filter: brightness(0.5);
+    filter: brightness(0.6) contrast(1.1);
+    /* Efek Zoom in pelan (Cinematic Move) */
+    animation: panZoom 20s infinite alternate;
 }
 
-/* --- HERO CONTENT LAYOUT --- */
-.hero-content-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    pointer-events: none;
-    /* Biar klik tembus ke tombol */
-}
+@keyframes panZoom {
+    0% {
+        transform: scale(1);
+    }
 
-/* ==========================================================================
-   PILIHAN GAYA TULISAN (PILIH SALAH SATU STYLE DI BAWAH)
-   ========================================================================== */
-
-/* --- STYLE A: GLASS BOX (DEFAULT - KOTAK KACA MEWAH) --- */
-.hero-content-style {
-    background: rgba(0, 0, 0, 0.3);
-    /* Hitam transparan */
-    backdrop-filter: blur(8px);
-    /* Efek blur background */
-    -webkit-backdrop-filter: blur(8px);
-    padding: 60px 40px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-top: 1px solid rgba(212, 175, 55, 0.5);
-    /* Garis emas atas */
-    border-bottom: 1px solid rgba(212, 175, 55, 0.5);
-    /* Garis emas bawah */
-    max-width: 900px;
-    text-align: center;
-    pointer-events: auto;
-    border-radius: 0;
-    /* Kotak tegas */
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-}
-
-/* --- STYLE B: GRADIENT TEXT (JIKA MAU LEBIH CLEAN/CINEMATIC) --- */
-/* Uncomment (hilangkan tanda komentar) bagian ini jika ingin mencoba Style B
-   dan Comment (tutup) bagian .hero-content-style di atas */
-/*
-.hero-content-style {
-    background: radial-gradient(circle, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 70%);
-    padding: 40px;
-    max-width: 1000px;
-    text-align: center;
-    pointer-events: auto;
-    text-shadow: 0 4px 10px rgba(0,0,0,0.8);
-}
-*/
-/* ========================================================================== */
-
-/* --- TYPOGRAPHY --- */
-/* Efek Teks Emas Berkilau */
-.text-gradient-gold {
-    background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    background-size: 200% auto;
-    animation: shine 4s linear infinite;
-}
-
-@keyframes shine {
-    to {
-        background-position: 200% center;
+    100% {
+        transform: scale(1.1);
     }
 }
 
-.hero-title {
+/* --- 4. GIANT WATERMARK TEXT (EFK UNIK) --- */
+.giant-text-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-family: 'Playfair Display', serif;
-    font-weight: 800;
-    font-size: 4.5rem;
-    color: #fff;
-    line-height: 1.1;
-    margin-bottom: 25px;
-    text-transform: uppercase;
-    letter-spacing: -1px;
+    font-size: 15vw;
+    /* Sangat Besar */
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.05);
+    /* Garis outline tipis */
+    z-index: 2;
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: 20px;
 }
 
-.hero-subtitle {
+/* --- 5. MAIN CONTENT (ASYMMETRICAL) --- */
+.hero-content-layer {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    padding-left: 5%;
+    /* Geser ke kiri (Asimetris) */
+}
+
+/* Garis Emas Panjang */
+.gold-line-decor {
+    width: 100px;
+    height: 4px;
+    background: var(--gold-primary);
+    margin-bottom: 30px;
+    transition: width 1s ease;
+}
+
+.hero-wrapper:hover .gold-line-decor {
+    width: 200px;
+}
+
+/* Memanjang saat hover */
+
+/* Judul Utama */
+.hero-title-main {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    font-weight: 800;
+    line-height: 0.9;
+    color: #fff;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    text-shadow: 10px 10px 0px rgba(0, 0, 0, 0.5);
+    /* Shadow kasar biar retro */
+}
+
+.hero-subtitle-main {
+    font-family: 'Montserrat', sans-serif;
     font-size: 1.2rem;
-    color: #ddd;
+    letter-spacing: 4px;
+    color: #ccc;
     font-weight: 300;
     margin-bottom: 40px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    border-left: 2px solid var(--gold-primary);
+    padding-left: 20px;
 }
 
-/* --- BUTTONS --- */
-.btn-gold-solid {
-    background: linear-gradient(45deg, var(--luxury-gold), #b38728);
-    color: #000;
-    font-weight: 700;
-    padding: 18px 50px;
+/* --- 6. GOLD DUST PARTICLES (PARTIKEL EMAS) --- */
+.gold-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--gold-primary);
+    border-radius: 50%;
+    opacity: 0;
+    animation: floatUp 5s infinite linear;
+    z-index: 3;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translateY(-10vh) scale(1);
+        opacity: 0;
+    }
+}
+
+/* --- 7. BUTTON STYLING (HOVER FILL) --- */
+.btn-luxury {
+    position: relative;
+    padding: 15px 50px;
+    border: 1px solid var(--gold-primary);
+    background: transparent;
+    color: #fff;
     text-transform: uppercase;
-    border: none;
-    transition: all 0.3s ease;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+    font-weight: 600;
+    overflow: hidden;
+    transition: 0.4s;
+    font-size: 0.9rem;
+}
+
+.btn-luxury::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background: var(--gold-primary);
+    transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: -1;
+}
+
+.btn-luxury:hover::before {
+    width: 100%;
+}
+
+.btn-luxury:hover {
+    color: #000;
+    border-color: var(--gold-primary);
+}
+
+/* --- 8. SERVICES SECTION (GLOW CARDS) --- */
+.service-card-unique {
+    background: #0a0a0a;
+    border: 1px solid #222;
+    padding: 40px 30px;
     position: relative;
     overflow: hidden;
-    z-index: 1;
-}
-
-.btn-gold-solid:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
-    color: #fff;
-}
-
-/* --- SERVICES (GLASS CARDS) --- */
-.glass-card {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 40px 30px;
-    transition: all 0.4s ease;
+    transition: 0.4s;
     height: 100%;
 }
 
-.glass-card:hover {
-    border-color: var(--luxury-gold);
-    transform: translateY(-10px);
-    background: rgba(255, 255, 255, 0.08);
+/* Efek Glow saat hover */
+.service-card-unique::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 60%);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: 0.5s;
 }
 
-.icon-circle {
-    width: 80px;
-    height: 80px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 25px;
-    color: var(--luxury-gold);
-    transition: 0.5s ease;
-    font-size: 2rem;
+.service-card-unique:hover::before {
+    opacity: 1;
+    transform: scale(1);
 }
 
-.glass-card:hover .icon-circle {
-    background: var(--luxury-gold);
-    color: #000;
-    transform: rotate(360deg);
-    box-shadow: 0 0 20px var(--luxury-gold);
+.service-card-unique:hover {
+    border-color: var(--gold-primary);
+    transform: translateY(-5px);
+}
+
+.service-num {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #1a1a1a;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    transition: 0.4s;
+}
+
+.service-card-unique:hover .service-num {
+    color: var(--gold-primary);
+    opacity: 0.2;
 }
 </style>
 @endpush
@@ -190,87 +255,82 @@
 {{-- 1. HERO SECTION --}}
 <section class="hero-wrapper">
 
-    {{-- A. SLIDER GAMBAR (GESER / SLIDE) --}}
-    {{-- Hapus class 'carousel-fade' jika ingin efek geser murni, atau biarkan untuk crossfade --}}
-    {{-- Saya hapus 'carousel-fade' agar efeknya GESER (Slide) seperti permintaan --}}
-    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+    {{-- PARTIKEL EMAS (Manual Divs for effect) --}}
+    <div class="gold-particle" style="left: 10%; animation-duration: 6s; animation-delay: 0s;"></div>
+    <div class="gold-particle" style="left: 30%; animation-duration: 8s; animation-delay: 2s;"></div>
+    <div class="gold-particle" style="left: 70%; animation-duration: 5s; animation-delay: 1s;"></div>
+    <div class="gold-particle" style="left: 90%; animation-duration: 7s; animation-delay: 3s;"></div>
 
-        {{-- Indikator Slide (Opsional, biar tau ada slide lain) --}}
-        <div class="carousel-indicators mb-5">
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
-            @if($setting && $setting->hero_image_2)
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
-            @endif
-            @if($setting && $setting->hero_image_3)
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
-            @endif
-        </div>
-
+    {{-- A. SLIDER BACKGROUND (Geser) --}}
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000"
+        style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;">
         <div class="carousel-inner">
             {{-- Slide 1 --}}
             <div class="carousel-item active">
                 <img src="{{ $setting && $setting->hero_image ? $setting->hero_image : asset('images/banner.webp') }}"
-                    class="d-block w-100" alt="Slide 1">
+                    alt="Slide 1">
             </div>
-
             {{-- Slide 2 --}}
             @if($setting && $setting->hero_image_2)
             <div class="carousel-item">
-                <img src="{{ $setting->hero_image_2 }}" class="d-block w-100" alt="Slide 2">
+                <img src="{{ $setting->hero_image_2 }}" alt="Slide 2">
             </div>
             @endif
-
             {{-- Slide 3 --}}
             @if($setting && $setting->hero_image_3)
             <div class="carousel-item">
-                <img src="{{ $setting->hero_image_3 }}" class="d-block w-100" alt="Slide 3">
+                <img src="{{ $setting->hero_image_3 }}" alt="Slide 3">
             </div>
             @endif
         </div>
-
-        {{-- Tombol Next/Prev (Opsional) --}}
-        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
     </div>
 
-    {{-- B. KONTEN TENGAH (MENGGUNAKAN STYLE YANG DIPILIH DI CSS) --}}
-    <div class="hero-content-overlay">
-        <div class="hero-content-style" data-aos="zoom-in" data-aos-duration="1000">
+    {{-- B. OVERLAY GELAP --}}
+    <div class="hero-overlay-gradient"></div>
 
-            {{-- Judul --}}
-            <h1 class="hero-title">
-                {!! $setting->hero_title ?? '<span class="text-gradient-gold">QUALITY</span> <span
-                    style="font-style:italic; font-size: 0.6em; color:#ccc;">Over</span> <span
-                    class="text-gradient-gold">QUANTITY</span>' !!}
-            </h1>
+    {{-- C. GIANT WATERMARK TEXT (Behind Content) --}}
+    <div class="giant-text-bg">
+        JARSAN
+    </div>
 
-            {{-- Garis Emas --}}
-            <div
-                style="width: 100px; height: 2px; background: linear-gradient(90deg, transparent, var(--luxury-gold), transparent); margin: 30px auto;">
+    {{-- D. KONTEN UTAMA (ASYMMETRICAL LAYOUT) --}}
+    <div class="container hero-content-layer">
+        <div class="row">
+            <div class="col-lg-8" data-aos="fade-right" data-aos-duration="1200">
+
+                {{-- Dekorasi Garis --}}
+                <div class="gold-line-decor"></div>
+
+                {{-- Judul Besar --}}
+                <h1 class="hero-title-main">
+                    {!! $setting->hero_title ?? 'PREMIUM <br> <span style="color:var(--gold-primary)">CUTS</span> ONLY.'
+                    !!}
+                </h1>
+
+                {{-- Subtitle --}}
+                <p class="hero-subtitle-main">
+                    {{ $setting->hero_subtitle ?? 'Lebih dari sekadar cukur rambut. Ini adalah pernyataan gaya dan jati diri pria sejati.' }}
+                </p>
+
+                {{-- Tombol --}}
+                @auth
+                <a href="{{ route('reservasi') }}" class="btn btn-luxury text-decoration-none">
+                    {{ $setting->hero_btn_text ?? 'BOOK APPOINTMENT' }}
+                </a>
+                @else
+                <a href="{{ route('login') }}" class="btn btn-luxury text-decoration-none">
+                    {{ $setting->hero_btn_text ?? 'BECOME A MEMBER' }}
+                </a>
+                @endauth
+
             </div>
-
-            {{-- Subtitle --}}
-            <p class="hero-subtitle">
-                {{ $setting->hero_subtitle ?? 'Rasakan sensasi cukur kelas atas dengan detail presisi.' }}
-            </p>
-
-            {{-- Tombol Action --}}
-            @auth
-            <a href="{{ route('reservasi') }}" class="btn btn-gold-solid rounded-pill text-decoration-none">
-                {{ $setting->hero_btn_text ?? 'BOOK NOW' }}
-            </a>
-            @else
-            <a href="{{ route('login') }}" class="btn btn-gold-solid rounded-pill text-decoration-none">
-                {{ $setting->hero_btn_text ?? 'LOGIN MEMBER' }}
-            </a>
-            @endauth
         </div>
+    </div>
+
+    {{-- SCROLL INDICATOR (Vertikal di Kanan) --}}
+    <div
+        style="position: absolute; right: 40px; bottom: 40px; z-index: 10; writing-mode: vertical-rl; text-orientation: mixed; color: rgba(255,255,255,0.5); font-size: 0.8rem; letter-spacing: 3px;">
+        SCROLL DOWN <i class="bi bi-arrow-down-long mt-2"></i>
     </div>
 
 </section>
@@ -278,51 +338,55 @@
 {{-- 2. SERVICES SECTION --}}
 <section class="py-5" style="background-color: #050505;">
     <div class="container py-5">
-        <div class="text-center mb-5" data-aos="fade-up">
-            <h6 class="text-gold letter-spacing-3 small fw-bold mb-2">
-                {{ $setting->services_subtext ?? 'OUR EXPERTISE' }}
-            </h6>
-            <h2 class="display-5 fw-bold text-white" style="font-family: 'Playfair Display', serif;">
-                {{ $setting->services_title ?? 'EXCLUSIVE SERVICES' }}
-            </h2>
+
+        <div class="row align-items-end mb-5" data-aos="fade-up">
+            <div class="col-md-8">
+                <h6 class="text-gold letter-spacing-3 small fw-bold mb-2">OUR EXPERTISE</h6>
+                <h2 class="display-4 fw-bold text-white mb-0" style="font-family: 'Playfair Display', serif;">
+                    {{ $setting->services_title ?? 'EXCLUSIVE SERVICES' }}
+                </h2>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <div style="width: 100%; height: 1px; background: #333; margin-bottom: 15px;"></div>
+                <p class="text-white-50 small mb-0">
+                    {{ $setting->services_subtext ?? 'Experience the best grooming service in town.' }}</p>
+            </div>
         </div>
 
         <div class="row g-4">
             {{-- CARD 1 --}}
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="glass-card text-center">
-                    <div class="icon-circle mx-auto">
-                        <i class="bi bi-scissors"></i>
-                    </div>
-                    <h4 class="fw-bold text-white mb-3">{{ $setting->service_1_title ?? 'Expert Barber' }}</h4>
-                    <p class="text-white-50 small mb-0 lh-base">
-                        {{ $setting->service_1_desc ?? 'Ditangani oleh seniman rambut berpengalaman tinggi dengan teknik fading presisi.' }}
+                <div class="service-card-unique">
+                    <span class="service-num">01</span>
+                    <i class="bi bi-scissors fs-1 text-white mb-4 d-block"></i>
+                    <h4 class="text-gold fw-bold mb-3">{{ $setting->service_1_title ?? 'Classic Cut' }}</h4>
+                    <p class="text-white-50 small mb-0 lh-lg">
+                        {{ $setting->service_1_desc ?? 'Potongan presisi dengan konsultasi gaya yang sesuai dengan bentuk wajah Anda.' }}
                     </p>
                 </div>
             </div>
 
             {{-- CARD 2 --}}
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="glass-card text-center">
-                    <div class="icon-circle mx-auto">
-                        <i class="bi bi-cup-hot"></i>
-                    </div>
-                    <h4 class="fw-bold text-white mb-3">{{ $setting->service_2_title ?? 'Luxury Lounge' }}</h4>
-                    <p class="text-white-50 small mb-0 lh-base">
-                        {{ $setting->service_2_desc ?? 'Nikmati kopi premium di ruang tunggu ber-AC dengan atmosfer yang menenangkan.' }}
+                <div class="service-card-unique" style="border-top: 3px solid var(--gold-primary);">
+                    {{-- Highlight tengah --}}
+                    <span class="service-num">02</span>
+                    <i class="bi bi-brush fs-1 text-white mb-4 d-block"></i>
+                    <h4 class="text-gold fw-bold mb-3">{{ $setting->service_2_title ?? 'Beard Trim' }}</h4>
+                    <p class="text-white-50 small mb-0 lh-lg">
+                        {{ $setting->service_2_desc ?? 'Perawatan jenggot dan kumis profesional untuk tampilan yang rapi dan maskulin.' }}
                     </p>
                 </div>
             </div>
 
             {{-- CARD 3 --}}
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
-                <div class="glass-card text-center">
-                    <div class="icon-circle mx-auto">
-                        <i class="bi bi-gem"></i>
-                    </div>
-                    <h4 class="fw-bold text-white mb-3">{{ $setting->service_3_title ?? 'Premium Products' }}</h4>
-                    <p class="text-white-50 small mb-0 lh-base">
-                        {{ $setting->service_3_desc ?? 'Hanya menggunakan produk grooming terbaik untuk kesehatan rambut dan kulit kepala Anda.' }}
+                <div class="service-card-unique">
+                    <span class="service-num">03</span>
+                    <i class="bi bi-stars fs-1 text-white mb-4 d-block"></i>
+                    <h4 class="text-gold fw-bold mb-3">{{ $setting->service_3_title ?? 'Hair Spa' }}</h4>
+                    <p class="text-white-50 small mb-0 lh-lg">
+                        {{ $setting->service_3_desc ?? 'Relaksasi total dengan pijatan kepala dan vitamin rambut premium.' }}
                     </p>
                 </div>
             </div>
@@ -331,7 +395,7 @@
 </section>
 
 {{-- 3. TESTIMONIALS --}}
-<section class="py-5" style="background: radial-gradient(circle at center, #151515 0%, #000000 100%);">
+<section class="py-5" style="background: radial-gradient(circle at center, #111 0%, #000000 100%);">
     <div class="container py-5 text-center">
         <h3 class="mb-5 text-gold letter-spacing-3 fw-bold fs-6">
             {{ $setting->testimonial_title ?? 'VOICE OF GENTLEMEN' }}
