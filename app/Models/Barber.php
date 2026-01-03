@@ -9,36 +9,36 @@ class Barber extends Model
 {
     use HasFactory;
 
+    protected $table = 'barbers'; // Memastikan nama tabel benar
+
     /**
      * The attributes that are mass assignable.
-     * Daftar kolom yang boleh diisi secara massal (create/update)
      */
     protected $fillable = [
         'name',
         'specialty',
         'bio',
-        'schedule',   // PENTING: Kolom jadwal kerja (JSON)
-        'photo_path', // Foto Base64
-        'is_active',
+        'schedule',   // Pastikan tipe data di database adalah JSON
+        'photo_path',
+        'is_active',  // Boolean (1 = Aktif, 0 = Nonaktif)
     ];
 
     /**
      * The attributes that should be cast.
-     * Mengubah tipe data otomatis saat diambil dari database
      */
     protected $casts = [
-        // PENTING: Ini agar data di kolom 'schedule' otomatis diubah 
-        // dari JSON (Database) menjadi Array (PHP) dan sebaliknya.
+        // Otomatis ubah JSON database jadi Array PHP
         'schedule' => 'array',
         'is_active' => 'boolean',
     ];
 
     /**
-     * RELASI KE TABLE REVIEWS
-     * Wajib ada agar bisa memanggil $barber->reviews di halaman reservasi
+     * Relasi ke Reviews (Opsional, nyalakan jika sudah ada tabel reviews)
      */
+    /*
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }
+    */
 }
