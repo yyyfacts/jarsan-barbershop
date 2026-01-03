@@ -160,38 +160,6 @@
     transform: scale(1.05);
 }
 
-/* EFEK BARU: Indikator Scroll (Panah Mantul) */
-.scroll-indicator {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 20;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 1.5rem;
-    animation: bounce 2s infinite;
-    cursor: pointer;
-}
-
-@keyframes bounce {
-
-    0%,
-    20%,
-    50%,
-    80%,
-    100% {
-        transform: translateX(-50%) translateY(0);
-    }
-
-    40% {
-        transform: translateX(-50%) translateY(-10px);
-    }
-
-    60% {
-        transform: translateX(-50%) translateY(-5px);
-    }
-}
-
 /* --- SERVICES (GLASS) --- */
 .glass-card {
     background: rgba(255, 255, 255, 0.03);
@@ -296,12 +264,6 @@
             </a>
             @endauth
         </div>
-    </div>
-
-    {{-- C. EFEK SCROLL DOWN INDICATOR --}}
-    <div class="scroll-indicator">
-        <span class="small d-block mb-1" style="font-size: 0.7rem; letter-spacing: 2px;">SCROLL</span>
-        <i class="bi bi-chevron-double-down"></i>
     </div>
 
 </section>
