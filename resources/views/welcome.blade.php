@@ -18,7 +18,8 @@
     background: #000;
 }
 
-/* --- CAROUSEL & KEN BURNS EFFECT --- */
+/* --- CAROUSEL (SLIDING EFFECT) --- */
+/* Menghapus animasi Ken Burns (Zoom) dan menggunakan Slide bawaan Bootstrap */
 .carousel,
 .carousel-inner,
 .carousel-item {
@@ -26,28 +27,15 @@
     width: 100%;
 }
 
-/* EFEK BARU: Ken Burns (Zoom Perlahan pada Gambar Slider) */
 .carousel-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.4) contrast(1.1);
-    transform-origin: center;
-    animation: kenBurns 20s infinite alternate;
-    /* Gambar bergerak zoom */
+    /* Filter brightness agar tulisan putih tetap kontras */
+    filter: brightness(0.5);
 }
 
-@keyframes kenBurns {
-    0% {
-        transform: scale(1);
-    }
-
-    100% {
-        transform: scale(1.15);
-    }
-}
-
-/* --- GLASS BOX TENGAH --- */
+/* --- HERO CONTENT LAYOUT --- */
 .hero-content-overlay {
     position: absolute;
     top: 0;
@@ -59,41 +47,58 @@
     justify-content: center;
     z-index: 10;
     pointer-events: none;
-    /* Klik tembus ke bawah */
+    /* Biar klik tembus ke tombol */
 }
 
-.glass-box {
-    background: rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+/* ==========================================================================
+   PILIHAN GAYA TULISAN (PILIH SALAH SATU STYLE DI BAWAH)
+   ========================================================================== */
+
+/* --- STYLE A: GLASS BOX (DEFAULT - KOTAK KACA MEWAH) --- */
+.hero-content-style {
+    background: rgba(0, 0, 0, 0.3);
+    /* Hitam transparan */
+    backdrop-filter: blur(8px);
+    /* Efek blur background */
+    -webkit-backdrop-filter: blur(8px);
     padding: 60px 40px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-top: 1px solid rgba(212, 175, 55, 0.3);
-    /* Aksen emas tipis di atas */
-    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-    /* Aksen emas tipis di bawah */
+    border-top: 1px solid rgba(212, 175, 55, 0.5);
+    /* Garis emas atas */
+    border-bottom: 1px solid rgba(212, 175, 55, 0.5);
+    /* Garis emas bawah */
     max-width: 900px;
     text-align: center;
     pointer-events: auto;
-    border-radius: 4px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-    transition: transform 0.3s ease;
+    border-radius: 0;
+    /* Kotak tegas */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
 
-.glass-box:hover {
-    transform: translateY(-5px);
-    /* Sedikit naik saat dihover */
-    border-color: var(--luxury-gold);
+/* --- STYLE B: GRADIENT TEXT (JIKA MAU LEBIH CLEAN/CINEMATIC) --- */
+/* Uncomment (hilangkan tanda komentar) bagian ini jika ingin mencoba Style B
+   dan Comment (tutup) bagian .hero-content-style di atas */
+/*
+.hero-content-style {
+    background: radial-gradient(circle, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 70%);
+    padding: 40px;
+    max-width: 1000px;
+    text-align: center;
+    pointer-events: auto;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.8);
 }
+*/
+/* ========================================================================== */
 
-/* EFEK BARU: Teks Emas Berkilau (Shining Gradient) */
+/* --- TYPOGRAPHY --- */
+/* Efek Teks Emas Berkilau */
 .text-gradient-gold {
     background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     background-size: 200% auto;
-    animation: shine 5s linear infinite;
+    animation: shine 4s linear infinite;
 }
 
 @keyframes shine {
@@ -105,78 +110,58 @@
 .hero-title {
     font-family: 'Playfair Display', serif;
     font-weight: 800;
-    font-size: 4rem;
+    font-size: 4.5rem;
     color: #fff;
-    /* Fallback color */
     line-height: 1.1;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     text-transform: uppercase;
-    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    letter-spacing: -1px;
 }
 
 .hero-subtitle {
     font-size: 1.2rem;
-    color: #e0e0e0;
+    color: #ddd;
     font-weight: 300;
-    margin-bottom: 35px;
-    letter-spacing: 1px;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
 
+/* --- BUTTONS --- */
 .btn-gold-solid {
     background: linear-gradient(45deg, var(--luxury-gold), #b38728);
     color: #000;
     font-weight: 700;
-    padding: 16px 50px;
+    padding: 18px 50px;
     text-transform: uppercase;
     border: none;
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
     letter-spacing: 2px;
     position: relative;
     overflow: hidden;
     z-index: 1;
 }
 
-/* Efek Kilatan pada Tombol */
-.btn-gold-solid::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    transition: 0.5s;
-    z-index: -1;
-}
-
-.btn-gold-solid:hover::before {
-    left: 100%;
-}
-
 .btn-gold-solid:hover {
-    color: #fff;
-    box-shadow: 0 0 25px rgba(212, 175, 55, 0.6);
     transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+    color: #fff;
 }
 
-/* --- SERVICES (GLASS) --- */
+/* --- SERVICES (GLASS CARDS) --- */
 .glass-card {
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.05);
     padding: 40px 30px;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    /* Bouncy effect */
+    transition: all 0.4s ease;
     height: 100%;
 }
 
 .glass-card:hover {
     border-color: var(--luxury-gold);
-    transform: translateY(-15px);
-    /* Naik lebih tinggi */
+    transform: translateY(-10px);
     background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
 }
 
 .icon-circle {
@@ -189,17 +174,14 @@
     justify-content: center;
     margin-bottom: 25px;
     color: var(--luxury-gold);
-    transition: 0.6s ease;
+    transition: 0.5s ease;
     font-size: 2rem;
 }
 
-/* EFEK BARU: Ikon Berputar saat Hover */
 .glass-card:hover .icon-circle {
     background: var(--luxury-gold);
     color: #000;
-    border-color: var(--luxury-gold);
-    transform: rotate(360deg) scale(1.1);
-    /* Muter 360 derajat */
+    transform: rotate(360deg);
     box-shadow: 0 0 20px var(--luxury-gold);
 }
 </style>
@@ -208,52 +190,77 @@
 {{-- 1. HERO SECTION --}}
 <section class="hero-wrapper">
 
-    {{-- A. SLIDER GAMBAR (Dengan Efek Ken Burns / Zoom) --}}
-    <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="6000">
-        <div class="carousel-inner">
+    {{-- A. SLIDER GAMBAR (GESER / SLIDE) --}}
+    {{-- Hapus class 'carousel-fade' jika ingin efek geser murni, atau biarkan untuk crossfade --}}
+    {{-- Saya hapus 'carousel-fade' agar efeknya GESER (Slide) seperti permintaan --}}
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
 
+        {{-- Indikator Slide (Opsional, biar tau ada slide lain) --}}
+        <div class="carousel-indicators mb-5">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+            @if($setting && $setting->hero_image_2)
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+            @endif
+            @if($setting && $setting->hero_image_3)
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+            @endif
+        </div>
+
+        <div class="carousel-inner">
             {{-- Slide 1 --}}
             <div class="carousel-item active">
                 <img src="{{ $setting && $setting->hero_image ? $setting->hero_image : asset('images/banner.webp') }}"
-                    alt="Slide 1">
+                    class="d-block w-100" alt="Slide 1">
             </div>
 
             {{-- Slide 2 --}}
             @if($setting && $setting->hero_image_2)
             <div class="carousel-item">
-                <img src="{{ $setting->hero_image_2 }}" alt="Slide 2">
+                <img src="{{ $setting->hero_image_2 }}" class="d-block w-100" alt="Slide 2">
             </div>
             @endif
 
             {{-- Slide 3 --}}
             @if($setting && $setting->hero_image_3)
             <div class="carousel-item">
-                <img src="{{ $setting->hero_image_3 }}" alt="Slide 3">
+                <img src="{{ $setting->hero_image_3 }}" class="d-block w-100" alt="Slide 3">
             </div>
             @endif
-
         </div>
+
+        {{-- Tombol Next/Prev (Opsional) --}}
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
 
-    {{-- B. KONTEN TENGAH (Glass Box) --}}
+    {{-- B. KONTEN TENGAH (MENGGUNAKAN STYLE YANG DIPILIH DI CSS) --}}
     <div class="hero-content-overlay">
-        <div class="glass-box" data-aos="zoom-in" data-aos-duration="1200">
+        <div class="hero-content-style" data-aos="zoom-in" data-aos-duration="1000">
 
-            {{-- Judul dengan Efek Gradasi Emas Mengkilap --}}
+            {{-- Judul --}}
             <h1 class="hero-title">
                 {!! $setting->hero_title ?? '<span class="text-gradient-gold">QUALITY</span> <span
-                    style="font-style:italic; font-size: 0.7em;">Over</span> <span
+                    style="font-style:italic; font-size: 0.6em; color:#ccc;">Over</span> <span
                     class="text-gradient-gold">QUANTITY</span>' !!}
             </h1>
 
+            {{-- Garis Emas --}}
             <div
-                style="width: 80px; height: 3px; background: linear-gradient(90deg, transparent, var(--luxury-gold), transparent); margin: 25px auto;">
+                style="width: 100px; height: 2px; background: linear-gradient(90deg, transparent, var(--luxury-gold), transparent); margin: 30px auto;">
             </div>
 
+            {{-- Subtitle --}}
             <p class="hero-subtitle">
                 {{ $setting->hero_subtitle ?? 'Rasakan sensasi cukur kelas atas dengan detail presisi.' }}
             </p>
 
+            {{-- Tombol Action --}}
             @auth
             <a href="{{ route('reservasi') }}" class="btn btn-gold-solid rounded-pill text-decoration-none">
                 {{ $setting->hero_btn_text ?? 'BOOK NOW' }}
