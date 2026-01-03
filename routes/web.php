@@ -33,7 +33,7 @@ Route::get('/', [PublicController::class, 'welcome'])->name('welcome');
 Route::get('/about', [AboutController::class, 'index'])->name('about'); 
 
 // Halaman Tim Barber (Meet The Artists)
-// PERBAIKAN: Menggunakan URL '/barberman' dan nama route 'barberman' agar sesuai Navbar
+// FIXED: Nama route disesuaikan jadi 'barberman' agar Navbar tidak error
 Route::get('/barberman', [BarberController::class, 'index'])->name('barberman');
 
 // Halaman Harga & Layanan
@@ -72,11 +72,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Dashboard User & Redirection Logic
     Route::get('/dashboard', function () {
-        // Jika admin login, lempar ke dashboard admin
         if (Auth::user()->role === 'admin') { 
             return redirect()->route('admin.dashboard');
         }
-        // Jika user biasa, ke dashboard user
         return view('user.dashboard');
     })->name('dashboard');
 
@@ -114,7 +112,8 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::delete('/barbers/{id}', [BarberController::class, 'destroy'])->name('barbers.destroy');
 
     // --- MANAJEMEN ABOUT US (TENTANG KAMI) ---
-    Route::get('/about', [AboutController::class, 'edit'])->name('about.edit');
+    // FIXED: Nama route diganti jadi 'about.index' agar Sidebar Admin tidak error
+    Route::get('/about', [AboutController::class, 'edit'])->name('about.index');
     Route::put('/about', [AboutController::class, 'update'])->name('about.update');
 
     // --- MANAJEMEN RESERVASI ---
