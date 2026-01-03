@@ -23,7 +23,7 @@ class BarberController extends Controller
         
         // Pastikan nama file view sesuai dengan folder kamu:
         // resources/views/admin/barber/index.blade.php
-        return view('admin.barber.index', compact('barbers'));
+        return view('admin.barberman', compact('barbers'));
     }
 
     // === 3. SIMPAN DATA BARU ===
