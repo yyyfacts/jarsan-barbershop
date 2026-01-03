@@ -22,7 +22,6 @@
     background: rgba(212, 175, 55, 0.05) !important;
 }
 
-/* Warna Placeholder Input (Putih Transparan) */
 .contact-input::placeholder {
     color: rgba(255, 255, 255, 0.3) !important;
     font-size: 0.9rem;
@@ -42,7 +41,7 @@
     background: rgba(40, 40, 40, 0.6);
 }
 
-/* Trik CSS untuk membuat Google Maps jadi Dark Mode */
+/* Map Dark Mode Filter */
 .map-container iframe {
     filter: grayscale(100%) invert(92%) contrast(83%);
     -webkit-filter: grayscale(100%) invert(92%) contrast(83%);
@@ -66,8 +65,14 @@
         {{-- BAGIAN KIRI: FORMULIR --}}
         <div class="col-lg-6" data-aos="fade-right">
             <h6 class="text-gold letter-spacing-3 mb-2 fw-bold small">SEND A MESSAGE</h6>
-            <h2 class="display-4 fw-bold text-white mb-5" style="font-family: 'Playfair Display', serif;">HUBUNGI KAMI
+            <h2 class="display-4 fw-bold text-white mb-5" style="font-family: 'Playfair Display', serif;">
+                {{ $config->page_title ?? 'HUBUNGI KAMI' }}
             </h2>
+
+            {{-- Tampilkan Subtitle jika ada --}}
+            @if(!empty($config->page_subtitle))
+            <p class="text-white-50 mb-4">{{ $config->page_subtitle }}</p>
+            @endif
 
             @if(session('success'))
             <div class="alert alert-success bg-transparent border-success text-white mb-4">
@@ -92,18 +97,19 @@
                     <textarea name="message" rows="4" class="form-control contact-input"
                         placeholder="How can we help you?"></textarea>
                 </div>
-                <button type="submit" class="btn btn-gold-luxury w-100 py-3 fs-6 letter-spacing-2 fw-bold">KIRIM PESAN
-                    SEKARANG</button>
+                <button type="submit" class="btn btn-gold-luxury w-100 py-3 fs-6 letter-spacing-2 fw-bold">
+                    KIRIM PESAN SEKARANG
+                </button>
             </form>
         </div>
 
-        {{-- BAGIAN KANAN: INFO & PETA --}}
+        {{-- BAGIAN KANAN: INFO & PETA (DINAMIS DARI DATABASE) --}}
         <div class="col-lg-6" data-aos="fade-left">
             <div class="glass-card p-5 mb-4 border-0 rounded-0">
                 <h4 class="text-white fw-bold mb-4 border-bottom border-secondary pb-3"
                     style="font-family: 'Playfair Display', serif;">OFFICE & BARBER</h4>
 
-                {{-- Alamat --}}
+                {{-- Alamat Dinamis --}}
                 <div class="d-flex mb-4">
                     <div class="me-3 mt-1">
                         <i class="bi bi-geo-alt text-gold fs-4"></i>
@@ -111,25 +117,26 @@
                     <div>
                         <h6 class="text-white fw-bold mb-1 letter-spacing-1">LOKASI STUDIO</h6>
                         <p class="text-white-50 mb-0 small lh-base">
-                            95PX+9CW, Kayulangit, Sikampuh, <br>
-                            Kec. Kroya, Kabupaten Cilacap, <br>
-                            Jawa Tengah 53282
+                            {{-- nl2br agar enter di textarea terbaca sebagai baris baru --}}
+                            {!! nl2br(e($config->address ?? 'Alamat belum diatur.')) !!}
                         </p>
                     </div>
                 </div>
 
-                {{-- Telepon --}}
+                {{-- Telepon Dinamis --}}
                 <div class="d-flex mb-4">
                     <div class="me-3 mt-1">
                         <i class="bi bi-whatsapp text-gold fs-4"></i>
                     </div>
                     <div>
                         <h6 class="text-white fw-bold mb-1 letter-spacing-1">WHATSAPP OFFICIAL</h6>
-                        <p class="text-white-50 mb-0 small">0882-3256-0561</p>
+                        <p class="text-white-50 mb-0 small">
+                            {{ $config->whatsapp ?? '-' }}
+                        </p>
                     </div>
                 </div>
 
-                {{-- JAM OPERASIONAL --}}
+                {{-- JAM OPERASIONAL DINAMIS --}}
                 <div class="d-flex mb-0">
                     <div class="me-3 mt-1">
                         <i class="bi bi-clock-history text-gold fs-4"></i>
@@ -137,39 +144,41 @@
                     <div class="w-100">
                         <h6 class="text-white fw-bold mb-3 letter-spacing-1">JAM OPERASIONAL</h6>
 
-                        {{-- SESI MALAM (HIGHLIGHT) --}}
+                        {{-- SESI MALAM --}}
                         <div class="p-2 mb-3 bg-dark border border-secondary border-opacity-25 rounded-1">
                             <div class="d-flex align-items-center text-gold small fw-bold">
                                 <i class="bi bi-moon-stars me-2"></i> SESI MALAM (SETIAP HARI)
                             </div>
-                            <div class="text-white ps-4 ms-1 small">19.30 - 21.00 WIB</div>
+                            <div class="text-white ps-4 ms-1 small">
+                                {{ $config->hours_night ?? '19.30 - 21.00 WIB' }}
+                            </div>
                         </div>
 
-                        {{-- SESI SIANG --}}
+                        {{-- SESI LAINNYA --}}
                         <ul class="list-unstyled text-white-50 mb-0 small">
                             <li
                                 class="d-flex justify-content-between py-1 border-bottom border-secondary border-opacity-10">
-                                <span>Senin, Kamis, Jumat</span>
-                                <span class="text-white">13.00 - 15.00</span>
+                                <span>Senin - Jumat</span>
+                                <span class="text-white">{{ $config->hours_mon_fri ?? 'Tutup' }}</span>
                             </li>
                             <li
                                 class="d-flex justify-content-between py-1 border-bottom border-secondary border-opacity-10">
                                 <span>Selasa, Rabu</span>
-                                <span class="text-white">13.00 - 17.00</span>
+                                <span class="text-white">{{ $config->hours_tue_wed ?? 'Tutup' }}</span>
                             </li>
                             <li class="d-flex justify-content-between py-1">
                                 <span>Sabtu, Minggu</span>
-                                <span class="text-white">13.00 - 17.00</span>
+                                <span class="text-white">{{ $config->hours_sat_sun ?? 'Tutup' }}</span>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            {{-- PETA --}}
+            {{-- PETA DINAMIS --}}
             <div class="map-wrapper map-container overflow-hidden" style="height: 300px;">
                 <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
-                    src="https://maps.google.com/maps?q=95PX%2B9CW%2C%20Kayulangit%2C%20Sikampuh%2C%20Kec.%20Kroya%2C%20Kabupaten%20Cilacap%2C%20Jawa%20Tengah%2053282&t=&z=15&ie=UTF8&iwloc=&output=embed">
+                    src="{{ $config->maps_link ?? 'https://maps.google.com/maps?q=Indonesia&output=embed' }}">
                 </iframe>
             </div>
         </div>
