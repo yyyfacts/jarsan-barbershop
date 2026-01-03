@@ -22,7 +22,7 @@
             </div>
 
             <div class="card-body p-4">
-                {{-- IMPORTANT: enctype="multipart/form-data" is required for file uploads --}}
+                {{-- Form dengan Multipart untuk upload file --}}
                 <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
@@ -38,6 +38,7 @@
                             <div class="p-3 border rounded bg-light d-flex align-items-center justify-content-center"
                                 style="height: 120px;">
                                 @if($setting && $setting->logo_path)
+                                {{-- Logo menggunakan Base64, jadi langsung panggil variabel --}}
                                 <img src="{{ $setting->logo_path }}" class="img-fluid object-fit-contain"
                                     style="max-height: 80px;">
                                 @else
@@ -67,15 +68,17 @@
                     </h6>
 
                     <div class="row g-3 mb-4">
-                        {{-- New Image Upload Section --}}
+                        {{-- Upload Gambar Banner --}}
                         <div class="col-12 mb-3">
                             <label class="form-label small fw-bold text-muted">GAMBAR BANNER (BACKGROUND)</label>
 
                             {{-- Image Preview --}}
                             @if($setting && $setting->hero_image)
                             <div class="mb-2">
-                                <img src="{{ asset('storage/' . $setting->hero_image) }}" alt="Current Banner"
-                                    class="img-thumbnail w-100" style="height: 200px; object-fit: cover;">
+                                {{-- PERBAIKAN DI SINI: --}}
+                                {{-- Hapus asset('storage/..') karena kita pakai Base64 --}}
+                                <img src="{{ $setting->hero_image }}" alt="Current Banner" class="img-thumbnail w-100"
+                                    style="height: 200px; object-fit: cover;">
                                 <div class="small text-muted mt-1">
                                     <i class="bi bi-info-circle me-1"></i>Gambar yang sedang digunakan
                                 </div>

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Setting;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage; // <--- WAJIB: Tambahkan ini untuk fitur hapus/upload file
 
 class SettingController extends Controller
 {
@@ -35,7 +34,7 @@ class SettingController extends Controller
             'hero_title'      => 'nullable|string',
             'hero_subtitle'   => 'nullable|string',
             'hero_btn_text'   => 'nullable|string|max:50',
-            // Validasi Gambar Banner (Tambahan Baru)
+            // Validasi Gambar Banner
             'hero_image'      => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048', 
 
             // Services Section
@@ -56,27 +55,22 @@ class SettingController extends Controller
         ]);
 
         // 2. Siapkan Data
-        // PENTING: Kita kecualikan 'hero_image' juga agar tidak langsung masuk array (karena perlu diproses manual)
+        // Kecualikan file input dari array data langsung
         $dataToUpdate = $request->except(['logo', 'hero_image', '_token', '_method']);
 
-        // Ambil data lama untuk cek gambar sebelumnya
-        $setting = Setting::first();
-
-        // 3. PROSES UPLOAD HERO IMAGE (Banner) - Via Storage Folder
+        // 3. PROSES UPLOAD HERO IMAGE (Ubah ke Base64 untuk Vercel)
+        // Kita tidak menggunakan Storage::put karena Vercel Read-Only
         if ($request->hasFile('hero_image')) {
-            // Hapus gambar lama jika ada
-            if ($setting && $setting->hero_image && Storage::disk('public')->exists($setting->hero_image)) {
-                Storage::disk('public')->delete($setting->hero_image);
-            }
-
-            // Upload gambar baru ke folder 'public/settings'
-            $path = $request->file('hero_image')->store('settings', 'public');
+            $file = $request->file('hero_image');
+            $path = $file->getRealPath();
+            $image = file_get_contents($path);
+            $base64 = base64_encode($image);
             
-            // Masukkan path ke database
-            $dataToUpdate['hero_image'] = $path;
+            // Simpan sebagai string Base64 lengkap (Data URI)
+            $dataToUpdate['hero_image'] = 'data:' . $file->getMimeType() . ';base64,' . $base64;
         }
 
-        // 4. PROSES UPLOAD LOGO (Base64) - Sesuai kodingan lama Anda
+        // 4. PROSES UPLOAD LOGO (Base64)
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
             $path = $file->getRealPath();

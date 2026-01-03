@@ -9,30 +9,34 @@
     --gold-dim: #c5a028;
 }
 
-/* --- 1. HERO SECTION ANIMATION --- */
+/* --- HERO SECTION UTAMA --- */
 .hero-wrapper {
     position: relative;
     height: 100vh;
     /* Full layar */
+    width: 100%;
     overflow: hidden;
     background: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    /* Konten ditaruh di bawah */
 }
 
-/* Background Image Dinamis dengan Efek Zoom */
+/* Background Image Dinamis */
 .hero-bg-image {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* Logic: Cek gambar dari database (Storage), kalau kosong pakai default */
-    background-image: url('{{ $setting && $setting->hero_image ? asset("storage/" . $setting->hero_image) : asset("images/banner.webp") }}');
+    /* FIX VERCEL: Menggunakan logic Base64 (tanpa 'storage/') */
+    background-image: url('{{ $setting && $setting->hero_image ? $setting->hero_image : asset("images/banner.webp") }}');
     background-size: cover;
-    background-position: center;
-    /* Fokus tengah */
+    background-position: center top;
     z-index: 0;
-    /* Animasi Zoom Perlahan */
-    animation: zoomEffect 25s infinite alternate;
+    /* Efek Zoom Perlahan */
+    animation: zoomEffect 30s infinite alternate;
 }
 
 @keyframes zoomEffect {
@@ -41,149 +45,175 @@
     }
 
     100% {
-        transform: scale(1.15);
+        transform: scale(1.1);
     }
 }
 
-/* Overlay Gradasi Hitam (Agar tulisan terbaca tapi gambar di kanan tetap terlihat) */
+/* Overlay Gelap Biasa */
 .hero-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* Gradasi dari Hitam Pekat (Kiri) ke Transparan (Kanan) */
-    background: linear-gradient(90deg,
-            rgba(0, 0, 0, 1) 0%,
-            rgba(0, 0, 0, 0.8) 40%,
-            rgba(0, 0, 0, 0.1) 100%);
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.2) 0%,
+            rgba(0, 0, 0, 0.1) 40%,
+            rgba(0, 0, 0, 0.6) 75%,
+            rgba(0, 0, 0, 0.95) 100%);
     z-index: 1;
 }
 
-/* Animasi Alat Cukur (Gunting) Melayang */
-.floating-icon {
+/* EFEK BARU: Frosted Blur di Bagian Bawah */
+/* Ini bikin gambar jadi blur cuma di bagian bawah tempat tulisan berada */
+.hero-blur-bottom {
     position: absolute;
-    right: 5%;
-    top: 15%;
-    z-index: 2;
-    opacity: 0.05;
-    /* Transparan samar-samar */
-    font-size: 20rem;
-    /* Ukuran sangat besar */
-    color: var(--luxury-gold);
-    transform: rotate(-15deg);
-    /* Animasi gerak */
-    animation: floatIcon 8s ease-in-out infinite;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    /* Setengah layar ke bawah */
+    z-index: 1;
+    backdrop-filter: blur(8px);
+    /* Efek Blur Kaca */
+    -webkit-backdrop-filter: blur(8px);
+    /* Masking biar blurnya gradasi (ilang pelan-pelan ke atas) */
+    mask-image: linear-gradient(to bottom, transparent, black 60%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 60%);
     pointer-events: none;
-    /* Agar tidak menghalangi klik */
 }
 
-@keyframes floatIcon {
-
-    0%,
-    100% {
-        transform: translateY(0) rotate(-15deg);
-    }
-
-    50% {
-        transform: translateY(-40px) rotate(-5deg);
-    }
+/* Dekorasi Garis Emas Vertikal */
+.vertical-line-decor {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 1px;
+    height: 150px;
+    background: linear-gradient(to top, var(--luxury-gold), transparent);
+    z-index: 2;
+    transform: translateX(-50%);
+    box-shadow: 0 0 15px var(--luxury-gold);
 }
 
-/* Konten Teks Hero */
+/* Konten Teks */
 .hero-content-wrapper {
     position: relative;
     z-index: 10;
-    /* Di atas overlay */
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    padding-left: 2%;
-    /* Padding kiri */
+    text-align: center;
+    padding-bottom: 80px;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
-/* Typography */
+/* Typography Judul */
 .hero-title {
     font-family: 'Playfair Display', serif;
     font-weight: 800;
-    line-height: 1.1;
-    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
-}
-
-/* Tombol Emas Mewah */
-.btn-gold-hero {
-    background: linear-gradient(135deg, var(--luxury-gold) 0%, #8a7018 100%);
-    border: 1px solid var(--luxury-gold);
-    color: #000;
-    letter-spacing: 3px;
-    font-weight: 700;
-    padding: 18px 50px;
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
-    transition: 0.4s;
+    font-size: 4.5rem;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+    letter-spacing: -2px;
+    margin-bottom: 20px;
     text-transform: uppercase;
 }
 
-.btn-gold-hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    transition: 0.5s;
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.8rem;
+    }
 }
 
-.btn-gold-hero:hover::before {
-    left: 100%;
+/* Garis pemisah */
+.separator-gold {
+    width: 60px;
+    height: 4px;
+    background: var(--luxury-gold);
+    margin: 0 auto 30px auto;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 
-.btn-gold-hero:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(212, 175, 55, 0.4);
+/* Subtitle */
+.hero-subtitle {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.85);
+    /* Lebih terang dikit */
+    margin-bottom: 40px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 1);
+}
+
+/* Tombol Minimalis Mewah */
+.btn-gold-minimal {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(212, 175, 55, 0.5);
     color: #fff;
+    letter-spacing: 3px;
+    font-weight: 600;
+    padding: 16px 50px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    transition: 0.4s;
+    backdrop-filter: blur(5px);
+    border-radius: 50px;
 }
 
-/* --- 2. GLASS CARDS (SERVICES) --- */
+.btn-gold-minimal:hover {
+    border-color: var(--luxury-gold);
+    color: #000;
+    background: var(--luxury-gold);
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+    transform: translateY(-3px);
+}
+
+/* Ikon Mouse Scroll Animasi */
+.scroll-indicator {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    opacity: 0.6;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    40% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+
+    60% {
+        transform: translateX(-50%) translateY(-5px);
+    }
+}
+
+/* --- GLASS CARDS (SERVICES) --- */
 .glass-card {
     background: rgba(255, 255, 255, 0.03);
-    /* Efek Buram (Blur) di belakang kartu */
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.05);
     padding: 40px 30px;
     transition: 0.4s;
     height: 100%;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Efek Sorot Cahaya saat Hover */
-.glass-card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
-    opacity: 0;
-    transition: 0.6s;
-    transform: scale(0.5);
-}
-
-.glass-card:hover::before {
-    opacity: 1;
-    transform: scale(1);
 }
 
 .glass-card:hover {
     border-color: var(--luxury-gold);
-    transform: translateY(-15px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 .icon-circle {
@@ -195,102 +225,89 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 25px;
+    color: var(--luxury-gold);
     transition: 0.4s;
-    background: rgba(0, 0, 0, 0.3);
 }
 
 .glass-card:hover .icon-circle {
     background: var(--luxury-gold);
-    border-color: var(--luxury-gold);
     color: #000;
-    transform: scale(1.1);
-}
-
-.glass-card:hover .icon-circle i {
-    color: #000 !important;
+    border-color: var(--luxury-gold);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
 }
 </style>
 @endpush
 
-{{-- ==================================================== --}}
 {{-- 1. HERO SECTION (BANNER UTAMA) --}}
-{{-- ==================================================== --}}
 <section class="hero-wrapper">
 
-    {{-- Background Image dengan Animasi Zoom --}}
+    {{-- Background Image --}}
     <div class="hero-bg-image"></div>
 
-    {{-- Overlay Gradasi (Agar teks terbaca, gambar kanan terlihat) --}}
+    {{-- Overlay Gradasi --}}
     <div class="hero-overlay"></div>
 
-    {{-- Elemen Dekorasi Bergerak (Gunting Raksasa) --}}
-    <div class="floating-icon">
-        <i class="bi bi-scissors"></i>
+    {{-- EFEK BARU: BLUR DI BAWAH --}}
+    <div class="hero-blur-bottom"></div>
+
+    {{-- Dekorasi Garis Vertikal --}}
+    <div class="vertical-line-decor"></div>
+
+    {{-- KONTEN UTAMA (POSISI DI BAWAH) --}}
+    <div class="container hero-content-wrapper">
+
+        {{-- Judul Utama Besar --}}
+        <h1 class="hero-title" data-aos="fade-up" data-aos-duration="1200">
+            {!! $setting->hero_title ?? 'QUALITY <span class="text-gold fst-italic">Over</span> QUANTITY' !!}
+        </h1>
+
+        {{-- Garis Pemisah Emas --}}
+        <div class="separator-gold" data-aos="zoom-in" data-aos-delay="300"></div>
+
+        {{-- Subtitle --}}
+        <p class="hero-subtitle mx-auto" style="max-width: 600px;" data-aos="fade-up" data-aos-delay="500">
+            {{ $setting->hero_subtitle ?? 'Rasakan sensasi cukur kelas atas dengan detail presisi. Ritual grooming untuk pria sejati.' }}
+        </p>
+
+        {{-- Tombol --}}
+        <div data-aos="fade-up" data-aos-delay="700">
+            @auth
+            <a href="{{ route('reservasi') }}" class="btn btn-gold-minimal rounded-pill text-decoration-none">
+                {{ $setting->hero_btn_text ?? 'BOOK NOW' }}
+            </a>
+            @else
+            <a href="{{ route('login') }}" class="btn btn-gold-minimal rounded-pill text-decoration-none">
+                {{ $setting->hero_btn_text ?? 'LOGIN MEMBER' }}
+            </a>
+            @endauth
+        </div>
+
     </div>
 
-    <div class="container position-relative">
-        <div class="row">
-            {{-- KOLOM TEKS (Lebar 7 kolom, sisanya untuk gambar background) --}}
-            <div class="col-lg-7 hero-content-wrapper">
-                <div class="position-relative">
-
-                    {{-- Judul Utama Dinamis --}}
-                    <h1 class="hero-title display-2 text-white mb-4" data-aos="fade-right" data-aos-duration="1200">
-                        {!! $setting->hero_title ?? 'QUALITY <span class="text-gold fst-italic">Over</span> QUANTITY'
-                        !!}
-                    </h1>
-
-                    {{-- Subtitle Dinamis --}}
-                    <p class="text-white-50 fs-5 mb-5 lh-lg pe-lg-5" data-aos="fade-up" data-aos-delay="200"
-                        style="border-left: 3px solid var(--luxury-gold); padding-left: 20px;">
-                        {{ $setting->hero_subtitle ?? 'Rasakan sensasi cukur kelas atas dengan detail presisi. Lebih dari sekadar potong rambut, ini adalah ritual pria sejati.' }}
-                    </p>
-
-                    {{-- Tombol Booking --}}
-                    <div data-aos="fade-up" data-aos-delay="400">
-                        @auth
-                        <a href="{{ route('reservasi') }}" class="btn btn-gold-hero rounded-0 text-decoration-none">
-                            {{ $setting->hero_btn_text ?? 'BOOK APPOINTMENT' }}
-                        </a>
-                        @else
-                        <a href="{{ route('login') }}" class="btn btn-gold-hero rounded-0 text-decoration-none">
-                            {{ $setting->hero_btn_text ?? 'LOGIN TO BOOK' }}
-                        </a>
-                        @endauth
-                    </div>
-                </div>
-            </div>
-        </div>
+    {{-- Indikator Scroll Mouse --}}
+    <div class="scroll-indicator text-white small">
+        <i class="bi bi-mouse fs-4"></i>
     </div>
 </section>
 
-{{-- ==================================================== --}}
-{{-- 2. SERVICES SECTION (LAYANAN) --}}
-{{-- ==================================================== --}}
+{{-- 2. SERVICES SECTION --}}
 <section class="py-5" style="background-color: #050505;">
     <div class="container py-5">
-        <div class="row align-items-end mb-5" data-aos="fade-up">
-            <div class="col-lg-6">
-                <h6 class="text-gold letter-spacing-3 small fw-bold mb-2">
-                    {{ $setting->services_subtext ?? 'OUR EXPERTISE' }}
-                </h6>
-                <h2 class="display-5 fw-bold text-white" style="font-family: 'Playfair Display', serif;">
-                    {{ $setting->services_title ?? 'EXCLUSIVE SERVICES' }}
-                </h2>
-            </div>
-            <div class="col-lg-6 text-lg-end text-white-50 small mt-3 mt-lg-0">
-                <p class="mb-0" style="max-width: 400px; margin-left: auto;">
-                    Pengalaman grooming premium dengan teknik modern, atmosfer relaksasi, dan produk terbaik.
-                </p>
-            </div>
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h6 class="text-gold letter-spacing-3 small fw-bold mb-2">
+                {{ $setting->services_subtext ?? 'OUR EXPERTISE' }}
+            </h6>
+            <h2 class="display-5 fw-bold text-white" style="font-family: 'Playfair Display', serif;">
+                {{ $setting->services_title ?? 'EXCLUSIVE SERVICES' }}
+            </h2>
         </div>
 
         <div class="row g-4">
             {{-- CARD 1 --}}
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="glass-card">
-                    <div class="icon-circle">
-                        <i class="bi bi-scissors fs-3 text-white"></i>
+                <div class="glass-card text-center">
+                    <div class="icon-circle mx-auto">
+                        <i class="bi bi-scissors fs-3"></i>
                     </div>
                     <h4 class="fw-bold text-white mb-3">{{ $setting->service_1_title ?? 'Expert Barber' }}</h4>
                     <p class="text-white-50 small mb-0 lh-base">
@@ -301,9 +318,9 @@
 
             {{-- CARD 2 --}}
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="glass-card">
-                    <div class="icon-circle">
-                        <i class="bi bi-cup-hot fs-3 text-white"></i>
+                <div class="glass-card text-center">
+                    <div class="icon-circle mx-auto">
+                        <i class="bi bi-cup-hot fs-3"></i>
                     </div>
                     <h4 class="fw-bold text-white mb-3">{{ $setting->service_2_title ?? 'Luxury Lounge' }}</h4>
                     <p class="text-white-50 small mb-0 lh-base">
@@ -314,9 +331,9 @@
 
             {{-- CARD 3 --}}
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
-                <div class="glass-card">
-                    <div class="icon-circle">
-                        <i class="bi bi-gem fs-3 text-white"></i>
+                <div class="glass-card text-center">
+                    <div class="icon-circle mx-auto">
+                        <i class="bi bi-gem fs-3"></i>
                     </div>
                     <h4 class="fw-bold text-white mb-3">{{ $setting->service_3_title ?? 'Premium Products' }}</h4>
                     <p class="text-white-50 small mb-0 lh-base">
@@ -328,25 +345,14 @@
     </div>
 </section>
 
-{{-- ==================================================== --}}
-{{-- 3. TESTIMONIALS (GOOGLE REVIEWS WIDGET) --}}
-{{-- ==================================================== --}}
-<section class="py-5 position-relative"
-    style="background: radial-gradient(circle at center, #151515 0%, #000000 100%); overflow: hidden;">
-
-    {{-- Dekorasi Garis Emas --}}
-    <div
-        style="position: absolute; top: 0; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--luxury-gold), transparent); opacity: 0.3;">
-    </div>
-
+{{-- 3. TESTIMONIALS --}}
+<section class="py-5" style="background: radial-gradient(circle at center, #151515 0%, #000000 100%);">
     <div class="container py-5 text-center">
-        <h3 class="mb-5 text-gold letter-spacing-3 fw-bold fs-6" data-aos="fade-down">
+        <h3 class="mb-5 text-gold letter-spacing-3 fw-bold fs-6">
             {{ $setting->testimonial_title ?? 'VOICE OF GENTLEMEN' }}
         </h3>
-
         <div class="row justify-content-center">
             <div class="col-md-10" data-aos="zoom-in">
-                {{-- Widget Review Elfsight --}}
                 <script src="https://elfsightcdn.com/platform.js" async></script>
                 <div class="elfsight-app-93067b61-ef61-4ae5-9ee5-08877c5d93c9" data-elfsight-app-lazy></div>
             </div>
