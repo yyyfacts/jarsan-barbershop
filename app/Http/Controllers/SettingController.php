@@ -15,50 +15,40 @@ class SettingController extends Controller
     }
 
     public function update(Request $request)
-    {
-        // 1. Validasi Input
-        $request->validate([
-            'app_name'        => 'required|string|max:255',
-            'logo'            => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'instagram_link'  => 'nullable|url',     // Format URL
-            'tiktok_link'     => 'nullable|url',     // Format URL
-            'whatsapp_number' => 'nullable|numeric', // <--- Validasi WA (Angka Saja)
-            'maps_embed'      => 'nullable|string',  // String kode iframe
-        ]);
+{
+    $request->validate([
+        'app_name'        => 'required|string|max:255',
+        'logo'            => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'instagram_link'  => 'nullable|url',
+        'tiktok_link'     => 'nullable|url',
+        'whatsapp_number' => 'nullable|numeric',
+        'maps_embed'      => 'nullable|string',
+        // VALIDASI BARU
+        'hero_title'      => 'nullable|string|max:100',
+        'hero_subtitle'   => 'nullable|string|max:500',
+    ]);
 
-        // 2. Siapkan data dasar yang akan diupdate
-        $dataToUpdate = [
-            'app_name'        => $request->app_name,
-            'instagram_link'  => $request->instagram_link,
-            'tiktok_link'     => $request->tiktok_link,
-            'whatsapp_number' => $request->whatsapp_number, // <--- Masukkan WA ke data update
-            'maps_embed'      => $request->maps_embed,
-        ];
+    $dataToUpdate = [
+        'app_name'        => $request->app_name,
+        'instagram_link'  => $request->instagram_link,
+        'tiktok_link'     => $request->tiktok_link,
+        'whatsapp_number' => $request->whatsapp_number,
+        'maps_embed'      => $request->maps_embed,
+        // DATA BARU
+        'hero_title'      => $request->hero_title,
+        'hero_subtitle'   => $request->hero_subtitle,
+    ];
 
-        // 3. Proses Logo menjadi Base64 jika ada file yang diupload
-        if ($request->hasFile('logo')) {
-            $file = $request->file('logo');
-            
-            // Ambil path sementara
-            $path = $file->getRealPath();
-            
-            // Baca konten file
-            $image = file_get_contents($path);
-            
-            // Encode ke Base64
-            $base64 = base64_encode($image);
-            
-            // Simpan format lengkap: data:image/png;base64,.....
-            $dataToUpdate['logo_path'] = 'data:' . $file->getMimeType() . ';base64,' . $base64;
-        }
-
-        // 4. Simpan ke Database
-        // Update data jika id=1 ada, atau buat baru jika belum ada
-        Setting::updateOrCreate(
-            ['id' => 1], // Kunci pencarian (selalu id 1 untuk setting tunggal)
-            $dataToUpdate // Data yang disimpan
-        );
-
-        return redirect()->back()->with('success', 'Pengaturan berhasil disimpan!');
+    if ($request->hasFile('logo')) {
+        $file = $request->file('logo');
+        $path = $file->getRealPath();
+        $image = file_get_contents($path);
+        $base64 = base64_encode($image);
+        $dataToUpdate['logo_path'] = 'data:' . $file->getMimeType() . ';base64,' . $base64;
     }
+
+    Setting::updateOrCreate(['id' => 1], $dataToUpdate);
+
+    return redirect()->back()->with('success', 'Pengaturan berhasil disimpan!');
+}
 }

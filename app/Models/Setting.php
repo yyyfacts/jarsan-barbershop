@@ -16,6 +16,8 @@ class Setting extends Model
         'instagram_link', // Kolom baru untuk Instagram
         'tiktok_link',    // Kolom baru untuk TikTok
         'maps_embed',  
-        'whatsapp_number',   // Kolom baru untuk Google Maps
+        'whatsapp_number',  
+        'hero_title',
+    'hero_subtitle', // Kolom baru untuk Google Maps
     ];
 }
