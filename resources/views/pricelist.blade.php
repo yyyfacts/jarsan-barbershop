@@ -98,16 +98,29 @@
 }
 </style>
 
+{{-- BAGIAN HERO (ATAS) --}}
 <section class="hero-pricelist">
     <div class="container text-center" data-aos="zoom-out">
-        <h5 class="text-gold letter-spacing-2 mb-2">EXCLUSIVE TREATMENTS</h5>
-        <h1 class="display-3 fw-bold text-white mb-2">SERVICE MENU</h1>
+        {{-- DINAMIS: Subtitle --}}
+        <h5 class="text-gold letter-spacing-2 mb-2">
+            {{ $pageConfig->pricelist_subtitle ?? 'EXCLUSIVE TREATMENTS' }}
+        </h5>
+
+        {{-- DINAMIS: Title --}}
+        <h1 class="display-3 fw-bold text-white mb-2">
+            {{ $pageConfig->pricelist_title ?? 'SERVICE MENU' }}
+        </h1>
+
         <div class="mx-auto" style="width: 60px; height: 3px; background: var(--luxury-gold); margin-top: 20px;"></div>
-        <p class="lead text-white mt-4 opacity-75">Layanan perawatan rambut terbaik untuk hasil pengerjaan profesional
-            dan presisi.</p>
+
+        {{-- DINAMIS: Description --}}
+        <p class="lead text-white mt-4 opacity-75">
+            {{ $pageConfig->pricelist_description ?? 'Layanan perawatan rambut terbaik untuk hasil pengerjaan profesional dan presisi.' }}
+        </p>
     </div>
 </section>
 
+{{-- BAGIAN DAFTAR LAYANAN (LOOPING) --}}
 <section class="py-5" style="background: var(--deep-charcoal)">
     <div class="container py-5">
         <div class="row g-4 justify-content-center">
@@ -139,15 +152,23 @@
     </div>
 </section>
 
+{{-- BAGIAN CTA (BAWAH) --}}
 <section class="py-5 position-relative overflow-hidden"
     style="background: var(--matte-black); border-top: 1px solid var(--luxury-gold);">
     <div class="position-absolute top-0 start-0 w-100 h-100"
         style="background: radial-gradient(circle at right, rgba(212, 175, 55, 0.15) 0%, transparent 50%);"></div>
 
     <div class="container py-4 text-center position-relative" style="z-index: 2;">
-        <h2 class="fw-bold text-white mb-3 display-5">INGIN TAMPIL LEBIH BERANI?</h2>
-        <p class="text-white-50 mb-5 fs-5">Pesan jadwal pengerjaan Anda sekarang dan rasakan pengalaman grooming
-            eksekutif.</p>
+
+        {{-- DINAMIS: CTA Title --}}
+        <h2 class="fw-bold text-white mb-3 display-5">
+            {{ $pageConfig->pricelist_cta_title ?? 'INGIN TAMPIL LEBIH BERANI?' }}
+        </h2>
+
+        {{-- DINAMIS: CTA Text --}}
+        <p class="text-white-50 mb-5 fs-5">
+            {{ $pageConfig->pricelist_cta_text ?? 'Pesan jadwal pengerjaan Anda sekarang dan rasakan pengalaman grooming eksekutif.' }}
+        </p>
 
         @auth
         <a href="{{ route('reservasi') }}" class="btn btn-gold-luxury btn-lg px-5 py-3 rounded-0 fw-bold shadow-lg">
