@@ -18,7 +18,7 @@ class BarberController extends Controller
         $pageConfig = About::first(); 
 
         // Pastikan nama view sesuai dengan file di resources/views/barberman.blade.php
-        return view('user.barberman', compact('barbers', 'pageConfig'));
+        return view('barber', compact('barbers', 'pageConfig'));
     }
 
     // === 2. HALAMAN ADMIN (MANAJEMEN) ===
