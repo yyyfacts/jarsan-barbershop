@@ -27,6 +27,22 @@
             <h6 class="fw-bold m-0 text-dark"><i class="bi bi-image me-2"></i>1. Banner Atas (Hero Section)</h6>
         </div>
         <div class="card-body p-4 row g-3">
+
+            {{-- INPUT BACKGROUND HERO --}}
+            <div class="col-12 mb-3">
+                <label class="form-label small fw-bold text-muted text-uppercase">BACKGROUND BANNER</label>
+                @if($about && $about->hero_bg)
+                <div class="mb-2">
+                    {{-- Preview Gambar Base64 --}}
+                    <img src="{{ $about->hero_bg }}" class="img-thumbnail w-100"
+                        style="height: 200px; object-fit: cover;">
+                    <div class="small text-muted mt-1"><i class="bi bi-info-circle me-1"></i>Gambar saat ini</div>
+                </div>
+                @endif
+                <input type="file" name="hero_bg" class="form-control" accept="image/*">
+                <div class="form-text small text-muted">Format: JPG, PNG, WEBP. Maksimal 2MB.</div>
+            </div>
+
             <div class="col-md-6">
                 <label class="form-label small fw-bold text-muted">JUDUL KECIL (TAGLINE)</label>
                 <input type="text" name="hero_subtitle" class="form-control"
@@ -69,14 +85,15 @@
 
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-muted">FOTO SEJARAH</label>
-                        <input type="file" name="history_image" class="form-control" accept="image/*">
 
                         @if($about && $about->history_image)
-                        <div class="mt-2 text-center p-2 bg-light border rounded">
-                            <small class="d-block text-muted mb-1">Gambar Saat Ini:</small>
-                            <img src="{{ $about->history_image }}" class="img-fluid rounded" style="max-height: 120px;">
+                        <div class="mb-2">
+                            <img src="{{ $about->history_image }}" class="img-thumbnail w-100"
+                                style="max-height: 200px; object-fit: cover;">
                         </div>
                         @endif
+
+                        <input type="file" name="history_image" class="form-control" accept="image/*">
                     </div>
                 </div>
             </div>
@@ -105,14 +122,15 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label small fw-bold text-muted">BACKGROUND IMAGE</label>
-                        <input type="file" name="mission_image" class="form-control" accept="image/*">
 
                         @if($about && $about->mission_image)
-                        <div class="mt-2 text-center p-2 bg-light border rounded">
-                            <small class="d-block text-muted mb-1">Gambar Saat Ini:</small>
-                            <img src="{{ $about->mission_image }}" class="img-fluid rounded" style="max-height: 120px;">
+                        <div class="mb-2">
+                            <img src="{{ $about->mission_image }}" class="img-thumbnail w-100"
+                                style="max-height: 200px; object-fit: cover;">
                         </div>
                         @endif
+
+                        <input type="file" name="mission_image" class="form-control" accept="image/*">
                     </div>
                 </div>
             </div>

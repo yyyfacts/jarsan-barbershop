@@ -14,7 +14,7 @@ class About extends Model
 
     // Mendaftarkan semua kolom yang boleh diisi (Mass Assignment)
     protected $fillable = [
-        // 1. Hero Section (Banner Atas)
+        'hero_bg',// 1. Hero Section (Banner Atas)
         'hero_title',
         'hero_subtitle',
 

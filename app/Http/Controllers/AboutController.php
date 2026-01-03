@@ -12,7 +12,7 @@ class AboutController extends Controller
     {
         // Ambil data pertama
         $about = About::first();
-        return view('about', compact('about'));
+        return view('user.about', compact('about'));
     }
 
     // ADMIN EDIT (FORM)
@@ -33,7 +33,8 @@ class AboutController extends Controller
     {
         // 1. VALIDASI DATA
         $request->validate([
-            // Gambar (Max 2MB)
+            // Validasi Gambar (Max 2MB)
+            'hero_bg'       => 'nullable|image|max:2048', // <--- TAMBAHAN BARU
             'history_image' => 'nullable|image|max:2048', 
             'mission_image' => 'nullable|image|max:2048',
 
@@ -62,32 +63,28 @@ class AboutController extends Controller
         ]);
 
         // 2. SIAPKAN DATA
-        // Ambil semua input kecuali gambar dan token
-        $data = $request->except(['history_image', 'mission_image', '_token', '_method']);
+        // Ambil semua input KECUALI file gambar dan token
+        $data = $request->except(['hero_bg', 'history_image', 'mission_image', '_token', '_method']);
 
-        // 3. PROSES GAMBAR SEJARAH (BASE64)
-        if ($request->hasFile('history_image')) {
-            $file = $request->file('history_image');
-            $path = $file->getRealPath();
-            $image = file_get_contents($path);
-            $base64 = base64_encode($image);
-            
-            // Masukkan ke array data
-            $data['history_image'] = 'data:' . $file->getMimeType() . ';base64,' . $base64;
-        }
+        // FUNGSI BANTUAN UNTUK UPLOAD BASE64 (Supaya kodingan rapi)
+        $processImage = function($fieldName) use ($request, &$data) {
+            if ($request->hasFile($fieldName)) {
+                $file = $request->file($fieldName);
+                $path = $file->getRealPath();
+                $image = file_get_contents($path);
+                $base64 = base64_encode($image);
+                
+                // Simpan sebagai Data URI
+                $data[$fieldName] = 'data:' . $file->getMimeType() . ';base64,' . $base64;
+            }
+        };
 
-        // 4. PROSES GAMBAR MISI (BASE64)
-        if ($request->hasFile('mission_image')) {
-            $file = $request->file('mission_image');
-            $path = $file->getRealPath();
-            $image = file_get_contents($path);
-            $base64 = base64_encode($image);
-            
-            // Masukkan ke array data
-            $data['mission_image'] = 'data:' . $file->getMimeType() . ';base64,' . $base64;
-        }
+        // 3. JALANKAN PROSES UPLOAD GAMBAR
+        $processImage('hero_bg');       // <--- PROSES BACKGROUND HERO
+        $processImage('history_image'); // <--- PROSES GAMBAR SEJARAH
+        $processImage('mission_image'); // <--- PROSES GAMBAR MISI
 
-        // 5. SIMPAN KE DATABASE
+        // 4. SIMPAN KE DATABASE
         // Update ID 1, atau buat baru jika belum ada
         About::updateOrCreate(['id' => 1], $data);
 
