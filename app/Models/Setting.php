@@ -22,11 +22,12 @@ class Setting extends Model
         // 2. Hero Section (Banner Utama)
         'hero_title',
         'hero_subtitle',
-        'hero_btn_text', // Tombol (misal: Book Now)
+        'hero_btn_text',
+        'hero_image', // <--- WAJIB DITAMBAHKAN DI SINI
 
         // 3. Services Section (Judul Bagian Layanan)
-        'services_subtext', // Teks kecil (misal: WHAT WE OFFER)
-        'services_title',   // Judul besar (misal: EXCLUSIVE SERVICES)
+        'services_subtext', 
+        'services_title',   
 
         // 4. Service Card 1
         'service_1_title',

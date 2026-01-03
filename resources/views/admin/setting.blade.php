@@ -22,8 +22,10 @@
             </div>
 
             <div class="card-body p-4">
+                {{-- IMPORTANT: enctype="multipart/form-data" is required for file uploads --}}
                 <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
-                    @csrf @method('PUT')
+                    @csrf
+                    @method('PUT')
 
                     {{-- ================================================= --}}
                     {{-- 1. IDENTITAS & LOGO --}}
@@ -65,6 +67,27 @@
                     </h6>
 
                     <div class="row g-3 mb-4">
+                        {{-- New Image Upload Section --}}
+                        <div class="col-12 mb-3">
+                            <label class="form-label small fw-bold text-muted">GAMBAR BANNER (BACKGROUND)</label>
+
+                            {{-- Image Preview --}}
+                            @if($setting && $setting->hero_image)
+                            <div class="mb-2">
+                                <img src="{{ asset('storage/' . $setting->hero_image) }}" alt="Current Banner"
+                                    class="img-thumbnail w-100" style="height: 200px; object-fit: cover;">
+                                <div class="small text-muted mt-1">
+                                    <i class="bi bi-info-circle me-1"></i>Gambar yang sedang digunakan
+                                </div>
+                            </div>
+                            @endif
+
+                            <input type="file" name="hero_image" class="form-control" accept="image/*">
+                            <div class="form-text small text-muted">
+                                Format: JPG, PNG, WEBP. Maksimal 2MB. Disarankan ukuran lebar 1920px (Landscape).
+                            </div>
+                        </div>
+
                         <div class="col-12">
                             <label class="form-label small fw-bold text-muted">JUDUL UTAMA (HERO TITLE)</label>
                             <input type="text" name="hero_title" class="form-control font-monospace"
