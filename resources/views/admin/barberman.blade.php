@@ -3,8 +3,8 @@
 @section('content')
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
     <div>
-        <h3 class="fw-bold m-0 text-dark">Daftar Tim Barber</h3>
-        <p class="small text-muted">Kelola data barberman, spesialisasi, dan jadwal kerja mingguan.</p>
+        <h3 class="fw-bold m-0 text-dark">Manajemen Halaman Barber</h3>
+        <p class="small text-muted">Atur judul halaman utama dan kelola daftar tim barber.</p>
     </div>
     {{-- Tombol Trigger Modal Tambah --}}
     <button class="btn btn-warning fw-bold shadow-sm px-4" data-bs-toggle="modal" data-bs-target="#modalTambah">
@@ -18,8 +18,46 @@
 </div>
 @endif
 
-{{-- TABEL DATA BARBER --}}
+{{-- BAGIAN 1: PENGATURAN JUDUL HALAMAN (Form ke AboutController) --}}
+<div class="card border-0 shadow-sm rounded-3 mb-4">
+    <div class="card-header bg-white border-bottom py-3 d-flex align-items-center">
+        <h6 class="fw-bold m-0 text-dark"><i class="bi bi-type-h1 me-2"></i>Edit Teks Judul Halaman</h6>
+    </div>
+    <div class="card-body p-4">
+        {{-- Form ini mengirim data ke route admin.about.update --}}
+        <form action="{{ route('admin.about.update') }}" method="POST">
+            @csrf @method('PUT')
+            <div class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label class="form-label small fw-bold text-muted">SUB-JUDUL (KECIL)</label>
+                    <input type="text" name="barber_subtitle" class="form-control"
+                        placeholder="Contoh: MEET THE ARTISTS"
+                        value="{{ $about->barber_subtitle ?? 'MEET THE ARTISTS' }}">
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label small fw-bold text-muted">JUDUL UTAMA (BESAR)</label>
+                    <input type="text" name="barber_title" class="form-control"
+                        placeholder="Contoh: MASTER OF PRECISION"
+                        value="{{ $about->barber_title ?? 'MASTER OF PRECISION' }}">
+                    <div class="form-text x-small">Bisa pakai HTML:
+                        <code>&lt;span class="text-gold"&gt;Teks Emas&lt;/span&gt;</code>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-dark w-100 fw-bold">
+                        <i class="bi bi-save me-1"></i> Update Teks
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{-- BAGIAN 2: TABEL DAFTAR BARBER --}}
 <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+    <div class="card-header bg-white border-bottom py-3">
+        <h6 class="fw-bold m-0 text-dark"><i class="bi bi-people-fill me-2"></i>Daftar Personil Barber</h6>
+    </div>
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">

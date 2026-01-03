@@ -9,32 +9,27 @@ class Barber extends Model
 {
     use HasFactory;
 
-    protected $table = 'barbers'; // Memastikan nama tabel benar
+    protected $table = 'barbers';
 
     /**
-     * The attributes that are mass assignable.
+     * KHUSUS DATA ORANG/KAPSTER
+     * Jangan masukkan judul halaman web di sini.
      */
     protected $fillable = [
         'name',
         'specialty',
         'bio',
-        'schedule',   // Pastikan tipe data di database adalah JSON
-        'photo_path',
-        'is_active',  // Boolean (1 = Aktif, 0 = Nonaktif)
+        'schedule',   // Jadwal (JSON)
+        'photo_path', // Foto
+        'is_active',  // Status Aktif
     ];
 
-    /**
-     * The attributes that should be cast.
-     */
     protected $casts = [
-        // Otomatis ubah JSON database jadi Array PHP
         'schedule' => 'array',
         'is_active' => 'boolean',
     ];
 
-    /**
-     * Relasi ke Reviews (Opsional, nyalakan jika sudah ada tabel reviews)
-     */
+    // Relasi Review (Opsional)
     /*
     public function reviews()
     {

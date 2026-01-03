@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barber;
+use App\Models\About; // <--- WAJIB: Import Model About untuk pengaturan judul
 use Illuminate\Http\Request;
 
 class BarberController extends Controller
@@ -10,31 +11,39 @@ class BarberController extends Controller
     // === 1. HALAMAN USER (FRONTEND) ===
     public function index()
     {
-        // Menampilkan semua barber yang aktif ke halaman pengunjung
+        // Ambil data barber yang aktif
         $barbers = Barber::where('is_active', 1)->get();
-        return view('barber', compact('barbers'));
+        
+        // Ambil data pengaturan teks (Judul Halaman) dari tabel abouts
+        $pageConfig = About::first(); 
+
+        // Pastikan nama view sesuai dengan file di resources/views/barberman.blade.php
+        return view('barberman', compact('barbers', 'pageConfig'));
     }
 
-    // === 2. HALAMAN ADMIN (CRUD) ===
+    // === 2. HALAMAN ADMIN (MANAJEMEN) ===
     public function indexAdmin()
     {
-        // Menampilkan semua barber di dashboard admin
+        // Ambil semua data barber urut dari yang terbaru
         $barbers = Barber::latest()->get();
         
-        // Pastikan nama file view sesuai dengan folder kamu:
-        // resources/views/admin/barber/index.blade.php
-        return view('admin.barberman', compact('barbers'));
+        // Ambil data settings (untuk form edit judul di bagian atas admin)
+        $about = About::first(); 
+
+        // Arahkan ke view admin: resources/views/admin/barberman.blade.php
+        return view('admin.barberman', compact('barbers', 'about'));
     }
 
-    // === 3. SIMPAN DATA BARU ===
+    // === 3. SIMPAN DATA BARBER BARU ===
     public function store(Request $request)
     {
+        // Validasi input khusus untuk Data Barber
         $request->validate([
             'name'      => 'required|string|max:255',
             'specialty' => 'required|string|max:100',
             'bio'       => 'nullable|string',
             'photo'     => 'nullable|image|max:2048', // Max 2MB
-            'schedule'  => 'nullable|array' // Validasi array karena di model di-cast
+            'schedule'  => 'nullable|array',
         ]);
 
         $photoBase64 = null;
@@ -48,7 +57,7 @@ class BarberController extends Controller
             $photoBase64 = 'data:' . $file->getMimeType() . ';base64,' . $base64;
         }
 
-        // Simpan ke Database
+        // Simpan Barber ke Database
         Barber::create([
             'name'       => $request->name,
             'specialty'  => $request->specialty,
@@ -61,7 +70,7 @@ class BarberController extends Controller
         return redirect()->back()->with('success', 'Barber berhasil ditambahkan!');
     }
 
-    // === 4. UPDATE DATA ===
+    // === 4. UPDATE DATA BARBER ===
     public function update(Request $request, $id)
     {
         $barber = Barber::findOrFail($id);
@@ -95,7 +104,7 @@ class BarberController extends Controller
         return redirect()->back()->with('success', 'Data barber berhasil diperbarui!');
     }
 
-    // === 5. HAPUS DATA ===
+    // === 5. HAPUS DATA BARBER ===
     public function destroy($id)
     {
         $barber = Barber::findOrFail($id);
