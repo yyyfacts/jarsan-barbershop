@@ -38,7 +38,7 @@
                             <div class="p-3 border rounded bg-light d-flex align-items-center justify-content-center"
                                 style="height: 120px;">
                                 @if($setting && $setting->logo_path)
-                                {{-- Logo menggunakan Base64, jadi langsung panggil variabel --}}
+                                {{-- Logo menggunakan Base64 --}}
                                 <img src="{{ $setting->logo_path }}" class="img-fluid object-fit-contain"
                                     style="max-height: 80px;">
                                 @else
@@ -62,43 +62,61 @@
                     <hr class="my-5 opacity-25">
 
                     {{-- ================================================= --}}
-                    {{-- 2. HERO SECTION (BANNER UTAMA) --}}
+                    {{-- 2. HERO SECTION (SLIDER GAMBAR) --}}
                     {{-- ================================================= --}}
-                    <h6 class="fw-bold text-primary mb-3"><i class="bi bi-images me-2"></i>Banner Utama (Hero Section)
+                    <h6 class="fw-bold text-primary mb-3"><i class="bi bi-images me-2"></i>Banner Slider (Hero Section)
                     </h6>
 
                     <div class="row g-3 mb-4">
-                        {{-- Upload Gambar Banner --}}
-                        <div class="col-12 mb-3">
-                            <label class="form-label small fw-bold text-muted">GAMBAR BANNER (BACKGROUND)</label>
 
-                            {{-- Image Preview --}}
+                        {{-- GAMBAR SLIDE 1 (UTAMA) --}}
+                        <div class="col-12 mb-4">
+                            <label class="form-label small fw-bold text-muted text-uppercase">GAMBAR SLIDE 1
+                                (UTAMA)</label>
                             @if($setting && $setting->hero_image)
                             <div class="mb-2">
-                                {{-- PERBAIKAN DI SINI: --}}
-                                {{-- Hapus asset('storage/..') karena kita pakai Base64 --}}
-                                <img src="{{ $setting->hero_image }}" alt="Current Banner" class="img-thumbnail w-100"
-                                    style="height: 200px; object-fit: cover;">
-                                <div class="small text-muted mt-1">
-                                    <i class="bi bi-info-circle me-1"></i>Gambar yang sedang digunakan
-                                </div>
+                                <img src="{{ $setting->hero_image }}" alt="Slide 1" class="img-thumbnail w-100"
+                                    style="height: 150px; object-fit: cover;">
                             </div>
                             @endif
-
                             <input type="file" name="hero_image" class="form-control" accept="image/*">
-                            <div class="form-text small text-muted">
-                                Format: JPG, PNG, WEBP. Maksimal 2MB. Disarankan ukuran lebar 1920px (Landscape).
-                            </div>
+                            <div class="form-text small text-muted">Gambar wajib diisi. Format: JPG/PNG/WEBP.</div>
                         </div>
 
-                        <div class="col-12">
+                        {{-- GAMBAR SLIDE 2 --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label small fw-bold text-muted text-uppercase">GAMBAR SLIDE 2
+                                (OPSIONAL)</label>
+                            @if($setting && $setting->hero_image_2)
+                            <div class="mb-2">
+                                <img src="{{ $setting->hero_image_2 }}" alt="Slide 2" class="img-thumbnail w-100"
+                                    style="height: 150px; object-fit: cover;">
+                            </div>
+                            @endif
+                            <input type="file" name="hero_image_2" class="form-control" accept="image/*">
+                        </div>
+
+                        {{-- GAMBAR SLIDE 3 --}}
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label small fw-bold text-muted text-uppercase">GAMBAR SLIDE 3
+                                (OPSIONAL)</label>
+                            @if($setting && $setting->hero_image_3)
+                            <div class="mb-2">
+                                <img src="{{ $setting->hero_image_3 }}" alt="Slide 3" class="img-thumbnail w-100"
+                                    style="height: 150px; object-fit: cover;">
+                            </div>
+                            @endif
+                            <input type="file" name="hero_image_3" class="form-control" accept="image/*">
+                        </div>
+
+                        {{-- TEXT CONTENT (GLOBAL) --}}
+                        <div class="col-12 mt-3">
                             <label class="form-label small fw-bold text-muted">JUDUL UTAMA (HERO TITLE)</label>
                             <input type="text" name="hero_title" class="form-control font-monospace"
                                 value="{{ $setting->hero_title ?? '' }}"
                                 placeholder="Contoh: QUALITY <span class='text-gold'>Over</span> QUANTITY">
                             <div class="form-text small text-muted">
-                                <i class="bi bi-code-slash me-1"></i> Mendukung HTML. Gunakan
-                                <code>&lt;span class="text-gold"&gt;Teks&lt;/span&gt;</code> untuk warna emas.
+                                <i class="bi bi-code-slash me-1"></i> Mendukung HTML.
                             </div>
                         </div>
                         <div class="col-12">

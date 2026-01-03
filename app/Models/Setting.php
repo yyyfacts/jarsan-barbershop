@@ -23,7 +23,9 @@ class Setting extends Model
         'hero_title',
         'hero_subtitle',
         'hero_btn_text',
-        'hero_image', // <--- PENTING: Wajib ada agar gambar bisa tersimpan
+        'hero_image',
+        'hero_image_2', // <--- TAMBAH INI
+    'hero_image_3', // <--- PENTING: Wajib ada agar gambar bisa tersimpan
 
         // 3. Services Section (Judul Bagian Layanan)
         'services_subtext', 
