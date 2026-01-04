@@ -25,23 +25,11 @@ use App\Http\Controllers\ReviewController;
 // ====================================================
 // 1. HALAMAN PUBLIK (Bisa diakses siapa saja)
 // ====================================================
-
-// Halaman Utama (Home)
 Route::get('/', [PublicController::class, 'welcome'])->name('welcome');
-
-// Halaman About Us (Tentang Kami)
 Route::get('/about', [AboutController::class, 'index'])->name('about'); 
-
-// Halaman Tim Barber (Meet The Artists)
 Route::get('/barberman', [BarberController::class, 'index'])->name('barberman');
-
-// Halaman Harga & Layanan
 Route::get('/pricelist', [PublicController::class, 'pricelist'])->name('pricelist');
-
-// Halaman Kontak (Formulir & Info)
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
-
-// Proses Kirim Pesan (Public)
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 
@@ -49,11 +37,8 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 // 2. AUTHENTICATION (Login & Register)
 // ====================================================
 Route::middleware('guest')->group(function () {
-    // Login
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.process');
-
-    // Register
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.process');
 
@@ -62,7 +47,6 @@ Route::middleware('guest')->group(function () {
     Route::get('auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
 });
 
-// Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
@@ -79,9 +63,15 @@ Route::middleware(['auth'])->group(function () {
         return view('user.dashboard');
     })->name('dashboard');
 
-    // Reservasi Booking
+    // --- RESERVASI BOOKING SYSTEM (UPDATED) ---
     Route::get('/reservasi', [ReservationController::class, 'create'])->name('reservasi');
     Route::post('/reservasi', [ReservationController::class, 'store'])->name('reservasi.store');
+    
+    // Fitur Cek Slot Terboking (AJAX) - Untuk membuat jam jadi merah/disabled
+    Route::get('/reservasi/check-slots', [ReservationController::class, 'checkSlots'])->name('reservasi.check-slots');
+    
+    // Fitur Riwayat Reservasi - Agar user bisa cek status "Pending/Approved" langsung
+    Route::get('/reservasi/history', [ReservationController::class, 'history'])->name('reservasi.history');
 
     // Edit Profile User
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -122,14 +112,9 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::put('/reservations/{id}/status', [ReservationController::class, 'updateStatus'])->name('reservations.status');
     Route::delete('/reservations/{id}', [ReservationController::class, 'destroy'])->name('reservations.destroy');
 
-    // --- MANAJEMEN PESAN KONTAK & INFO (FIXED) ---
-    // SAYA UBAH INI: Dari 'contact' menjadi 'contacts.index' agar sidebar tidak error
+    // --- MANAJEMEN PESAN KONTAK & INFO ---
     Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index'); 
-    
-    // Proses Update Info Kontak
     Route::post('/contact/update', [ContactController::class, 'updateDetails'])->name('contact.update');
-    
-    // Hapus Pesan Masuk
     Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
 
     // --- PENGATURAN WEBSITE (SETTINGS LAINNYA) ---

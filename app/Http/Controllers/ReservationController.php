@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Reservation;
 use App\Models\Service;
-use App\Models\Barber; // Import Model Barber
+use App\Models\Barber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB; // Ditambahkan untuk query yang lebih kompleks
 
 // IMPORT UNTUK EXCEL
 use App\Exports\ReservationsExport;
@@ -17,29 +18,75 @@ class ReservationController extends Controller
     // --- USER: FORM BOOKING ---
     public function create()
     {
-        // 1. Ambil data service yang aktif
         $services = Service::where('is_active', 1)->get();
-        
-        // 2. Ambil data barber BESERTA ulasan dan user yang mengulas
-        // 'with(['reviews.user'])' ini PENTING agar pop-up detail bisa menampilkan rating & komentar
+        // Mengambil barber beserta relasi reviews dan user yang mengulas
         $barbers = Barber::with(['reviews.user'])->get(); 
 
-        // 3. Kirim ke view reservasi
         return view('reservasi', compact('services', 'barbers')); 
     }
 
-    // --- USER: KIRIM DATA ---
+    // --- FITUR BARU: CEK KETERSEDIAAN SLOT (AJAX) ---
+    public function checkSlots(Request $request)
+    {
+        $date = $request->query('date');
+        $barberId = $request->query('barber_id');
+
+        if (!$date) {
+            return response()->json([]);
+        }
+
+        // Logic 1: Jika User memilih Barber spesifik
+        if ($barberId) {
+            $bookedTimes = Reservation::whereDate('date', $date)
+                ->where('barber_id', $barberId)
+                ->whereNotIn('status', ['Cancelled', 'Done']) // Slot dianggap penuh jika Pending/Approved
+                ->pluck('time')
+                ->map(function($time) {
+                    return date('H:i', strtotime($time));
+                });
+        } 
+        // Logic 2: Jika User memilih "Any Barber" (Sesuai kode radio value="")
+        else {
+            // "Any Barber" hanya dianggap penuh jika SEMUA barber sudah dibooking pada jam tersebut
+            $totalBarbers = Barber::count();
+            
+            $bookedTimes = Reservation::whereDate('date', $date)
+                ->whereNotIn('status', ['Cancelled', 'Done'])
+                ->select('time', DB::raw('count(*) as total'))
+                ->groupBy('time')
+                ->having('total', '>=', $totalBarbers)
+                ->pluck('time')
+                ->map(function($time) {
+                    return date('H:i', strtotime($time));
+                });
+        }
+
+        return response()->json($bookedTimes);
+    }
+
+    // --- USER: KIRIM DATA (DENGAN VALIDASI DOUBLE BOOKING) ---
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
-            'date' => 'required|date',
+            'date' => 'required|date|after_or_equal:today',
             'time' => 'required',
             'service_id' => 'required|exists:services,id', 
-            'barber_id' => 'nullable|exists:barbers,id', // Nullable = Bisa pilih "Any Barber"
+            'barber_id' => 'nullable|exists:barbers,id',
             'notes' => 'nullable|string',
         ]);
+
+        // Proteksi Server-Side: Cek kembali apakah slot masih tersedia sebelum simpan
+        $isBooked = Reservation::whereDate('date', $request->date)
+            ->where('time', $request->time)
+            ->where('barber_id', $request->barber_id)
+            ->whereNotIn('status', ['Cancelled', 'Done'])
+            ->exists();
+
+        if ($isBooked) {
+            return redirect()->back()->with('error', 'Maaf, slot waktu ini baru saja diambil orang lain. Silakan pilih waktu lain.');
+        }
 
         Reservation::create([
             'user_id' => Auth::id(),        
@@ -48,7 +95,7 @@ class ReservationController extends Controller
             'date' => $request->date,
             'time' => $request->time,
             'service_id' => $request->service_id,
-            'barber_id' => $request->barber_id, // Simpan ID Barber
+            'barber_id' => $request->barber_id, 
             'notes' => $request->notes,
             'status' => 'Pending'           
         ]);
@@ -59,7 +106,6 @@ class ReservationController extends Controller
     // --- ADMIN: LIHAT DATA ---
     public function index()
     {
-        // Eager loading service & barber agar query lebih efisien
         $reservations = Reservation::with(['service', 'barber'])->latest()->get();
         return view('admin.reservations', compact('reservations'));
     }
@@ -71,12 +117,10 @@ class ReservationController extends Controller
     }
 
     // --- ADMIN: GANTI STATUS ---
-    // --- ADMIN: GANTI STATUS (UPDATE FLOW) ---
     public function updateStatus(Request $request, $id)
     {
         $reservation = Reservation::findOrFail($id);
         
-        // Cek apakah ada request status spesifik dari tombol (Approved / Done / Canceled)
         if ($request->has('status')) {
             $reservation->status = $request->status;
             $reservation->save();
