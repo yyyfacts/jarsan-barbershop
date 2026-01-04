@@ -33,17 +33,19 @@ body {
     pointer-events: none;
 }
 
-/* --- 2. MARQUEE (SANGAT GELAP/SAMAR) --- */
+/* --- 2. MARQUEE (DIPERBAIKI: LEBIH NAIK & SAMAR) --- */
 .marquee-container {
     overflow: hidden;
     white-space: nowrap;
     position: absolute;
-    top: 10%;
+    top: 2%;
+    /* Dinaikkan agar ada jarak dengan judul */
     left: 0;
     width: 100%;
-    /* Diubah menjadi 0.04 agar lebih gelap/samar */
     color: rgba(255, 255, 255, 0.04);
-    font-size: 10rem;
+    /* Dibuat lebih gelap/samar */
+    font-size: 9rem;
+    /* Ukuran sedikit diperkecil agar proporsional */
     font-family: 'Italiana', serif;
     z-index: -1;
     pointer-events: none;
@@ -104,7 +106,7 @@ body {
     font-size: 0.65rem;
 }
 
-/* --- 4. ANIMASI KANAN BARU (GEOMETRIC LINES) --- */
+/* --- 4. ANIMASI KANAN (GEOMETRIC) --- */
 .visual-container {
     position: relative;
     height: 400px;
@@ -144,7 +146,7 @@ body {
     }
 }
 
-/* --- 5. INFO BOX & MAPS (DIPISAH) --- */
+/* --- 5. INFO BOX & MAPS (TERPISAH) --- */
 .info-box {
     background: var(--card-bg);
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -198,15 +200,19 @@ body {
     </div>
 </div>
 
-<div class="container" style="padding-top: 120px; padding-bottom: 60px;">
+{{-- JARAK ATAS DITAMBAHKAN AGAR TIDAK NEMPEL MARQUEE --}}
+<div class="container" style="padding-top: 220px; padding-bottom: 60px;">
     <div class="row align-items-center">
         {{-- KOLOM KIRI: FORMULIR --}}
         <div class="col-lg-6 mb-5" data-aos="fade-right">
-            <h1 class="display-3 font-luxury text-white mb-4">
-                {!! nl2br(e($config->page_title ?? "Contact Us")) !!}
+            <span class="text-gold small letter-spacing-3 text-uppercase d-block mb-3">Studio • Kroya</span>
+
+            {{-- JUDUL DIAMBIL DARI DATABASE ADMIN --}}
+            <h1 class="display-3 font-luxury text-white mb-4" style="line-height: 1.1;">
+                {!! nl2br(e($config->page_title ?? "Hubungi Kami")) !!}
             </h1>
             <p class="text-white-50 mb-5 fw-light">
-                {{ $config->page_subtitle ?? 'Get in touch for appointments or inquiries.' }}
+                {{ $config->page_subtitle ?? 'Silakan hubungi kami untuk reservasi atau datang langsung ke lokasi.' }}
             </p>
 
             <form action="{{ route('contact.store') }}" method="POST">
@@ -242,7 +248,7 @@ body {
     </div>
 </div>
 
-{{-- SECTION BARU: INFO & MAPS (RAPI & TERPISAH) --}}
+{{-- SECTION INFO & MAPS TERPISAH --}}
 <div class="container mb-5">
     <div class="row g-4">
         {{-- INFO BOX --}}
@@ -251,20 +257,20 @@ body {
                 <h4 class="font-luxury text-gold mb-4">Information</h4>
 
                 <div class="mb-4">
-                    <small class="text-white-50 text-uppercase d-block mb-1" style="letter-spacing: 2px;">Studio
-                        Location</small>
-                    <p class="fw-light">{!! nl2br(e($config->address ?? 'Address not set.')) !!}</p>
+                    <small class="text-white-50 text-uppercase d-block mb-1" style="letter-spacing: 2px;">Lokasi
+                        Studio</small>
+                    <p class="fw-light">{!! nl2br(e($config->address ?? 'Alamat belum diatur.')) !!}</p>
                 </div>
 
                 <div class="mb-4">
-                    <small class="text-white-50 text-uppercase d-block mb-1"
-                        style="letter-spacing: 2px;">WhatsApp</small>
+                    <small class="text-white-50 text-uppercase d-block mb-1" style="letter-spacing: 2px;">WhatsApp
+                        Official</small>
                     <p class="fw-light text-gold">{{ $config->whatsapp ?? '-' }}</p>
                 </div>
 
                 <div class="mb-0">
-                    <small class="text-white-50 text-uppercase d-block mb-1" style="letter-spacing: 2px;">Today's
-                        Schedule</small>
+                    <small class="text-white-50 text-uppercase d-block mb-1" style="letter-spacing: 2px;">Jam
+                        Operasional</small>
                     <p class="fw-light">
                         {{ \Carbon\Carbon::now()->isWeekend() ? ($config->hours_sat_sun ?? '-') : ($config->hours_mon_fri ?? '-') }}
                     </p>
