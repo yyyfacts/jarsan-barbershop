@@ -312,8 +312,8 @@
                         {{ $setting->app_name ?? 'JARSAN' }}
                     </a>
                     <p class="footer-desc">
-                        Destinasi grooming premium untuk pria modern. Kami memadukan teknik klasik dengan gaya hidup
-                        masa kini.
+                        Barbershop yang mengutamakan kualitas potongan dan kenyamanan
+                        pelanggan. Kami menghadirkan pengalaman cukur terbaik dengan standar pelayanan tinggi.
                     </p>
                     <div class="d-flex gap-3 mt-4">
                         @if($setting && $setting->instagram_link)
@@ -345,15 +345,14 @@
                 </div>
 
                 <div class="col-lg-4 col-md-12">
-                    <h6 class="footer-title">STUDIO & HOURS</h6>
+                    <h6 class="footer-title">BARBER & HOURS</h6>
                     <div class="mb-4">
-                        <p class="mb-1 text-white opacity-75 small">ALAMAT STUDIO</p>
+                        <p class="mb-1 text-white opacity-75 small">ALAMAT BARBER</p>
                         <p class="text-white small">Kayulangit, Sikampuh, Kroya, Cilacap, Jawa Tengah 53282</p>
                     </div>
                     <div>
                         <p class="mb-1 text-white opacity-75 small">JAM OPERASIONAL</p>
-                        <p class="text-gold fw-bold mb-0">Setiap Hari: 13.00 - 21.00 WIB</p>
-                        <small class="text-white-50">(Kecuali Jumat Libur)</small>
+                        <p class="text-gold fw-bold mb-0">Setiap Hari: 10.00 - 21.00 WIB</p>
                     </div>
                 </div>
             </div>

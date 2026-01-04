@@ -334,10 +334,6 @@
     {{-- OVERLAY GELAP --}}
     <div class="hero-overlay-gradient"></div>
 
-    {{-- GIANT WATERMARK TEXT (JARSAN) --}}
-    <div class="giant-text-bg">
-        JARSAN
-    </div>
 
     {{-- KONTEN UTAMA --}}
     <div class="container hero-content-layer">
