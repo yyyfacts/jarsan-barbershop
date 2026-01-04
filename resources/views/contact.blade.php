@@ -1,285 +1,346 @@
 @extends('layouts.app')
 
-@section('title', 'Get in Touch')
+@section('title', 'Contact Studio')
 
 @section('content')
 @push('styles')
-<link
-    href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Manrope:wght@200;400;700&display=swap"
     rel="stylesheet">
 <style>
 :root {
-    --primary-gold: #D4AF37;
-    --dark-bg: #121212;
-    --card-bg: #1e1e1e;
+    --gold: #D4AF37;
+    --gold-dim: #8a701e;
+    --black: #050505;
+    --glass: rgba(20, 20, 20, 0.7);
 }
 
 body {
-    background-color: var(--dark-bg);
+    background-color: var(--black);
     color: #fff;
+    font-family: 'Manrope', sans-serif;
+    overflow-x: hidden;
 }
 
-/* TYPOGRAPHY */
-.font-heading {
-    font-family: 'Oswald', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+/* --- 1. BACKGROUND YANG "HIDUP" (NOISE & GLOW) --- */
+.noise-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://grainy-gradients.vercel.app/noise.svg');
+    opacity: 0.05;
+    z-index: -1;
+    pointer-events: none;
 }
 
-.font-serif {
-    font-family: 'Playfair Display', serif;
+.ambient-glow {
+    position: fixed;
+    top: -20%;
+    right: -10%;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, rgba(0, 0, 0, 0) 70%);
+    z-index: -2;
+    animation: pulseGlow 10s infinite alternate;
 }
 
-/* UNIQUE INPUT STYLE */
-.floating-group {
+@keyframes pulseGlow {
+    0% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+}
+
+/* --- 2. TYPOGRAPHY MEWAH --- */
+.font-luxury {
+    font-family: 'Italiana', serif;
+    font-weight: 400;
+}
+
+/* Teks Berjalan (Marquee) */
+.marquee-container {
+    overflow: hidden;
+    white-space: nowrap;
+    position: absolute;
+    top: 10%;
+    left: 0;
+    width: 100%;
+    opacity: 0.03;
+    font-size: 15rem;
+    font-family: 'Italiana', serif;
+    line-height: 1;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.marquee-content {
+    display: inline-block;
+    animation: marquee 40s linear infinite;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* --- 3. CUSTOM FORM INPUT (MINIMALIS) --- */
+.input-group-luxury {
     position: relative;
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
 }
 
-.modern-input {
+.input-luxury {
     width: 100%;
     background: transparent;
     border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     padding: 15px 0;
-    color: white;
-    font-size: 1.1rem;
-    transition: 0.3s ease;
-    border-radius: 0;
+    color: #fff;
+    font-size: 1.2rem;
+    font-family: 'Italiana', serif;
+    transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.modern-input:focus {
+.input-luxury:focus {
     outline: none;
-    border-bottom: 2px solid var(--primary-gold);
-    background: transparent;
-    box-shadow: none;
+    border-bottom-color: var(--gold);
+    padding-left: 20px;
+    /* Geser sedikit saat fokus */
 }
 
-.floating-label {
+.label-luxury {
     position: absolute;
     top: 15px;
     left: 0;
-    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.4);
     pointer-events: none;
-    transition: 0.3s ease;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-}
-
-/* Animasi Label saat input diisi/fokus */
-.modern-input:focus~.floating-label,
-.modern-input:valid~.floating-label {
-    top: -10px;
-    font-size: 0.75rem;
-    color: var(--primary-gold);
-    font-weight: bold;
-}
-
-/* BUTTON STYLE - SLIDING EFFECT */
-.btn-luxury {
-    background: transparent;
-    color: var(--primary-gold);
-    border: 1px solid var(--primary-gold);
-    padding: 15px 40px;
-    position: relative;
-    overflow: hidden;
-    transition: 0.4s;
-    z-index: 1;
-    font-family: 'Oswald', sans-serif;
-    letter-spacing: 3px;
-}
-
-.btn-luxury::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: var(--primary-gold);
-    transition: 0.4s;
-    z-index: -1;
-}
-
-.btn-luxury:hover::before {
-    left: 0;
-}
-
-.btn-luxury:hover {
-    color: #000;
-    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
-}
-
-/* INFO CARD - OFFSET DESIGN */
-.info-card-wrapper {
-    background: var(--card-bg);
-    padding: 3rem;
-    position: relative;
-    border-left: 5px solid var(--primary-gold);
-    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
-    /* Membuat card sedikit naik ke atas menimpa elemen lain */
-    margin-top: -50px;
-    z-index: 10;
-}
-
-.info-item {
-    margin-bottom: 2rem;
-    padding-left: 1rem;
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-    transition: 0.3s;
-}
-
-.info-item:hover {
-    border-left: 1px solid var(--primary-gold);
-    padding-left: 1.5rem;
-}
-
-/* MAP STYLING */
-.map-container-stylish {
-    position: relative;
-    height: 100%;
-    min-height: 500px;
-    filter: grayscale(100%) contrast(1.2);
     transition: 0.5s;
 }
 
-.map-container-stylish:hover {
-    filter: grayscale(0%);
+.input-luxury:focus~.label-luxury,
+.input-luxury:valid~.label-luxury {
+    top: -20px;
+    color: var(--gold);
+    font-size: 0.7rem;
 }
 
-/* DECORATION */
-.big-watermark {
-    position: absolute;
-    font-size: 10rem;
-    font-weight: 900;
-    color: rgba(255, 255, 255, 0.03);
-    z-index: 0;
-    top: -50px;
-    right: 0;
-    line-height: 0.8;
-    pointer-events: none;
+/* --- 4. BUTTON MAGNETIK --- */
+.btn-gold-outline {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--gold);
+    background: transparent;
+    padding: 20px 40px;
+    font-family: 'Manrope', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 0.8rem;
+    transition: 0.4s;
+    position: relative;
     overflow: hidden;
+}
+
+.btn-gold-outline:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.05);
+    color: #fff;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+}
+
+/* --- 5. LAYOUT UNIK (MAP FIX) --- */
+.overlap-section {
+    position: relative;
+    margin-top: 100px;
+}
+
+.map-frame {
+    width: 100%;
+    height: 70vh;
+    /* Tinggi Peta Dominan */
+    filter: grayscale(100%) invert(90%) contrast(120%);
+    transition: 1s;
+    overflow: hidden;
+    background: #1a1a1a;
+    /* Placeholder bg */
+}
+
+.map-frame:hover {
+    filter: grayscale(0%) invert(0%);
+}
+
+/* PERBAIKAN CSS MAPS AGAR RESPONSIVE */
+.map-frame iframe {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+}
+
+.floating-card {
+    background: rgba(18, 18, 18, 0.85);
+    /* Glass effect gelap */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 4rem;
+    position: absolute;
+    right: 10%;
+    bottom: -50px;
+    /* Offset ke bawah agar unik */
+    width: 450px;
+    box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
+    border-top: 3px solid var(--gold);
+}
+
+@media (max-width: 991px) {
+    .floating-card {
+        position: relative;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        margin-top: -100px;
+        padding: 2rem;
+    }
+
+    .marquee-container {
+        font-size: 8rem;
+    }
 }
 </style>
 @endpush
 
-{{-- HERO SECTION --}}
-<div class="container-fluid px-0 position-relative"
-    style="background: #0a0a0a; padding-top: 100px; padding-bottom: 100px;">
-    <div class="container position-relative">
-        <div class="big-watermark font-heading">CONTACT</div>
+{{-- BACKGROUND ELEMENTS --}}
+<div class="noise-bg"></div>
+<div class="ambient-glow"></div>
 
-        <div class="row">
-            <div class="col-lg-7" data-aos="fade-up">
-                <h5 class="text-gold font-heading mb-3">Get In Touch</h5>
-                <h1 class="display-3 fw-bold font-serif mb-4">
-                    {{ $config->page_title ?? 'Ready for a New Look?' }}
-                </h1>
-                <p class="text-white-50 fs-5 mb-5" style="max-width: 500px;">
-                    {{ $config->page_subtitle ?? 'Jangan ragu untuk berkonsultasi atau memesan jadwal potong rambut Anda hari ini.' }}
+{{-- MARQUEE BACKGROUND --}}
+<div class="marquee-container">
+    <div class="marquee-content">
+        RESERVATION &nbsp; • &nbsp; CONTACT &nbsp; • &nbsp; MOOD CUT &nbsp; • &nbsp; STYLE &nbsp; • &nbsp;
+        RESERVATION &nbsp; • &nbsp; CONTACT &nbsp; • &nbsp; MOOD CUT &nbsp; • &nbsp; STYLE &nbsp; • &nbsp;
+    </div>
+</div>
+
+<div class="container" style="padding-top: 150px; padding-bottom: 100px;">
+    <div class="row">
+
+        {{-- KOLOM KIRI: HEADLINE & FORM --}}
+        <div class="col-lg-6 mb-5" data-aos="fade-right" data-aos-duration="1200">
+            <span class="text-white-50 small letter-spacing-3 text-uppercase d-block mb-3">Est. 2024 • Kroya</span>
+
+            <h1 class="display-2 font-luxury text-white mb-4" style="line-height: 1.1;">
+                Let's Craft <br>
+                <span style="color: var(--gold); font-style: italic;">Your Style.</span>
+            </h1>
+
+            <p class="text-white-50 mb-5 fs-5 fw-light" style="max-width: 450px;">
+                {{ $config->page_subtitle ?? 'Kami siap mendengarkan preferensi gaya Anda. Hubungi kami untuk konsultasi eksklusif.' }}
+            </p>
+
+            @if(session('success'))
+            <div class="p-3 mb-5 border border-success text-success bg-transparent"
+                style="border-style: dashed !important;">
+                ✓ {{ session('success') }}
+            </div>
+            @endif
+
+            <form action="{{ route('contact.store') }}" method="POST" class="mt-5">
+                @csrf
+                <div class="input-group-luxury">
+                    <input type="text" name="name" class="input-luxury" required autocomplete="off">
+                    <label class="label-luxury">Your Name</label>
+                </div>
+
+                <div class="input-group-luxury">
+                    <input type="email" name="email" class="input-luxury" required autocomplete="off">
+                    <label class="label-luxury">Email Address</label>
+                </div>
+
+                <div class="input-group-luxury">
+                    <textarea name="message" class="input-luxury" rows="1" required style="resize: none; height: auto;"
+                        oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
+                    <label class="label-luxury">What's on your mind?</label>
+                </div>
+
+                <button type="submit" class="btn-gold-outline mt-4">
+                    Send Request
+                </button>
+            </form>
+        </div>
+
+        {{-- KOLOM KANAN: HANYA GARIS DEKORATIF --}}
+        <div class="col-lg-6 position-relative d-none d-lg-block">
+            <div
+                style="position: absolute; right: 0; top: 20%; height: 300px; width: 1px; background: linear-gradient(to bottom, var(--gold), transparent);">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{{-- SECTION MAP & FLOATING INFO (ASIMETRIS) --}}
+<div class="container-fluid px-0 overlap-section position-relative">
+
+    {{-- MAP FULL WIDTH --}}
+    <div class="map-frame">
+        @if(!empty($config->maps_link))
+        {{-- Gunakan {!! !!} agar kode HTML iframe dari Google terbaca & tampil --}}
+        {!! $config->maps_link !!}
+        @else
+        <div class="d-flex align-items-center justify-content-center h-100 text-white-50">
+            <small>MAPS LOCATION NOT SET</small>
+        </div>
+        @endif
+    </div>
+
+    {{-- KARTU INFO YANG MENGAMBANG (FLOATING) DI ATAS MAP --}}
+    <div class="floating-card" data-aos="fade-up" data-aos-delay="200">
+        <h3 class="font-luxury text-white mb-5">Studio Information</h3>
+
+        <div class="row g-4">
+            <div class="col-12">
+                <small class="text-white-50 text-uppercase letter-spacing-2">Location</small>
+                <p class="text-white fs-5 mt-1 font-luxury lh-sm">
+                    {!! nl2br(e($config->address ?? 'Alamat belum diisi.')) !!}
                 </p>
-
-                @if(session('success'))
-                <div class="alert alert-success bg-dark border-success text-success mb-5 rounded-0">
-                    <i class="bi bi-check-lg me-2"></i> {{ session('success') }}
-                </div>
-                @endif
-
-                {{-- FORMULIR MINIMALIS --}}
-                <form action="{{ route('contact.store') }}" method="POST" class="pe-lg-5">
-                    @csrf
-
-                    <div class="floating-group">
-                        <input type="text" name="name" class="modern-input" required autocomplete="off">
-                        <label class="floating-label">FULL NAME</label>
-                    </div>
-
-                    <div class="floating-group">
-                        <input type="email" name="email" class="modern-input" required autocomplete="off">
-                        <label class="floating-label">EMAIL ADDRESS</label>
-                    </div>
-
-                    <div class="floating-group">
-                        <textarea name="message" class="modern-input" rows="1" required
-                            style="resize: none; height: auto;"
-                            oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
-                        <label class="floating-label">YOUR MESSAGE</label>
-                    </div>
-
-                    <button type="submit" class="btn btn-luxury mt-3">
-                        SEND MESSAGE <i class="bi bi-arrow-right ms-2"></i>
-                    </button>
-                </form>
             </div>
 
-            {{-- BAGIAN KANAN (MAP SEBAGAI BACKGROUND/SIDE) --}}
-            <div class="col-lg-5 d-none d-lg-block position-relative">
-                <div
-                    style="position: absolute; right: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(to bottom, transparent, var(--primary-gold), transparent);">
+            <div class="col-6">
+                <small class="text-white-50 text-uppercase letter-spacing-2">Whatsapp</small>
+                <p class="text-white mt-1">{{ $config->whatsapp ?? '-' }}</p>
+            </div>
+
+            <div class="col-6">
+                <small class="text-white-50 text-uppercase letter-spacing-2">Email</small>
+                <p class="text-white mt-1">{{ $config->email ?? '-' }}</p>
+            </div>
+
+            <div class="col-12 border-top border-secondary pt-4 mt-4 border-opacity-25">
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-gold text-uppercase letter-spacing-2">Today's Hours</small>
+                    {{-- Logika sederhana untuk menampilkan jam sesuai hari ini --}}
+                    <span class="text-white font-luxury fs-5">
+                        {{ \Carbon\Carbon::now()->isWeekend() ? ($config->hours_sat_sun ?? 'Check Schedule') : ($config->hours_mon_fri ?? 'Check Schedule') }}
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-{{-- SECTION MAP & INFO YANG UNIK --}}
-<div class="container-fluid px-0">
-    <div class="row g-0">
-        {{-- KOLOM MAP (FULL HEIGHT) --}}
-        <div class="col-lg-7 order-2 order-lg-1">
-            <div class="map-container-stylish">
-                <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
-                    src="{{ $config->maps_link ?? 'https://maps.google.com' }}" style="border:0; min-height: 600px;">
-                </iframe>
-            </div>
-        </div>
-
-        {{-- KOLOM INFO (OVERLAP) --}}
-        <div class="col-lg-5 order-1 order-lg-2 position-relative bg-dark d-flex align-items-center">
-            <div class="info-card-wrapper w-100 mx-lg-0 mx-auto" style="max-width: 500px; margin-left: -50px;">
-
-                <h3 class="font-serif text-white mb-5">Visit Our Studio</h3>
-
-                {{-- Address --}}
-                <div class="info-item">
-                    <h6 class="text-gold font-heading mb-1">LOCATION</h6>
-                    <p class="text-white-50 mb-0">
-                        {!! nl2br(e($config->address ?? 'Lokasi belum diatur.')) !!}
-                    </p>
-                </div>
-
-                {{-- WhatsApp --}}
-                <div class="info-item">
-                    <h6 class="text-gold font-heading mb-1">CONTACT</h6>
-                    <p class="text-white mb-0 fs-5 font-serif">{{ $config->whatsapp ?? '-' }}</p>
-                    <p class="text-white-50 small">{{ $config->email ?? '-' }}</p>
-                </div>
-
-                {{-- Hours --}}
-                <div class="info-item border-0">
-                    <h6 class="text-gold font-heading mb-3">OPENING HOURS</h6>
-
-                    <div
-                        class="d-flex justify-content-between mb-2 pb-2 border-bottom border-secondary border-opacity-25">
-                        <span class="text-white">Weekdays</span>
-                        <span class="text-white fw-bold">{{ $config->hours_mon_fri ?? 'Closed' }}</span>
-                    </div>
-                    <div
-                        class="d-flex justify-content-between mb-2 pb-2 border-bottom border-secondary border-opacity-25">
-                        <span class="text-white">Weekend</span>
-                        <span class="text-white fw-bold">{{ $config->hours_sat_sun ?? 'Closed' }}</span>
-                    </div>
-
-                    <div class="mt-3 p-3"
-                        style="background: rgba(212, 175, 55, 0.1); border-left: 3px solid var(--primary-gold);">
-                        <small class="text-gold d-block fw-bold mb-1">SESI MALAM (NIGHT OWL)</small>
-                        <span class="text-white">{{ $config->hours_night ?? '19.30 - 22.00' }}</span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
+{{-- Spacer bawah agar Floating Card tidak kepotong footer --}}
+<div style="height: 100px; background: var(--black);"></div>
 
 @endsection
