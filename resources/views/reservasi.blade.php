@@ -373,7 +373,7 @@ input[type="date"] {
         <h4 class="fw-bold mb-2">RESERVATION RECEIVED</h4>
         <p class="text-white-50 mb-3">{{ session('success') }}</p>
 
-        <a href="{{ route('reservasi.history') }}" class="btn-status-outline">
+        <a href="{{ route('dashboard') }}" class="btn-status-outline">
             <i class="bi bi-clock-history me-2"></i> CEK STATUS PEMESANAN SAYA
         </a>
     </div>

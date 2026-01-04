@@ -104,17 +104,7 @@ class ReservationController extends Controller
     }
 
     // --- USER: LIHAT RIWAYAT (INI YANG SEBELUMNYA HILANG/ERROR) ---
-    public function history()
-    {
-        // Ambil data reservasi milik user yang sedang login
-        $reservations = Reservation::where('user_id', Auth::id())
-            ->with(['service', 'barber']) // Load relasi biar nama service/barber muncul
-            ->latest() // Urutkan dari yang terbaru
-            ->get();
-
-        // Pastikan kamu punya file: resources/views/user/history.blade.php
-        return view('user.history', compact('reservations'));
-    }
+    
 
     // --- ADMIN: LIHAT DATA ---
     public function index()

@@ -70,8 +70,7 @@ Route::middleware(['auth'])->group(function () {
     // Fitur Cek Slot Terboking (AJAX) - Untuk membuat jam jadi merah/disabled
     Route::get('/reservasi/check-slots', [ReservationController::class, 'checkSlots'])->name('reservasi.check-slots');
     
-    // Fitur Riwayat Reservasi - Agar user bisa cek status "Pending/Approved" langsung
-    Route::get('/reservasi/history', [ReservationController::class, 'history'])->name('reservasi.history');
+
 
     // Edit Profile User
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
