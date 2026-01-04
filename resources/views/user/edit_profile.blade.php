@@ -17,7 +17,7 @@
                 </div>
                 @endif
 
-                {{-- Menampilkan Error Validasi (Penting agar tahu kenapa error) --}}
+                {{-- Menampilkan Error Validasi --}}
                 @if ($errors->any())
                 <div class="alert alert-danger bg-opacity-25 bg-danger text-white border-0 mb-4 rounded-0">
                     <ul class="mb-0">
@@ -28,30 +28,19 @@
                 </div>
                 @endif
 
-                <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('profile.update') }}" method="POST">
                     @csrf
                     @method('PUT')
 
-                    {{-- PREVIEW FOTO --}}
-                    <div class="text-center mb-4">
+                    {{-- INFORMASI FOTO (STATIS) --}}
+                    <div class="text-center mb-5">
                         <div class="d-inline-block position-relative">
-                            {{-- Logic Gambar: Cek BLOB/Path dulu --}}
                             <img src="{{ Auth::user()->avatar_blob ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=D4AF37&color=000' }}"
                                 class="rounded-circle border border-warning p-1 shadow"
-                                style="width: 130px; height: 130px; object-fit: cover;" id="avatarPreview">
-
-                            <label for="avatarInput"
-                                class="position-absolute bottom-0 end-0 text-dark rounded-circle d-flex align-items-center justify-content-center shadow-sm"
-                                style="cursor: pointer; background: #D4AF37; width: 40px; height: 40px; border: 3px solid #0a0a0a;">
-                                <i class="bi bi-camera-fill"></i>
-                            </label>
+                                style="width: 130px; height: 130px; object-fit: cover;">
                         </div>
-                        <p class="text-white-50 small mt-3">Klik ikon kamera untuk mengganti foto</p>
+                        <p class="text-white-50 small mt-3">Foto profil saat ini</p>
                     </div>
-
-                    {{-- INPUT FILE HIDDEN --}}
-                    <input type="file" name="avatar" id="avatarInput" class="d-none"
-                        accept="image/png, image/jpeg, image/jpg" onchange="previewImage(event)">
 
                     {{-- INPUT NAMA --}}
                     <div class="mb-4">
@@ -73,8 +62,9 @@
                     <div class="d-flex gap-3">
                         <a href="{{ route('dashboard') }}"
                             class="btn btn-outline-light w-50 py-3 rounded-0 border-secondary">BATAL</a>
-                        <button type="submit" class="btn btn-gold-luxury w-50 py-3 rounded-0 fw-bold shadow">SIMPAN
-                            PERUBAHAN</button>
+                        <button type="submit" class="btn btn-gold-luxury w-50 py-3 rounded-0 fw-bold shadow">
+                            SIMPAN PERUBAHAN
+                        </button>
                     </div>
                 </form>
             </div>
@@ -91,23 +81,4 @@
     color: white !important;
 }
 </style>
-
-<script>
-function previewImage(event) {
-    const file = event.target.files[0];
-    // Validasi ukuran file di sisi klien (Contoh: Max 2MB)
-    if (file.size > 2 * 1024 * 1024) {
-        alert("Ukuran file terlalu besar! Maksimal 2MB.");
-        event.target.value = "";
-        return;
-    }
-
-    var reader = new FileReader();
-    reader.onload = function() {
-        var output = document.getElementById('avatarPreview');
-        output.src = reader.result;
-    };
-    reader.readAsDataURL(file);
-}
-</script>
 @endsection
