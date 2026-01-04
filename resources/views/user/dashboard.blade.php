@@ -4,14 +4,20 @@
 
 @push('styles')
 <style>
-/* --- FIX MODAL ERROR (Supaya tidak layar hitam/freeze) --- */
+:root {
+    --luxury-gold: #D4AF37;
+    --matte-black: #0f0f0f;
+}
+
+/* --- FIX MODAL ERROR --- */
 .modal-backdrop {
     display: none !important;
     z-index: -1 !important;
 }
 
 .modal {
-    background-color: rgba(0, 0, 0, 0.85) !important;
+    background-color: rgba(0, 0, 0, 0.9) !important;
+    backdrop-filter: blur(5px);
 }
 
 .modal-dialog {
@@ -19,285 +25,247 @@
     margin-top: 10vh;
 }
 
-/* --- TABLE LUXURY STYLE --- */
-.table-luxury {
-    background-color: transparent !important;
-    color: #fff !important;
-    /* Pastikan teks putih */
+/* --- ELITE CARD DESIGN --- */
+.elite-card {
+    background: linear-gradient(145deg, #161616, #000);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 40px 25px;
+    position: relative;
+    overflow: hidden;
 }
 
-/* Header Tabel Gelap dengan Garis Emas */
-.table-luxury thead th {
-    background-color: #1a1a1a !important;
-    /* Latar belakang gelap */
-    color: var(--luxury-gold) !important;
-    /* Teks Emas */
-    border-bottom: 1px solid var(--luxury-gold) !important;
-    font-weight: 600;
-    letter-spacing: 1px;
-    padding: 15px;
-    text-transform: uppercase;
-    font-size: 0.85rem;
+.elite-card::after {
+    content: "VIP";
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 6rem;
+    font-weight: 900;
+    color: rgba(212, 175, 55, 0.03);
+    z-index: 0;
 }
 
-/* Body Tabel Transparan */
-.table-luxury tbody td {
-    background-color: transparent !important;
-    color: #e0e0e0 !important;
-    /* Putih agak abu biar mata nyaman */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-    padding: 20px 15px;
-    vertical-align: middle;
-}
-
-/* Hover Baris */
-.table-luxury tbody tr:hover td {
-    background-color: rgba(212, 175, 55, 0.05) !important;
-    /* Efek hover emas tipis */
-    color: #fff !important;
-}
-
-/* Stats Box Hover Effect */
+/* --- STATS GLOW --- */
 .stats-box {
-    transition: transform 0.3s;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .stats-box:hover {
-    transform: translateY(-5px);
-    border-color: var(--luxury-gold) !important;
+    transform: scale(1.05);
+    border-color: var(--luxury-gold);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+}
+
+/* --- TABLE RE-BORN --- */
+.table-luxury {
+    --bs-table-bg: transparent;
+    --bs-table-color: #fff;
+}
+
+.table-luxury thead th {
+    font-family: 'Playfair Display', serif;
+    color: var(--luxury-gold) !important;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: 2px solid var(--luxury-gold) !important;
+    padding: 20px 15px;
+}
+
+.table-luxury tbody td {
+    padding: 25px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    font-size: 0.9rem;
+}
+
+.table-luxury tbody tr:hover td {
+    background: rgba(212, 175, 55, 0.03) !important;
+}
+
+.status-badge {
+    padding: 6px 15px;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    font-weight: 700;
+    border-radius: 0;
 }
 </style>
 @endpush
 
 @section('content')
-<div class="container py-5" style="margin-bottom: 100px;">
+<div class="container py-5" style="margin-top: 100px; margin-bottom: 120px;">
 
-    {{-- ALERT FEEDBACK --}}
+    {{-- FEEDBACK --}}
     @if(session('success'))
-    <div class="alert alert-success border-0 bg-success bg-opacity-25 text-white mb-4">
-        <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
-    </div>
-    @endif
-    @if(session('error'))
-    <div class="alert alert-danger border-0 bg-danger bg-opacity-25 text-white mb-4">
-        <i class="bi bi-exclamation-circle me-2"></i> {{ session('error') }}
+    <div class="alert alert-success border-0 bg-dark text-gold mb-5 rounded-0 border-start border-gold border-3 shadow">
+        <i class="bi bi-patch-check-fill me-2"></i> {{ session('success') }}
     </div>
     @endif
 
-    <div class="row g-4">
-
-        {{-- BAGIAN KIRI: PROFIL CARD --}}
+    <div class="row g-5">
+        {{-- BAGIAN KIRI: ELITE CARD --}}
         <div class="col-lg-4" data-aos="fade-right">
-            <div class="mb-4 position-relative d-inline-block">
-                <img src="{{ Auth::user()->avatar_blob ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=D4AF37&color=000' }}"
-                    class="rounded-circle shadow-lg"
-                    style="width: 120px; height: 120px; object-fit: cover; border: 3px solid var(--luxury-gold); padding: 3px;"
-                    alt="Foto Profil">
-
-                <span
-                    class="position-absolute bottom-0 end-0 badge rounded-pill bg-success border border-dark px-3 py-2">
-                    Active
-                </span>
-            </div>
-
-            <h3 class="fw-bold text-white mb-1">{{ Auth::user()->name }}</h3>
-            <p class="text-white-50 small mb-4">{{ Auth::user()->email }}</p>
-
-            <hr style="border-color: var(--luxury-gold); opacity: 0.5;">
-
-            <div class="row g-2 text-center mt-4">
-                <div class="col-6">
-                    <div class="p-3 border border-secondary stats-box bg-dark bg-opacity-25">
-                        <h2 class="fw-bold text-gold m-0">
-                            {{ Auth::user()->reservations()->where('status', 'done')->count() }}
-                        </h2>
-                        <small class="text-white letter-spacing-1" style="font-size: 0.7rem;">TOTAL CUKUR</small>
+            <div class="elite-card shadow-lg rounded-3">
+                <div class="text-center position-relative z-index-1">
+                    <div class="mb-4 position-relative d-inline-block">
+                        <img src="{{ Auth::user()->avatar_blob ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=D4AF37&color=000' }}"
+                            class="rounded-circle"
+                            style="width: 130px; height: 130px; object-fit: cover; border: 2px solid var(--luxury-gold); padding: 5px;">
+                        <div class="position-absolute bottom-0 end-0 bg-success border border-dark rounded-circle"
+                            style="width: 20px; height: 20px;"></div>
                     </div>
-                </div>
-                <div class="col-6">
-                    <div class="p-3 border border-secondary stats-box bg-dark bg-opacity-25">
-                        <h2 class="fw-bold text-gold m-0">ELITE</h2>
-                        <small class="text-white letter-spacing-1" style="font-size: 0.7rem;">MEMBERSHIP</small>
+
+                    <h2 class="fw-bold text-white mb-1 font-serif">{{ Auth::user()->name }}</h2>
+                    <span class="text-gold small letter-spacing-3 text-uppercase opacity-75">Elite Member</span>
+
+                    <div class="mt-4 mb-4 d-flex justify-content-center gap-2">
+                        <div class="flex-fill stats-box p-3">
+                            <h3 class="m-0 text-white fw-bold">
+                                {{ Auth::user()->reservations()->where('status', 'done')->count() }}</h3>
+                            <small class="text-gold-dim small uppercase">Visits</small>
+                        </div>
+                        <div class="flex-fill stats-box p-3">
+                            <h3 class="m-0 text-white fw-bold">Level</h3>
+                            <small class="text-gold-dim small uppercase">Gold</small>
+                        </div>
                     </div>
+
+                    <p class="text-white-50 small mb-4 italic">"Style is a reflection of your attitude and your
+                        personality."</p>
+
+                    <a href="{{ route('profile.edit') }}"
+                        class="btn btn-gold-luxury w-100 py-3 fw-bold letter-spacing-2">
+                        MANAGE ACCOUNT
+                    </a>
                 </div>
             </div>
-
-            <div class="mt-4">
-                <a href="{{ route('profile.edit') }}"
-                    class="btn btn-outline-light w-100 rounded-0 py-2 fw-bold letter-spacing-1 hover-gold-border"
-                    style="opacity: 0.8;">
-                    <i class="bi bi-pencil-square me-2"></i> EDIT PROFILE
-                </a>
-            </div>
-
-            <style>
-            .hover-gold-border:hover {
-                border-color: var(--luxury-gold) !important;
-                color: var(--luxury-gold) !important;
-                opacity: 1 !important;
-            }
-            </style>
         </div>
 
-
-        {{-- BAGIAN KANAN: RIWAYAT CARD --}}
+        {{-- BAGIAN KANAN: HISTORY --}}
         <div class="col-lg-8" data-aos="fade-left">
-            <div class="p-4 rounded-0 bg-matte h-100"
-                style="border: 1px solid var(--luxury-gold); box-shadow: 0 0 20px rgba(0,0,0,0.5); background-color: #0f0f0f;">
-
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="fw-bold text-white m-0">
-                        <i class="bi bi-clock-history me-2 text-gold"></i>RIWAYAT LAYANAN
-                    </h4>
-                    <span class="badge border border-warning text-gold bg-transparent">History</span>
+            <div class="p-5" style="background: #111; border: 1px solid #222;">
+                <div class="d-flex justify-content-between align-items-end mb-5">
+                    <div>
+                        <h6 class="text-gold letter-spacing-3 mb-2">CHRONICLES</h6>
+                        <h3 class="text-white fw-bold m-0 font-serif">SERVICE HISTORY</h3>
+                    </div>
+                    <i class="bi bi-stars text-gold fs-2"></i>
                 </div>
 
                 <div class="table-responsive">
-                    {{-- HAPUS class 'table-hover', Ganti dengan class custom 'table-luxury' --}}
-                    <table class="table table-luxury align-middle mb-0">
+                    <table class="table table-luxury align-middle">
                         <thead>
                             <tr>
-                                <th>TANGGAL</th>
-                                <th>LAYANAN</th>
-                                <th>HARGA</th>
-                                <th class="text-end">STATUS</th>
+                                <th>Schedule</th>
+                                <th>Ritual</th>
+                                <th>Investment</th>
+                                <th class="text-end">Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse(Auth::user()->reservations()->with('barber')->latest()->get() as $res)
                             <tr>
                                 <td>
-                                    <div class="d-flex align-items-center gap-2 text-white">
-                                        <i class="bi bi-calendar-event text-white-50"></i>
-                                        {{ \Carbon\Carbon::parse($res->date)->translatedFormat('d M Y') }}
-                                    </div>
-                                    <div class="small text-gold ps-4">
-                                        {{ \Carbon\Carbon::parse($res->time)->format('H:i') }} WIB
-                                    </div>
+                                    <div class="text-white fw-bold">
+                                        {{ \Carbon\Carbon::parse($res->date)->format('d.M.Y') }}</div>
+                                    <small
+                                        class="text-gold opacity-75">{{ \Carbon\Carbon::parse($res->time)->format('H:i') }}
+                                        WIB</small>
                                 </td>
-
                                 <td>
-                                    <span
-                                        class="fw-bold text-white d-block">{{ $res->service->name ?? 'Layanan' }}</span>
-                                    <small class="text-white-50" style="font-size: 0.8rem;">
-                                        <i class="bi bi-person me-1"></i> {{ $res->barber->name ?? 'Any Barber' }}
-                                    </small>
+                                    <div class="text-white">{{ $res->service->name ?? 'Premium Cut' }}</div>
+                                    <small class="text-white-50">with
+                                        {{ $res->barber->name ?? 'Master Artist' }}</small>
                                 </td>
-
-                                <td class="text-gold fw-bold">
-                                    Rp {{ number_format($res->service->price ?? 0, 0, ',', '.') }}
-                                </td>
-
+                                <td class="text-gold font-serif">Rp
+                                    {{ number_format($res->service->price ?? 0, 0, ',', '.') }}</td>
                                 <td class="text-end">
                                     @php
                                     $status = strtolower($res->status);
                                     $hasReview = \App\Models\Review::where('reservation_id', $res->id)->exists();
+                                    $badgeClass = match($status) {
+                                    'done','selesai' => 'bg-success text-white',
+                                    'approved','dikonfirmasi' => 'bg-info text-white',
+                                    'pending','menunggu' => 'bg-warning text-black',
+                                    default => 'bg-danger text-white'
+                                    };
                                     @endphp
 
-                                    @if($status == 'done' || $status == 'selesai')
-                                    <span class="badge bg-success bg-opacity-75 text-white px-3 py-2 rounded-1 mb-2">
-                                        <i class="bi bi-check-circle-fill me-1"></i> SELESAI
-                                    </span>
+                                    <span class="status-badge {{ $badgeClass }}">{{ strtoupper($status) }}</span>
 
-                                    @if(!$hasReview && $res->barber_id)
+                                    @if(($status == 'done' || $status == 'selesai') && !$hasReview && $res->barber_id)
                                     <div class="mt-2">
-                                        <button class="btn btn-sm btn-outline-warning text-gold border-warning"
+                                        <button class="btn btn-sm btn-outline-warning text-gold py-1 px-3 rounded-0"
                                             data-bs-toggle="modal" data-bs-target="#reviewModal{{ $res->id }}"
-                                            style="font-size: 0.7rem; padding: 4px 10px;">
-                                            <i class="bi bi-star-fill me-1"></i> Beri Ulasan
+                                            style="font-size: 0.65rem;">
+                                            LEAVE A REVIEW
                                         </button>
                                     </div>
 
-                                    {{-- MODAL REVIEW --}}
-                                    <div class="modal fade" id="reviewModal{{ $res->id }}" tabindex="-1"
-                                        aria-hidden="true">
+                                    {{-- MODAL REVIEW LUXURY --}}
+                                    <div class="modal fade" id="reviewModal{{ $res->id }}" tabindex="-1">
                                         <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content"
-                                                style="background: #1a1a1a; border: 1px solid var(--luxury-gold);">
-                                                <div class="modal-header border-bottom border-secondary">
-                                                    <h5 class="modal-title text-gold fw-bold">Ulas Pelayanan</h5>
+                                            <div class="modal-content modal-content-luxury">
+                                                <div class="modal-header border-secondary p-4">
+                                                    <h5 class="modal-title font-serif text-gold">Rate Your Ritual</h5>
                                                     <button type="button" class="btn-close btn-close-white"
                                                         data-bs-dismiss="modal"></button>
                                                 </div>
                                                 <form action="{{ route('review.store') }}" method="POST">
                                                     @csrf
                                                     <input type="hidden" name="reservation_id" value="{{ $res->id }}">
-                                                    <div class="modal-body text-start">
-                                                        <p class="text-white small mb-3">Bagaimana hasil cukuran dengan
-                                                            <strong
-                                                                class="text-gold">{{ $res->barber->name ?? 'Barber' }}</strong>?
-                                                        </p>
-                                                        <div class="mb-3">
-                                                            <label class="text-white small fw-bold mb-2">Rating</label>
+                                                    <div class="modal-body p-4">
+                                                        <p class="text-white-50 mb-4">How was your experience with
+                                                            Master <span
+                                                                class="text-gold">{{ $res->barber->name }}</span>?</p>
+                                                        <div class="mb-4">
+                                                            <label
+                                                                class="text-gold small uppercase letter-spacing-2 mb-2 d-block">Rating</label>
                                                             <select name="rating"
-                                                                class="form-select bg-dark text-white border-secondary"
+                                                                class="form-select bg-black text-white border-secondary rounded-0 py-3"
                                                                 required>
-                                                                <option value="5">⭐⭐⭐⭐⭐ (Sempurna)</option>
-                                                                <option value="4">⭐⭐⭐⭐ (Bagus)</option>
-                                                                <option value="3">⭐⭐⭐ (Cukup)</option>
-                                                                <option value="2">⭐⭐ (Kurang)</option>
-                                                                <option value="1">⭐ (Buruk)</option>
+                                                                <option value="5">★★★★★ Excellent</option>
+                                                                <option value="4">★★★★ Very Good</option>
+                                                                <option value="3">★★★ Average</option>
+                                                                <option value="2">★★ Poor</option>
+                                                                <option value="1">★ Disappointing</option>
                                                             </select>
                                                         </div>
-                                                        <div class="mb-3">
+                                                        <div class="mb-2">
                                                             <label
-                                                                class="text-white small fw-bold mb-2">Komentar</label>
+                                                                class="text-gold small uppercase letter-spacing-2 mb-2 d-block">Comment</label>
                                                             <textarea name="comment"
-                                                                class="form-control bg-dark text-white border-secondary"
-                                                                rows="3"></textarea>
+                                                                class="form-control bg-black text-white border-secondary rounded-0"
+                                                                rows="4"
+                                                                placeholder="Share your experience..."></textarea>
                                                         </div>
                                                     </div>
-                                                    <div class="modal-footer border-top border-secondary">
-                                                        <button type="submit" class="btn btn-gold-luxury w-100">Kirim
-                                                            Ulasan</button>
+                                                    <div class="p-4 pt-0">
+                                                        <button type="submit"
+                                                            class="btn btn-gold-luxury w-100 py-3 fw-bold">SUBMIT
+                                                            REVIEW</button>
                                                     </div>
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
                                     @elseif($hasReview)
-                                    <div class="mt-1">
-                                        <small class="text-gold fst-italic" style="font-size: 0.65rem;">
-                                            <i class="bi bi-star-fill text-warning"></i> Ulasan Terkirim
-                                        </small>
+                                    <div class="mt-2">
+                                        <i class="bi bi-star-fill text-warning small"></i>
+                                        <small class="text-white-50 fst-italic ms-1" style="font-size: 0.7rem;">Review
+                                            Submitted</small>
                                     </div>
-                                    @endif
-
-                                    @elseif($status == 'approved' || $status == 'dikonfirmasi')
-                                    <span class="badge bg-info bg-opacity-75 text-white px-3 py-2 rounded-1">
-                                        <i class="bi bi-calendar-check me-1"></i> DIKONFIRMASI
-                                    </span>
-                                    <div class="mt-1">
-                                        <small class="text-white-50" style="font-size: 0.65rem;">Datang sesuai
-                                            jadwal.</small>
-                                    </div>
-
-                                    @elseif($status == 'pending' || $status == 'menunggu')
-                                    <span class="badge bg-warning bg-opacity-75 text-black px-3 py-2 rounded-1">
-                                        <i class="bi bi-hourglass-split me-1"></i> MENUNGGU
-                                    </span>
-                                    @elseif($status == 'canceled' || $status == 'batal')
-                                    <span class="badge bg-danger bg-opacity-75 text-white px-3 py-2 rounded-1">
-                                        <i class="bi bi-x-circle me-1"></i> BATAL
-                                    </span>
-                                    @else
-                                    <span class="badge bg-secondary text-white px-3 py-2 rounded-1">
-                                        {{ strtoupper($res->status) }}
-                                    </span>
                                     @endif
                                 </td>
                             </tr>
                             @empty
                             <tr>
                                 <td colspan="4" class="text-center py-5">
-                                    <div class="d-flex flex-column align-items-center justify-content-center">
-                                        <i class="bi bi-scissors display-4 text-white-50 mb-3"
-                                            style="opacity: 0.3;"></i>
-                                        <p class="text-white mb-0 fs-5">Belum Ada Riwayat</p>
-                                        <a href="{{ route('reservasi') }}" class="btn btn-sm btn-gold-luxury mt-3 px-4">
-                                            BOOK NOW
-                                        </a>
-                                    </div>
+                                    <div class="opacity-25 mb-3"><i class="bi bi-journal-x display-4"></i></div>
+                                    <p class="text-white-50 letter-spacing-2 small">NO RITUAL HISTORY FOUND</p>
+                                    <a href="{{ route('reservasi') }}"
+                                        class="btn btn-sm btn-outline-warning mt-3 rounded-0 px-4">START RITUAL</a>
                                 </td>
                             </tr>
                             @endforelse
