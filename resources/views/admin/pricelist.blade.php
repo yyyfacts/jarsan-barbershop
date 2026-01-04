@@ -4,7 +4,7 @@
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
     <div>
         <h3 class="fw-bold m-0 text-dark">Manajemen Layanan (Pricelist)</h3>
-        <p class="small text-muted">Atur judul halaman utama, CTA, dan daftar harga layanan.</p>
+        <p class="small text-muted">Atur judul halaman utama, background, dan daftar harga layanan.</p>
     </div>
     {{-- Tombol Trigger Modal Tambah --}}
     <button class="btn btn-warning fw-bold shadow-sm px-4" data-bs-toggle="modal" data-bs-target="#modalTambahService">
@@ -12,59 +12,69 @@
     </button>
 </div>
 
+{{-- ALERT --}}
 @if(session('success'))
 <div class="alert alert-success border-0 shadow-sm mb-4">
     <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
 </div>
 @endif
 
-{{-- BAGIAN 1: PENGATURAN TEKS HALAMAN (Form ke AboutController) --}}
+@if($errors->any())
+<div class="alert alert-danger border-0 shadow-sm mb-4">
+    <ul class="mb-0">
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
+{{-- BAGIAN 1: PENGATURAN TAMPILAN HALAMAN (SINKRON DENGAN JSON) --}}
 <div class="card border-0 shadow-sm rounded-3 mb-4">
-    <div class="card-header bg-white border-bottom py-3 d-flex align-items-center">
-        <h6 class="fw-bold m-0 text-dark"><i class="bi bi-fonts me-2"></i>Edit Teks Halaman</h6>
+    <div class="card-header bg-white border-bottom py-3 d-flex align-items-center justify-content-between">
+        <h6 class="fw-bold m-0 text-dark"><i class="bi bi-palette me-2"></i>Edit Tampilan Halaman</h6>
     </div>
     <div class="card-body p-4">
-        {{-- Form ini mengirim data ke route admin.about.update --}}
-        <form action="{{ route('admin.about.update') }}" method="POST">
-            @csrf @method('PUT')
+        {{-- Form ini mengirim data ke route admin.services.updatePageConfig --}}
+        <form action="{{ route('admin.services.updatePageConfig') }}" method="POST" enctype="multipart/form-data">
+            @csrf
             <div class="row g-4">
-                {{-- Bagian Atas (Hero) --}}
-                <div class="col-12">
-                    <h6 class="fw-bold text-primary border-bottom pb-2 mb-3">Bagian Atas (Hero Section)</h6>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label small fw-bold text-muted">SUB-JUDUL</label>
-                    <input type="text" name="pricelist_subtitle" class="form-control"
-                        value="{{ $about->pricelist_subtitle ?? 'EXCLUSIVE TREATMENTS' }}">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label small fw-bold text-muted">JUDUL UTAMA</label>
-                    <input type="text" name="pricelist_title" class="form-control"
-                        value="{{ $about->pricelist_title ?? 'SERVICE MENU' }}">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label small fw-bold text-muted">DESKRIPSI SINGKAT</label>
-                    <textarea name="pricelist_description" class="form-control"
-                        rows="1">{{ $about->pricelist_description ?? 'Layanan perawatan rambut terbaik...' }}</textarea>
+                {{-- Preview Background Saat Ini --}}
+                <div class="col-12 mb-2">
+                    @if(!empty($pageConfig->pricelist_bg_path))
+                    <label class="form-label small fw-bold text-muted">BACKGROUND SAAT INI</label>
+                    <div class="ratio ratio-21x9 rounded overflow-hidden border shadow-sm" style="max-height: 150px;">
+                        <img src="{{ $pageConfig->pricelist_bg_path }}" class="object-fit-cover">
+                    </div>
+                    @endif
                 </div>
 
-                {{-- Bagian Bawah (CTA) --}}
-                <div class="col-12 mt-2">
-                    <h6 class="fw-bold text-success border-bottom pb-2 mb-3">Bagian Bawah (Call to Action)</h6>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label small fw-bold text-muted">JUDUL CTA</label>
-                    <input type="text" name="pricelist_cta_title" class="form-control"
-                        value="{{ $about->pricelist_cta_title ?? 'INGIN TAMPIL LEBIH BERANI?' }}">
+                <div class="col-md-6">
+                    <label class="form-label small fw-bold text-muted">SUB-JUDUL (Kecil di Atas)</label>
+                    <input type="text" name="pricelist_subtitle" class="form-control"
+                        value="{{ $pageConfig->pricelist_subtitle ?? 'CURATED GROOMING' }}">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label small fw-bold text-muted">TEKS CTA</label>
-                    <input type="text" name="pricelist_cta_text" class="form-control"
-                        value="{{ $about->pricelist_cta_text ?? 'Pesan jadwal pengerjaan Anda sekarang...' }}">
+                    <label class="form-label small fw-bold text-muted">JUDUL UTAMA (Besar)</label>
+                    <input type="text" name="pricelist_title" class="form-control"
+                        value="{{ $pageConfig->pricelist_title ?? 'SERVICE MENU' }}">
                 </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-dark w-100 fw-bold">
-                        <i class="bi bi-save me-1"></i> Update
+
+                <div class="col-md-12">
+                    <label class="form-label small fw-bold text-muted">DESKRIPSI SINGKAT</label>
+                    <textarea name="pricelist_description" class="form-control"
+                        rows="2">{{ $pageConfig->pricelist_description ?? 'Layanan perawatan rambut terbaik...' }}</textarea>
+                </div>
+
+                <div class="col-md-8">
+                    <label class="form-label small fw-bold text-muted">GANTI BACKGROUND IMAGE (Opsional)</label>
+                    <input type="file" name="pricelist_bg" class="form-control" accept="image/*">
+                    <small class="text-muted d-block mt-1">*Disarankan gambar gelap ukuran 1920x1080 px</small>
+                </div>
+
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-dark w-100 fw-bold py-2">
+                        <i class="bi bi-save me-1"></i> Simpan Tampilan
                     </button>
                 </div>
             </div>
