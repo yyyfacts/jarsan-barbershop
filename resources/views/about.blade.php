@@ -209,13 +209,13 @@
     </div>
 
     {{-- Teks Raksasa di Belakang --}}
-    <div class="giant-text">THE LEGACY</div>
+    <div class="giant-text">GOOD HAIR, GOOD MOOD</div>
 
     <div class="hero-content" data-aos="fade-up">
         <h6 class="text-gold letter-spacing-3 small mb-3">{{ $about->hero_subtitle ?? 'ESTABLISHED 2024' }}</h6>
         <h1 class="display-3 fw-bold text-white mb-0"
             style="font-family: 'Playfair Display', serif; text-shadow: 0 5px 15px rgba(0,0,0,0.5);">
-            {{ $about->hero_title ?? 'CRAFTING CONFIDENCE' }}
+            {{ $about->hero_title ?? 'KUALITAS CUKUR, KENYAMANAN GAYA' }}
         </h1>
     </div>
 </section>
