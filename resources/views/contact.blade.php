@@ -33,21 +33,21 @@ body {
     pointer-events: none;
 }
 
-/* --- 2. MARQUEE (DIPERBAIKI: LEBIH NAIK & SAMAR) --- */
+/* --- 2. MARQUEE (DIPERBAIKI: UKURAN LEBIH KECIL & POSISI PAS) --- */
 .marquee-container {
     overflow: hidden;
     white-space: nowrap;
     position: absolute;
-    top: 2%;
-    /* Dinaikkan agar ada jarak dengan judul */
+    top: 80px;
+    /* Menyesuaikan di bawah navbar */
     left: 0;
     width: 100%;
-    color: rgba(255, 255, 255, 0.04);
-    /* Dibuat lebih gelap/samar */
-    font-size: 9rem;
-    /* Ukuran sedikit diperkecil agar proporsional */
+    color: rgba(255, 255, 255, 0.03);
+    /* Sangat samar */
+    font-size: 6rem;
+    /* Ukuran diperkecil agar tidak menutupi judul */
     font-family: 'Italiana', serif;
-    z-index: -1;
+    z-index: 0;
     pointer-events: none;
 }
 
@@ -66,7 +66,16 @@ body {
     }
 }
 
-/* --- 3. FORM STYLE --- */
+/* --- 3. KONTEN UTAMA (DIPERBAIKI: JARAK ATAS DITAMBAH) --- */
+.main-contact-section {
+    padding-top: 250px;
+    /* Memberi ruang agar judul berada di bawah marquee */
+    padding-bottom: 80px;
+    position: relative;
+    z-index: 10;
+}
+
+/* --- 4. FORM STYLE --- */
 .input-group-luxury {
     position: relative;
     margin-bottom: 2.5rem;
@@ -106,7 +115,7 @@ body {
     font-size: 0.65rem;
 }
 
-/* --- 4. ANIMASI KANAN (GEOMETRIC) --- */
+/* --- 5. ANIMASI KANAN --- */
 .visual-container {
     position: relative;
     height: 400px;
@@ -118,22 +127,21 @@ body {
 .geo-line {
     position: absolute;
     border: 1px solid var(--gold);
-    opacity: 0.2;
-    animation: rotateGeo 15s linear infinite;
+    opacity: 0.15;
+    animation: rotateGeo 20s linear infinite;
 }
 
 .line-1 {
-    width: 300px;
-    height: 300px;
+    width: 320px;
+    height: 320px;
     border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
 }
 
 .line-2 {
-    width: 250px;
-    height: 250px;
+    width: 280px;
+    height: 280px;
     border-radius: 50%;
     border-style: dashed;
-    animation-duration: 20s;
 }
 
 @keyframes rotateGeo {
@@ -146,7 +154,24 @@ body {
     }
 }
 
-/* --- 5. INFO BOX & MAPS (TERPISAH) --- */
+.btn-luxury {
+    background: var(--gold);
+    color: #000;
+    border: none;
+    padding: 15px 45px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    transition: 0.3s;
+}
+
+.btn-luxury:hover {
+    background: #fff;
+    transform: translateY(-3px);
+}
+
+/* --- 6. INFO BOX & MAPS --- */
 .info-box {
     background: var(--card-bg);
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -157,7 +182,7 @@ body {
 .map-wrapper {
     width: 100%;
     height: 450px;
-    filter: grayscale(1) contrast(1.2) brightness(0.8);
+    filter: grayscale(1) contrast(1.1) brightness(0.7);
     border: 1px solid rgba(212, 175, 55, 0.1);
     transition: 0.5s;
 }
@@ -167,32 +192,16 @@ body {
 }
 
 .map-wrapper iframe {
-    width: 100%;
-    height: 100%;
+    width: 100% !important;
+    height: 100% !important;
     border: none;
-}
-
-.btn-luxury {
-    background: var(--gold);
-    color: #000;
-    border: none;
-    padding: 15px 40px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    transition: 0.3s;
-}
-
-.btn-luxury:hover {
-    background: #fff;
-    transform: translateY(-3px);
 }
 </style>
 @endpush
 
 <div class="noise-bg"></div>
 
+{{-- MARQUEE --}}
 <div class="marquee-container">
     <div class="marquee-content">
         RESERVATION &nbsp; • &nbsp; CONTACT &nbsp; • &nbsp; MOOD CUT &nbsp; • &nbsp; STYLE &nbsp; • &nbsp;
@@ -200,20 +209,25 @@ body {
     </div>
 </div>
 
-{{-- JARAK ATAS DITAMBAHKAN AGAR TIDAK NEMPEL MARQUEE --}}
-<div class="container" style="padding-top: 220px; padding-bottom: 60px;">
+<div class="container main-contact-section">
     <div class="row align-items-center">
-        {{-- KOLOM KIRI: FORMULIR --}}
+        {{-- KOLOM KIRI --}}
         <div class="col-lg-6 mb-5" data-aos="fade-right">
-            <span class="text-gold small letter-spacing-3 text-uppercase d-block mb-3">Studio • Kroya</span>
+            <span class="text-gold small letter-spacing-5 text-uppercase d-block mb-3" style="opacity: 0.8;">Studio •
+                Kroya</span>
 
-            {{-- JUDUL DIAMBIL DARI DATABASE ADMIN --}}
-            <h1 class="display-3 font-luxury text-white mb-4" style="line-height: 1.1;">
+            <h1 class="display-3 font-luxury text-white mb-4" style="line-height: 1.2;">
                 {!! nl2br(e($config->page_title ?? "Hubungi Kami")) !!}
             </h1>
-            <p class="text-white-50 mb-5 fw-light">
+            <p class="text-white-50 mb-5 fw-light" style="max-width: 500px; letter-spacing: 0.5px;">
                 {{ $config->page_subtitle ?? 'Silakan hubungi kami untuk reservasi atau datang langsung ke lokasi.' }}
             </p>
+
+            @if(session('success'))
+            <div class="alert alert-success bg-transparent border-success text-success mb-4 rounded-0">
+                <i class="bi bi-check2-circle me-2"></i> {{ session('success') }}
+            </div>
+            @endif
 
             <form action="{{ route('contact.store') }}" method="POST">
                 @csrf
@@ -230,57 +244,57 @@ body {
                         oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
                     <label class="label-luxury">Message</label>
                 </div>
-                <button type="submit" class="btn-luxury">Send Message</button>
+                <button type="submit" class="btn-luxury mt-3">Send Message</button>
             </form>
         </div>
 
-        {{-- KOLOM KANAN: ANIMASI GEOMETRIS --}}
+        {{-- KOLOM KANAN --}}
         <div class="col-lg-6 d-none d-lg-block">
             <div class="visual-container">
                 <div class="geo-line line-1"></div>
                 <div class="geo-line line-2"></div>
                 <div class="text-center">
-                    <h2 class="font-luxury text-gold" style="letter-spacing: 10px;">MOOD</h2>
-                    <p class="small text-white-50 letter-spacing-5">CUT</p>
+                    <h2 class="font-luxury text-gold mb-0" style="letter-spacing: 15px; margin-left: 15px;">MOOD</h2>
+                    <p class="small text-white-50 letter-spacing-10" style="margin-left: 10px;">CUT</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-{{-- SECTION INFO & MAPS TERPISAH --}}
+{{-- INFO & MAPS --}}
 <div class="container mb-5">
     <div class="row g-4">
-        {{-- INFO BOX --}}
         <div class="col-lg-4" data-aos="fade-up">
-            <div class="info-box">
-                <h4 class="font-luxury text-gold mb-4">Information</h4>
+            <div class="info-box shadow-lg">
+                <h4 class="font-luxury text-gold mb-5 border-bottom border-secondary border-opacity-25 pb-3">Information
+                </h4>
 
                 <div class="mb-4">
-                    <small class="text-white-50 text-uppercase d-block mb-1" style="letter-spacing: 2px;">Lokasi
+                    <small class="text-white-50 text-uppercase d-block mb-2" style="letter-spacing: 2px;">Lokasi
                         Studio</small>
-                    <p class="fw-light">{!! nl2br(e($config->address ?? 'Alamat belum diatur.')) !!}</p>
+                    <p class="fw-light mb-0" style="color: #eee;">{!! nl2br(e($config->address ?? 'Alamat belum
+                        diatur.')) !!}</p>
                 </div>
 
                 <div class="mb-4">
-                    <small class="text-white-50 text-uppercase d-block mb-1" style="letter-spacing: 2px;">WhatsApp
+                    <small class="text-white-50 text-uppercase d-block mb-2" style="letter-spacing: 2px;">WhatsApp
                         Official</small>
-                    <p class="fw-light text-gold">{{ $config->whatsapp ?? '-' }}</p>
+                    <p class="fw-light text-gold mb-0 fs-5">{{ $config->whatsapp ?? '-' }}</p>
                 </div>
 
                 <div class="mb-0">
-                    <small class="text-white-50 text-uppercase d-block mb-1" style="letter-spacing: 2px;">Jam
+                    <small class="text-white-50 text-uppercase d-block mb-2" style="letter-spacing: 2px;">Jam
                         Operasional</small>
-                    <p class="fw-light">
+                    <p class="fw-light mb-0" style="color: #eee;">
                         {{ \Carbon\Carbon::now()->isWeekend() ? ($config->hours_sat_sun ?? '-') : ($config->hours_mon_fri ?? '-') }}
                     </p>
                 </div>
             </div>
         </div>
 
-        {{-- MAP BOX --}}
         <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
-            <div class="map-wrapper">
+            <div class="map-wrapper shadow-lg">
                 @if(!empty($config->maps_link))
                 {!! $config->maps_link !!}
                 @else
@@ -293,5 +307,5 @@ body {
     </div>
 </div>
 
-<div style="height: 60px;"></div>
+<div style="height: 80px;"></div>
 @endsection
