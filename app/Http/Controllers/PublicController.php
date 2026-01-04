@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Service;
 use App\Models\Barber;
 use App\Models\About;
+use App\Models\ContactDetail; // <--- 1. WAJIB IMPORT MODEL INI
 
 class PublicController extends Controller
 {
@@ -18,7 +19,6 @@ class PublicController extends Controller
     // 2. Halaman Tentang Kami
     public function about()
     {
-        // Ambil data about, kalau kosong pakai default array biar ga error
         $about = About::first(); 
         return view('about', compact('about'));
     }
@@ -26,7 +26,6 @@ class PublicController extends Controller
     // 3. Halaman Barberman
     public function barberman()
     {
-        // Ambil semua barber
         $barbers = Barber::all();
         return view('barberman', compact('barbers'));
     }
@@ -34,14 +33,17 @@ class PublicController extends Controller
     // 4. Halaman Pricelist
     public function pricelist()
     {
-        // Ambil semua layanan
         $services = Service::all();
         return view('pricelist', compact('services'));
     }
 
-    // 5. Halaman Kontak
+    // 5. Halaman Kontak (PERBAIKAN DISINI)
     public function contact()
     {
-        return view('contact');
+        // 2. Ambil data konfigurasi kontak dari database
+        $config = ContactDetail::first();
+        
+        // 3. Kirim variabel $config ke view
+        return view('contact', compact('config'));
     }
 }
