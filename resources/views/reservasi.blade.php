@@ -1,286 +1,309 @@
 @extends('layouts.app')
 
-@section('title', 'Premium Booking Ritual')
+@section('title', 'Booking Ritual')
 
 @push('styles')
-<link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap"
-    rel="stylesheet">
 <style>
-/* --- ULTIMATE LUXURY VARIABLES --- */
+/* 1. VARIABEL WARNA (Tema Gelap & Emas) */
 :root {
-    --base-dark: #050505;
-    --surface-dark: #111111;
-    --accent-gold: #D4AF37;
-    --accent-gold-bright: #F2D06B;
-    --glass-white: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --text-dim: #a0a0a0;
-    --gold-gradient: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+    --bg-main: #050505;
+    /* Hitam Pekat */
+    --bg-card: #141414;
+    /* Abu Sangat Gelap */
+    --gold: #D4AF37;
+    /* Emas Mewah */
+    --gold-dim: rgba(212, 175, 55, 0.2);
+    --text-white: #ffffff;
+    --border-dark: #333333;
 }
 
+/* 2. GLOBAL RESET */
 body {
-    background-color: var(--base-dark) !important;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    color: #ffffff;
-    letter-spacing: -0.01em;
+    background-color: var(--bg-main) !important;
+    color: var(--text-white) !important;
+    font-family: sans-serif;
 }
 
-/* --- DECORATIVE BACKGROUND --- */
-.bg-ritual {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background:
-        radial-gradient(circle at 50% -20%, rgba(212, 175, 55, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 0% 100%, rgba(212, 175, 55, 0.05) 0%, transparent 30%);
-    z-index: -1;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--text-white);
 }
 
-/* --- SECTION TITLES --- */
-.ritual-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 3.5rem;
-    font-weight: 700;
-    background: linear-gradient(to bottom, #fff 40%, var(--accent-gold) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+/* 3. INPUT FORM (Dark Mode Style) */
+.form-control {
+    background-color: transparent !important;
+    border: 1px solid var(--border-dark) !important;
+    color: #fff !important;
+    border-radius: 0;
+    padding: 15px;
 }
 
-.step-header {
-    text-align: center;
-    margin-bottom: 50px;
+.form-control:focus {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 10px var(--gold-dim);
 }
 
-.step-number {
-    font-family: 'Playfair Display', serif;
-    color: var(--accent-gold);
-    font-style: italic;
-    font-size: 1.2rem;
-    display: block;
-    margin-bottom: 5px;
+/* Fix Warna Kalender agar Putih */
+input[type="date"] {
+    color-scheme: dark;
+    /* Fitur browser modern untuk kalender gelap */
 }
 
-.step-label {
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #ffffff;
-}
-
-/* --- LUXURY CARDS --- */
-.selection-card {
-    background: var(--glass-white);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(10px);
-    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    /* Memutihkan icon kalender */
     cursor: pointer;
+}
+
+/* 4. CARD SELECTION (Barber & Service) */
+.selection-input {
+    display: none;
+}
+
+.selection-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-dark);
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
     height: 100%;
-    position: relative;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .selection-card:hover {
-    border-color: var(--accent-gold);
-    background: rgba(212, 175, 55, 0.05);
-    transform: translateY(-10px);
+    border-color: var(--gold);
+    transform: translateY(-5px);
 }
 
 .selection-input:checked+.selection-card {
-    border-color: var(--accent-gold);
-    background: rgba(212, 175, 55, 0.08);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(212, 175, 55, 0.1);
-}
-
-/* BARBER IMAGE STYLING */
-.barber-wrapper {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 15px;
+    border: 2px solid var(--gold);
+    background: rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 15px var(--gold-dim);
 }
 
 .barber-img {
-    width: 100%;
-    height: 100%;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
     object-fit: cover;
+    border: 2px solid #555;
+    margin-bottom: 10px;
     filter: grayscale(100%);
-    border: 2px solid var(--glass-border);
-    transition: 0.5s;
+    transition: 0.3s;
 }
 
 .selection-input:checked+.selection-card .barber-img {
     filter: grayscale(0%);
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 15px var(--accent-gold);
+    border-color: var(--gold);
 }
 
-/* --- SERVICE GRID --- */
-.service-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 60%);
-}
-
-/* --- TIME SLOTS --- */
-.time-slot-label {
-    background: var(--glass-white);
-    border: 1px solid var(--glass-border);
-    padding: 18px;
+/* 5. TOMBOL SLOT WAKTU (Merah jika Full) */
+.time-slot {
+    background: transparent;
+    border: 1px solid #444;
+    color: white;
+    padding: 15px 0;
     text-align: center;
-    transition: 0.3s;
-    font-weight: 600;
-    letter-spacing: 1px;
+    cursor: pointer;
+    display: block;
+    transition: 0.2s;
+    font-weight: bold;
 }
 
-.selection-input:checked+.time-slot-label {
-    background: var(--gold-gradient);
-    color: #000;
-    border-color: transparent;
+.time-slot:hover {
+    border-color: var(--gold);
+    color: var(--gold);
 }
 
-/* BOOKED STATE */
-.time-slot-label.booked {
-    background: #1a0505 !important;
-    border-color: #330000 !important;
-    color: #444 !important;
+.selection-input:checked+.time-slot {
+    background: var(--gold);
+    color: black;
+    border-color: var(--gold);
+}
+
+/* Style Slot Penuh/Booked */
+.time-slot.booked {
+    background: #330000 !important;
+    /* Merah Gelap */
+    border-color: #ff0000 !important;
+    color: #777 !important;
     text-decoration: line-through;
-    opacity: 0.5;
     cursor: not-allowed;
+    position: relative;
 }
 
-/* --- SUMMARY BAR --- */
-.luxury-summary {
+.time-slot.booked::after {
+    content: 'FULL';
+    font-size: 0.6rem;
+    color: red;
+    display: block;
+}
+
+/* 6. MODAL (Pop-up Detail) - HARUS GELAP */
+.modal-content {
+    background-color: #1a1a1a !important;
+    /* Latar Belakang Modal Gelap */
+    border: 1px solid var(--gold);
+    color: white !important;
+}
+
+.modal-header {
+    border-bottom: 1px solid #333;
+}
+
+.modal-footer {
+    border-top: 1px solid #333;
+}
+
+.btn-close {
+    filter: invert(1);
+    /* Tombol close jadi putih */
+}
+
+/* Tabel Jadwal di Modal */
+.schedule-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #333;
+}
+
+/* Ulasan di Modal */
+.review-box {
+    background: #000;
+    padding: 10px;
+    border-left: 3px solid var(--gold);
+    margin-bottom: 10px;
+}
+
+/* 7. SUMMARY BAR (Bawah) */
+.sticky-summary {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    background: rgba(5, 5, 5, 0.9);
-    backdrop-filter: blur(20px);
-    border-top: 1px solid var(--accent-gold);
-    padding: 25px 0;
-    z-index: 2000;
+    background: rgba(0, 0, 0, 0.95);
+    border-top: 2px solid var(--gold);
+    padding: 20px 0;
+    z-index: 9999;
     display: none;
-    animation: slideUp 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    /* Default hide */
 }
 
-.btn-ritual {
-    background: var(--gold-gradient);
-    color: #000;
-    font-weight: 800;
-    letter-spacing: 3px;
-    padding: 18px 45px;
+.btn-gold {
+    background: var(--gold);
+    color: black;
+    font-weight: bold;
     border: none;
-    transition: 0.4s;
-    border-radius: 0;
+    padding: 10px 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-.btn-ritual:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+.btn-gold:hover {
+    background: #fff;
 }
 
-/* --- CUSTOM ALERT --- */
-.alert-success-luxury {
-    background: rgba(212, 175, 55, 0.1);
-    border: 1px solid var(--accent-gold);
-    padding: 40px;
-    text-align: center;
-    margin-bottom: 60px;
+/* Tombol Cek Status */
+.btn-status-outline {
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    background: transparent;
+    padding: 10px 20px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 15px;
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(0.7) sepia(1) saturate(5) hue-rotate(10deg);
-    cursor: pointer;
+.btn-status-outline:hover {
+    background: var(--gold);
+    color: black;
 }
 </style>
 @endpush
 
 @section('content')
-<div class="bg-ritual"></div>
-
-<div class="container pb-5" style="margin-top: 150px; margin-bottom: 180px;">
+<div class="container" style="margin-top: 100px; margin-bottom: 150px;">
 
     {{-- HEADER --}}
-    <div class="text-center mb-5" data-aos="fade-down">
-        <h2 class="ritual-title mb-3">The Ritual</h2>
-        <p class="text-gold letter-spacing-5 fw-light small">RESERVE YOUR TIME AT JARSAN</p>
+    <div class="text-center mb-5">
+        <h5 class="text-warning ls-2">PREMIUM RESERVATION</h5>
+        <h2 class="fw-bold text-white display-4">BOOK YOUR SLOT</h2>
+        <hr style="width: 50px; border: 2px solid var(--gold); margin: 20px auto; opacity: 1;">
     </div>
 
+    {{-- ALERT SUKSES + TOMBOL CEK STATUS --}}
     @if(session('success'))
-    <div class="alert-success-luxury" data-aos="zoom-in">
-        <h3 class="fw-bold mb-3">APPOINTMENT SECURED</h3>
-        <p class="text-white-50 mb-4">{{ session('success') }}</p>
-        <a href="{{ route('reservasi.history') }}" class="btn-check-status px-5 py-3">VIEW MY STATUS</a>
+    <div class="alert border border-success bg-dark text-white text-center p-4 mb-5">
+        <h4 class="text-success fw-bold"><i class="bi bi-check-circle"></i> RESERVASI DITERIMA!</h4>
+        <p>{{ session('success') }}</p>
+        <a href="{{ route('reservasi.history') }}" class="btn-status-outline">
+            CEK STATUS PEMESANAN
+        </a>
     </div>
     @endif
 
-    <form action="{{ route('reservasi.store') }}" method="POST" id="bookingForm">
+    <form action="{{ route('reservasi.store') }}" method="POST">
         @csrf
 
-        {{-- 01. DATE --}}
-        <div class="mb-5 py-5" data-aos="fade-up">
-            <div class="step-header">
-                <span class="step-number">I.</span>
-                <h4 class="step-label">Select Date</h4>
-            </div>
+        {{-- 1. PILIH TANGGAL --}}
+        <div class="mb-5">
+            <h4 class="text-warning text-center mb-4">01. PILIH TANGGAL</h4>
             <div class="row justify-content-center">
                 <div class="col-md-5">
-                    <input type="date" name="date" class="form-control date-luxury" min="{{ date('Y-m-d') }}" required
-                        id="dateInput" onchange="checkAvailableSlots()">
+                    <input type="date" name="date" id="dateInput" class="form-control text-center fs-4"
+                        min="{{ date('Y-m-d') }}" required onchange="checkSlots()">
+                    <div class="text-center text-muted small mt-2">Pilih tanggal untuk melihat jam tersedia</div>
                 </div>
             </div>
         </div>
 
-        {{-- 02. BARBER --}}
-        <div class="mb-5 py-5" data-aos="fade-up">
-            <div class="step-header">
-                <span class="step-number">II.</span>
-                <h4 class="step-label">Choose Your Artist</h4>
-            </div>
-            <div class="row g-4 justify-content-center">
-                {{-- ANY BARBER --}}
+        {{-- 2. PILIH BARBER --}}
+        <div class="mb-5">
+            <h4 class="text-warning text-center mb-4">02. PILIH ARTIST</h4>
+            <div class="row g-3 justify-content-center">
+                {{-- Any Barber --}}
                 <div class="col-6 col-md-3 col-lg-2">
-                    <input type="radio" name="barber_id" id="barber_null" value="" class="selection-input d-none"
-                        checked onchange="checkAvailableSlots()">
-                    <label for="barber_null"
-                        class="selection-card p-4 text-center d-flex flex-column align-items-center justify-content-center">
-                        <div class="barber-wrapper">
-                            <div class="barber-img d-flex align-items-center justify-content-center bg-dark">
-                                <i class="bi bi-stars fs-1 text-gold"></i>
-                            </div>
+                    <input type="radio" name="barber_id" id="b_null" value="" class="selection-input" checked
+                        onchange="checkSlots()">
+                    <label for="b_null" class="selection-card">
+                        <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center mb-2"
+                            style="width: 80px; height: 80px;">
+                            <i class="bi bi-shuffle fs-1 text-white"></i>
                         </div>
-                        <h6 class="text-white fw-bold mb-1 small mt-2">Any Artist</h6>
-                        <small class="text-white-50">Auto-Select</small>
+                        <h6 class="fw-bold text-white mb-0">ANY BARBER</h6>
+                        <small class="text-muted">Rekomendasi</small>
                     </label>
                 </div>
 
+                {{-- Loop Barber --}}
                 @foreach($barbers as $barber)
                 @php
-                $imgSrc = $barber->photo_path ?? 'https://ui-avatars.com/api/?name=' . urlencode($barber->name);
-                $scheduleJson = json_encode($barber->schedule ?? []);
-                $reviewsJson = json_encode($barber->reviews->sortByDesc('created_at')->take(5)->values());
-                $avgRating = number_format($barber->reviews->avg('rating') ?? 0, 1);
+                $img = $barber->photo_path ??
+                'https://ui-avatars.com/api/?name='.$barber->name.'&background=D4AF37&color=000';
+                $sched = json_encode($barber->schedule ?? []);
+                $revs = json_encode($barber->reviews->take(5));
+                $rating = number_format($barber->reviews->avg('rating') ?? 0, 1);
                 @endphp
                 <div class="col-6 col-md-3 col-lg-2">
-                    <input type="radio" name="barber_id" id="barber_{{ $barber->id }}" value="{{ $barber->id }}"
-                        class="selection-input d-none" data-name="{{ $barber->name }}" onchange="checkAvailableSlots()">
-                    <label for="barber_{{ $barber->id }}" class="selection-card p-4 text-center h-100">
-                        <div class="barber-wrapper">
-                            <img src="{{ $imgSrc }}" class="barber-img">
-                        </div>
-                        <h6 class="text-white fw-bold mb-2 small text-uppercase">{{ Str::limit($barber->name, 12) }}
-                        </h6>
-                        <button type="button" class="btn-detail bg-transparent border-0 text-gold small p-0"
-                            onclick="event.stopPropagation(); showBarberDetail('{{ $barber->name }}', '{{ $imgSrc }}', '{{ $barber->bio ?? 'Premier Barber' }}', {{ $scheduleJson }}, {{ $reviewsJson }}, '{{ $avgRating }}', {{ $barber->reviews->count() }})">
-                            <u>View Details</u>
+                    <input type="radio" name="barber_id" id="b_{{ $barber->id }}" value="{{ $barber->id }}"
+                        class="selection-input" data-name="{{ $barber->name }}" onchange="checkSlots()">
+                    <label for="b_{{ $barber->id }}" class="selection-card">
+                        <img src="{{ $img }}" class="barber-img">
+                        <h6 class="fw-bold text-white mb-1">{{ Str::limit($barber->name, 10) }}</h6>
+
+                        {{-- Tombol Detail --}}
+                        <button type="button" class="btn btn-sm btn-outline-warning rounded-0 mt-2"
+                            onclick="event.stopPropagation(); showModal('{{ $barber->name }}', '{{ $img }}', '{{ $barber->bio }}', {{ $sched }}, {{ $revs }}, '{{ $rating }}')">
+                            DETAIL
                         </button>
                     </label>
                 </div>
@@ -288,28 +311,24 @@ input[type="date"]::-webkit-calendar-picker-indicator {
             </div>
         </div>
 
-        {{-- 03. SERVICE --}}
-        <div class="mb-5 py-5" data-aos="fade-up">
-            <div class="step-header">
-                <span class="step-number">III.</span>
-                <h4 class="step-label">Select Treatment</h4>
-            </div>
+        {{-- 3. PILIH SERVICE --}}
+        <div class="mb-5">
+            <h4 class="text-warning text-center mb-4">03. PILIH LAYANAN</h4>
             <div class="row g-4">
                 @foreach($services as $service)
                 <div class="col-6 col-md-4 col-lg-3">
-                    <input type="radio" name="service_id" id="service_{{ $service->id }}" value="{{ $service->id }}"
-                        class="selection-input d-none" data-name="{{ $service->name }}"
-                        data-price="{{ $service->price }}" onchange="updateSummary()" required>
-                    <label for="service_{{ $service->id }}" class="selection-card p-0 h-100">
-                        <div style="height: 160px; position: relative;">
-                            <img src="{{ $service->image_path ?? asset('images/default-service.jpg') }}"
-                                class="w-100 h-100 object-fit-cover">
-                            <div class="service-overlay"></div>
-                        </div>
-                        <div class="p-4">
-                            <h6 class="text-white fw-bold mb-1 letter-spacing-1">{{ strtoupper($service->name) }}</h6>
-                            <span class="text-gold fw-bold small">IDR
-                                {{ number_format($service->price, 0, ',', '.') }}</span>
+                    <input type="radio" name="service_id" id="s_{{ $service->id }}" value="{{ $service->id }}"
+                        class="selection-input" data-name="{{ $service->name }}" data-price="{{ $service->price }}"
+                        onchange="updateSummary()" required>
+                    <label for="s_{{ $service->id }}" class="selection-card p-0 overflow-hidden">
+                        <img src="{{ $service->image_path ?? asset('images/default-service.jpg') }}" class="w-100"
+                            style="height: 140px; object-fit: cover;"
+                            onerror="this.src='https://via.placeholder.com/300x200/000/fff?text=SERVICE'">
+                        <div class="p-3 w-100">
+                            <h6 class="fw-bold text-white mb-1">{{ $service->name }}</h6>
+                            <span class="text-warning fw-bold border border-warning px-2">
+                                Rp {{ number_format($service->price, 0, ',', '.') }}
+                            </span>
                         </div>
                     </label>
                 </div>
@@ -317,190 +336,171 @@ input[type="date"]::-webkit-calendar-picker-indicator {
             </div>
         </div>
 
-        {{-- 04. TIME --}}
-        <div class="mb-5 py-5" data-aos="fade-up">
-            <div class="step-header">
-                <span class="step-number">IV.</span>
-                <h4 class="step-label">Appointment Time</h4>
-            </div>
-            <div class="row g-3 justify-content-center">
-                @php
-                $start = strtotime('10:00');
-                $end = strtotime('21:00');
-                @endphp
-                @for ($t = $start; $t <= $end; $t +=1800) @php $timeVal=date('H:i', $t); $cleanTime=str_replace(':', ''
-                    , $timeVal); @endphp <div class="col-4 col-md-2">
-                    <input type="radio" name="time" id="time_{{ $cleanTime }}" value="{{ $timeVal }}"
-                        class="selection-input d-none time-radio" onchange="updateSummary()" required>
-                    <label for="time_{{ $cleanTime }}" class="time-slot-label time-label d-block rounded-0"
-                        data-time="{{ $timeVal }}">
-                        {{ $timeVal }}
+        {{-- 4. PILIH WAKTU (AJAX Logic Here) --}}
+        <div class="mb-5">
+            <h4 class="text-warning text-center mb-4">04. PILIH WAKTU</h4>
+            <div class="row g-2 justify-content-center">
+                @for ($t = strtotime('10:00'); $t <= strtotime('21:00'); $t +=1800) @php $val=date('H:i', $t);
+                    $id=str_replace(':', '' , $val); @endphp <div class="col-4 col-md-2">
+                    <input type="radio" name="time" id="t_{{ $id }}" value="{{ $val }}"
+                        class="selection-input time-radio" onchange="updateSummary()" required>
+                    <label for="t_{{ $id }}" class="time-slot" id="label_{{ $id }}">
+                        {{ $val }}
                     </label>
             </div>
             @endfor
         </div>
 </div>
 
-{{-- 05. CONTACT --}}
-<div class="mb-5 py-5" data-aos="fade-up">
-    <div class="step-header">
-        <span class="step-number">V.</span>
-        <h4 class="step-label">Confirmation</h4>
-    </div>
+{{-- 5. KONFIRMASI --}}
+<div class="mb-5">
+    <h4 class="text-warning text-center mb-4">05. KONFIRMASI</h4>
     <div class="row justify-content-center">
         <div class="col-md-6">
             <input type="hidden" name="name" value="{{ Auth::user()->name }}">
-            <div class="mb-4">
-                <label class="text-gold small fw-bold mb-3 d-block letter-spacing-2">WHATSAPP NUMBER</label>
-                <input type="text" name="phone" class="form-control form-control-luxury py-3 border-0 rounded-0"
-                    style="background: var(--glass-white);" placeholder="08xxxxxxxx" required>
+            <div class="mb-3">
+                <label class="text-warning fw-bold mb-2">NO WHATSAPP</label>
+                <input type="text" name="phone" class="form-control text-center" placeholder="08xxxxxxxx" required>
             </div>
-            <div class="mb-0">
-                <label class="text-gold small fw-bold mb-3 d-block letter-spacing-2">SPECIAL NOTES</label>
-                <textarea name="notes" class="form-control form-control-luxury border-0 rounded-0"
-                    style="background: var(--glass-white);" rows="3"
-                    placeholder="Tell us your preferences..."></textarea>
+            <div class="mb-3">
+                <label class="text-warning fw-bold mb-2">CATATAN</label>
+                <textarea name="notes" class="form-control text-center" rows="2"
+                    placeholder="Permintaan khusus..."></textarea>
             </div>
         </div>
     </div>
 </div>
 
 {{-- SUMMARY BAR --}}
-<div class="luxury-summary" id="summaryBar">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <div class="d-flex align-items-center">
-                    <div class="pe-5 border-end border-secondary">
-                        <small class="text-gold d-block mb-1 letter-spacing-1">TOTAL PAYMENT</small>
-                        <h2 class="text-white fw-bold m-0" id="totalPrice"
-                            style="font-family: 'Playfair Display', serif;">Rp 0</h2>
-                    </div>
-                    <div class="ps-5">
-                        <small class="text-white-50 d-block mb-1">SELECTED RITUAL</small>
-                        <span class="text-white small fw-light" id="summaryText">...</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 text-end">
-                <button type="submit" class="btn btn-ritual">CONFIRM RESERVATION</button>
-            </div>
+<div class="sticky-summary" id="summaryBar">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div>
+            <small class="text-muted d-block">TOTAL BAYAR</small>
+            <h3 class="text-warning fw-bold m-0" id="priceDisplay">Rp 0</h3>
+            <small class="text-white" id="descDisplay">...</small>
         </div>
+        <button type="submit" class="btn btn-gold">BOOKING SEKARANG</button>
     </div>
 </div>
 
 </form>
-</div>
 
-{{-- MODAL DETAIL BARBER --}}
-<div class="modal fade" id="barberDetailModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content modal-content-luxury p-4">
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-5 text-center border-end border-secondary">
-                        <img src="" id="modalBarberImg" class="rounded-circle border border-warning mb-4 shadow"
-                            style="width: 180px; height: 180px; object-fit: cover;">
-                        <h2 class="fw-bold text-white mb-2" id="modalBarberName2"
-                            style="font-family: 'Playfair Display';">Name</h2>
-                        <p class="text-gold small fst-italic mb-4" id="modalBarberBio">Bio...</p>
-                        <div id="ratingBox" class="p-3 bg-dark border border-secondary"></div>
-                    </div>
-                    <div class="col-md-7 ps-md-5">
-                        <h6 class="text-gold border-bottom border-secondary pb-3 mb-3 fw-bold small letter-spacing-2">
-                            WEEKLY SCHEDULE</h6>
-                        <div id="scheduleContainer" class="mb-5"></div>
-                        <h6 class="text-gold border-bottom border-secondary pb-3 mb-3 fw-bold small letter-spacing-2">
-                            RECENT REVIEWS</h6>
-                        <div class="reviews-container" style="max-height: 200px; overflow-y: auto;"></div>
-                    </div>
-                </div>
-                <div class="text-end mt-4">
-                    <button class="btn btn-outline-secondary border-0 text-white px-5"
-                        data-bs-dismiss="modal">CLOSE</button>
-                </div>
+{{-- MODAL DETAIL BARBER (Dark Theme) --}}
+<div class="modal fade" id="barberModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold text-warning" id="mName">Barber Name</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="" id="mImg" class="rounded-circle border border-warning mb-3"
+                    style="width: 120px; height: 120px; object-fit: cover;">
+                <p class="text-white small fst-italic" id="mBio">Bio...</p>
+                <div class="text-warning fs-5 mb-3" id="mRating"></div>
+
+                <h6 class="text-warning border-bottom border-secondary pb-2">JADWAL MINGGU INI</h6>
+                <div id="mSchedule" class="mb-3 text-start small"></div>
+
+                <h6 class="text-warning border-bottom border-secondary pb-2">ULASAN TERBARU</h6>
+                <div id="mReviews" class="text-start small" style="max-height: 150px; overflow-y: auto;"></div>
             </div>
         </div>
     </div>
+</div>
+
 </div>
 @endsection
 
 @push('scripts')
 <script>
-// --- 1. AJAX SLOT CHECK ---
-function checkAvailableSlots() {
+// --- 1. AJAX CEK JAM MERAH ---
+function checkSlots() {
     const date = document.getElementById('dateInput').value;
-    const barberId = document.querySelector('input[name="barber_id"]:checked').value;
-    updateSummary();
+    const barberEl = document.querySelector('input[name="barber_id"]:checked');
+    const barberId = barberEl ? barberEl.value : '';
+
+    updateSummary(); // Update harga/teks
+
     if (!date) return;
 
+    // Reset semua slot jadi putih dulu
+    document.querySelectorAll('.time-radio').forEach(el => el.disabled = false);
+    document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('booked'));
+
+    // Panggil Backend
     fetch(`/reservasi/check-slots?date=${date}&barber_id=${barberId}`)
         .then(res => res.json())
-        .then(booked => {
-            document.querySelectorAll('.time-radio').forEach(el => el.disabled = false);
-            document.querySelectorAll('.time-label').forEach(el => el.classList.remove('booked'));
+        .then(data => {
+            data.forEach(time => {
+                // Convert 10:00 -> 1000
+                let id = time.substring(0, 5).replace(':', '');
+                let input = document.getElementById('t_' + id);
+                let label = document.getElementById('label_' + id);
 
-            booked.forEach(time => {
-                const clean = time.substring(0, 5).replace(':', '');
-                const input = document.getElementById('time_' + clean);
-                const label = document.querySelector(`label[for="time_${clean}"]`);
                 if (input && label) {
                     input.disabled = true;
                     label.classList.add('booked');
                 }
             });
-        });
+        })
+        .catch(err => console.error(err));
 }
 
-// --- 2. SUMMARY LOGIC ---
+// --- 2. UPDATE SUMMARY ---
 function updateSummary() {
-    const bar = document.getElementById('summaryBar');
     const svc = document.querySelector('input[name="service_id"]:checked');
-    const bbr = document.querySelector('input[name="barber_id"]:checked');
-    const tme = document.querySelector('input[name="time"]:checked');
-    const dte = document.getElementById('dateInput').value;
+    const bar = document.getElementById('summaryBar');
 
     if (svc) {
-        bar.style.display = 'block';
-        document.getElementById('totalPrice').innerText = 'Rp ' + parseInt(svc.getAttribute('data-price'))
-            .toLocaleString('id-ID');
+        bar.style.display = 'flex'; // Munculkan bar
+        const price = parseInt(svc.getAttribute('data-price'));
+        document.getElementById('priceDisplay').innerText = 'Rp ' + price.toLocaleString('id-ID');
+
+        // Update teks deskripsi
         let txt = svc.getAttribute('data-name');
-        if (bbr && bbr.value) txt += ' by ' + bbr.getAttribute('data-name');
-        if (dte && tme) txt += ' at ' + dte + ' / ' + tme.value;
-        document.getElementById('summaryText').innerText = txt;
+        const bbr = document.querySelector('input[name="barber_id"]:checked');
+        if (bbr && bbr.value) txt += ' + ' + bbr.getAttribute('data-name');
+
+        const date = document.getElementById('dateInput').value;
+        const time = document.querySelector('input[name="time"]:checked');
+        if (date && time) txt += ' (' + date + ' @ ' + time.value + ')';
+
+        document.getElementById('descDisplay').innerText = txt;
     }
 }
 
-// --- 3. DETAIL MODAL ---
-function showBarberDetail(name, imgSrc, bio, schedule, reviews, avgRating, ratingCount) {
-    document.getElementById('modalBarberName2').innerText = name;
-    document.getElementById('modalBarberImg').src = imgSrc;
-    document.getElementById('modalBarberBio').innerText = bio;
+// --- 3. MODAL DETAIL ---
+function showModal(name, img, bio, schedule, reviews, rating) {
+    document.getElementById('mName').innerText = name;
+    document.getElementById('mImg').src = img;
+    document.getElementById('mBio').innerText = bio || 'Barber Profesional';
+    document.getElementById('mRating').innerText = '★ ' + rating + ' / 5.0';
 
-    let stars = '';
-    for (let i = 1; i <= 5; i++) stars +=
-        `<i class="bi bi-star${i <= Math.round(avgRating) ? '-fill' : ''} text-warning mx-1"></i>`;
-    document.getElementById('ratingBox').innerHTML =
-        `${stars} <br><small class="text-white-50">${avgRating} / 5.0 from ${ratingCount} clients</small>`;
-
-    const sched = document.getElementById('scheduleContainer');
-    sched.innerHTML = '';
-    ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'].forEach(day => {
-        let time = schedule && schedule[day] ? schedule[day] : 'OFF';
-        sched.innerHTML +=
-            `<div class="d-flex justify-content-between mb-2 small"><span class="text-white-50">${day}</span><span class="${time === 'OFF' ? 'text-danger fw-bold' : 'text-white'}">${time}</span></div>`;
+    // Jadwal
+    let schedHtml = '';
+    const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+    days.forEach(d => {
+        let t = schedule[d] || 'OFF';
+        let color = t === 'OFF' ? 'text-danger' : 'text-white';
+        schedHtml +=
+            `<div class="d-flex justify-content-between"><span>${d}</span><span class="${color}">${t}</span></div>`;
     });
+    document.getElementById('mSchedule').innerHTML = schedHtml;
 
-    const revs = document.querySelector('.reviews-container');
-    revs.innerHTML = reviews.length > 0 ? '' : '<p class="text-white-50 small">Wait for the first review.</p>';
-    reviews.forEach(r => {
-        revs.innerHTML +=
-            `<div class="bg-dark p-3 mb-2 rounded border-start border-warning"><div class="d-flex justify-content-between mb-1"><span class="text-gold small fw-bold">${r.user ? r.user.name : 'Client'}</span><span class="small">★ ${r.rating}</span></div><p class="m-0 text-white-50 small fst-italic">"${r.comment || ''}"</p></div>`;
-    });
+    // Review
+    let revHtml = '';
+    if (reviews.length > 0) {
+        reviews.forEach(r => {
+            revHtml +=
+                `<div class="review-box"><span class="text-warning fw-bold">${r.user ? r.user.name : 'User'}</span><br>"${r.comment || ''}"</div>`;
+        });
+    } else {
+        revHtml = '<p class="text-center text-muted">Belum ada ulasan.</p>';
+    }
+    document.getElementById('mReviews').innerHTML = revHtml;
 
-    new bootstrap.Modal(document.getElementById('barberDetailModal')).show();
+    new bootstrap.Modal(document.getElementById('barberModal')).show();
 }
-
-document.addEventListener('DOMContentLoaded', checkAvailableSlots);
 </script>
 @endpush
