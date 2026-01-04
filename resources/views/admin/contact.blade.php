@@ -3,8 +3,7 @@
 @section('content')
 <div class="container-fluid">
 
-    {{-- BAGIAN NOTIFIKASI / ALERT --}}
-    {{-- Ini akan muncul jika ada session 'success' dari Controller --}}
+    {{-- NOTIFIKASI SUKSES / ERROR --}}
     @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show mb-4 shadow-sm" role="alert">
         <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
@@ -12,7 +11,6 @@
     </div>
     @endif
 
-    {{-- Ini akan muncul jika ada error validasi input --}}
     @if ($errors->any())
     <div class="alert alert-danger alert-dismissible fade show mb-4 shadow-sm" role="alert">
         <ul class="mb-0 ps-3">
@@ -23,7 +21,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     @endif
-    {{-- BATAS NOTIFIKASI --}}
+    {{-- END NOTIFIKASI --}}
 
     {{-- JUDUL 1 --}}
     <h3 class="fw-bold mb-4 text-dark">Contact Information Settings</h3>
@@ -33,6 +31,7 @@
             <form action="{{ route('admin.contact.update') }}" method="POST">
                 @csrf
                 <div class="row">
+                    {{-- Page Title & Subtitle --}}
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-bold">Page Title</label>
                         <input type="text" name="page_title" class="form-control"
@@ -44,37 +43,32 @@
                             value="{{ old('page_subtitle', $config->page_subtitle ?? '') }}">
                     </div>
 
-                    <div class="col-md-4 mb-3">
+                    {{-- WhatsApp & Google Maps (Email Dihapus) --}}
+                    <div class="col-md-6 mb-3">
                         <label class="form-label fw-bold">WhatsApp Number</label>
                         <input type="text" name="whatsapp" class="form-control"
                             value="{{ old('whatsapp', $config->whatsapp ?? '') }}" placeholder="628xxxxx">
                     </div>
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label fw-bold">Email Address</label>
-                        <input type="email" name="email" class="form-control"
-                            value="{{ old('email', $config->email ?? '') }}">
-                    </div>
-                    <div class="col-md-4 mb-3">
+                    <div class="col-md-6 mb-3">
                         <label class="form-label fw-bold">Google Maps Link</label>
                         <input type="text" name="maps_link" class="form-control"
                             value="{{ old('maps_link', $config->maps_link ?? '') }}">
                     </div>
 
+                    {{-- Full Address --}}
                     <div class="col-12 mb-3">
                         <label class="form-label fw-bold">Full Address</label>
                         <textarea name="address" class="form-control"
                             rows="2">{{ old('address', $config->address ?? '') }}</textarea>
                     </div>
 
-                    <div class="col-md-3 mb-3">
-                        <label class="small text-muted">Mon-Fri Hours</label>
-                        <input type="text" name="hours_mon_fri" class="form-control form-control-sm"
-                            value="{{ old('hours_mon_fri', $config->hours_mon_fri ?? '') }}">
-                    </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="small text-muted">Sat-Sun Hours</label>
-                        <input type="text" name="hours_sat_sun" class="form-control form-control-sm"
-                            value="{{ old('hours_sat_sun', $config->hours_sat_sun ?? '') }}">
+                    {{-- JAM OPERASIONAL (SENIN - MINGGU) --}}
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label fw-bold">Operating Hours (Mon - Sun)</label>
+                        <input type="text" name="hours_mon_sun" class="form-control"
+                            value="{{ old('hours_mon_sun', $config->hours_mon_sun ?? '10:00 - 21:00') }}"
+                            placeholder="e.g. 10:00 - 21:00">
+                        <small class="text-muted">Set jam operasional untuk setiap hari (Senin sampai Minggu).</small>
                     </div>
                 </div>
 
@@ -108,7 +102,7 @@
                             <td class="text-center text-dark">{{ $loop->iteration }}</td>
                             <td>
                                 <div class="fw-bold text-dark">{{ $contact->name }}</div>
-                                <div class="small text-muted">{{ $contact->email }}</div>
+                                <div class="small text-muted">{{ $contact->phone ?? '-' }}</div>
                             </td>
                             <td style="min-width: 300px; white-space: normal;">
                                 {{ Str::limit($contact->message, 80) }}
