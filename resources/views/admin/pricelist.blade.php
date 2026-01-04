@@ -4,7 +4,7 @@
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
     <div>
         <h3 class="fw-bold m-0 text-dark">Manajemen Layanan (Pricelist)</h3>
-        <p class="small text-muted">Atur judul halaman utama, background, dan daftar harga layanan.</p>
+        <p class="small text-muted">Kelola daftar harga dan jenis layanan yang tersedia.</p>
     </div>
     {{-- Tombol Trigger Modal Tambah --}}
     <button class="btn btn-warning fw-bold shadow-sm px-4" data-bs-toggle="modal" data-bs-target="#modalTambahService">
@@ -12,89 +12,39 @@
     </button>
 </div>
 
-{{-- ALERT --}}
+{{-- ALERT SUCCESS --}}
 @if(session('success'))
-<div class="alert alert-success border-0 shadow-sm mb-4">
+<div class="alert alert-success border-0 shadow-sm mb-4 alert-dismissible fade show" role="alert">
     <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 @endif
 
+{{-- ALERT ERROR --}}
 @if($errors->any())
-<div class="alert alert-danger border-0 shadow-sm mb-4">
-    <ul class="mb-0">
+<div class="alert alert-danger border-0 shadow-sm mb-4 alert-dismissible fade show" role="alert">
+    <ul class="mb-0 ps-3">
         @foreach ($errors->all() as $error)
         <li>{{ $error }}</li>
         @endforeach
     </ul>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 @endif
 
-{{-- BAGIAN 1: PENGATURAN TAMPILAN HALAMAN (SINKRON DENGAN JSON) --}}
-<div class="card border-0 shadow-sm rounded-3 mb-4">
-    <div class="card-header bg-white border-bottom py-3 d-flex align-items-center justify-content-between">
-        <h6 class="fw-bold m-0 text-dark"><i class="bi bi-palette me-2"></i>Edit Tampilan Halaman</h6>
-    </div>
-    <div class="card-body p-4">
-        {{-- Form ini mengirim data ke route admin.services.updatePageConfig --}}
-        <form action="{{ route('admin.services.updatePageConfig') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="row g-4">
-                {{-- Preview Background Saat Ini --}}
-                <div class="col-12 mb-2">
-                    @if(!empty($pageConfig->pricelist_bg_path))
-                    <label class="form-label small fw-bold text-muted">BACKGROUND SAAT INI</label>
-                    <div class="ratio ratio-21x9 rounded overflow-hidden border shadow-sm" style="max-height: 150px;">
-                        <img src="{{ $pageConfig->pricelist_bg_path }}" class="object-fit-cover">
-                    </div>
-                    @endif
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label small fw-bold text-muted">SUB-JUDUL (Kecil di Atas)</label>
-                    <input type="text" name="pricelist_subtitle" class="form-control"
-                        value="{{ $pageConfig->pricelist_subtitle ?? 'CURATED GROOMING' }}">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label small fw-bold text-muted">JUDUL UTAMA (Besar)</label>
-                    <input type="text" name="pricelist_title" class="form-control"
-                        value="{{ $pageConfig->pricelist_title ?? 'SERVICE MENU' }}">
-                </div>
-
-                <div class="col-md-12">
-                    <label class="form-label small fw-bold text-muted">DESKRIPSI SINGKAT</label>
-                    <textarea name="pricelist_description" class="form-control"
-                        rows="2">{{ $pageConfig->pricelist_description ?? 'Layanan perawatan rambut terbaik...' }}</textarea>
-                </div>
-
-                <div class="col-md-8">
-                    <label class="form-label small fw-bold text-muted">GANTI BACKGROUND IMAGE (Opsional)</label>
-                    <input type="file" name="pricelist_bg" class="form-control" accept="image/*">
-                    <small class="text-muted d-block mt-1">*Disarankan gambar gelap ukuran 1920x1080 px</small>
-                </div>
-
-                <div class="col-md-4 d-flex align-items-end">
-                    <button type="submit" class="btn btn-dark w-100 fw-bold py-2">
-                        <i class="bi bi-save me-1"></i> Simpan Tampilan
-                    </button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-{{-- BAGIAN 2: TABEL DAFTAR LAYANAN --}}
+{{-- TABEL DAFTAR LAYANAN --}}
 <div class="card border-0 shadow-sm rounded-3">
-    <div class="card-header bg-white border-bottom py-3">
+    <div class="card-header bg-white border-bottom py-3 d-flex align-items-center">
         <h6 class="fw-bold m-0 text-dark"><i class="bi bi-scissors me-2"></i>Daftar Layanan Tersedia</h6>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <table class="table table-hover align-middle mb-0 text-nowrap">
                 <thead class="bg-light text-secondary">
                     <tr>
                         <th class="text-center py-3" width="5%">No</th>
                         <th width="10%">Gambar</th>
-                        <th>Nama & Deskripsi</th>
+                        <th>Nama Layanan</th>
                         <th>Durasi</th>
                         <th>Harga</th>
                         <th class="text-center">Aksi</th>
@@ -129,10 +79,13 @@
                         </td>
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
+                                {{-- Tombol Edit --}}
                                 <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                                     data-bs-target="#modalEditService{{ $service->id }}">
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
+
+                                {{-- Tombol Hapus --}}
                                 <form action="{{ route('admin.services.destroy', $service->id) }}" method="POST"
                                     onsubmit="return confirm('Yakin ingin menghapus layanan ini?');">
                                     @csrf @method('DELETE')
@@ -144,7 +97,7 @@
                         </td>
                     </tr>
 
-                    {{-- MODAL EDIT (Per Item Loop) --}}
+                    {{-- MODAL EDIT (Looping untuk setiap item) --}}
                     <div class="modal fade" id="modalEditService{{ $service->id }}" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content border-0">
@@ -180,8 +133,11 @@
                                                 rows="3">{{ $service->description }}</textarea>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label small fw-bold text-muted">GANTI GAMBAR</label>
+                                            <label class="form-label small fw-bold text-muted">GANTI GAMBAR
+                                                (OPSIONAL)</label>
                                             <input type="file" name="image" class="form-control" accept="image/*">
+                                            <small class="text-muted">Biarkan kosong jika tidak ingin mengubah
+                                                gambar.</small>
                                         </div>
                                     </div>
                                     <div class="modal-footer bg-light">
