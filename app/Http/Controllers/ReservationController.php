@@ -7,7 +7,7 @@ use App\Models\Service;
 use App\Models\Barber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB; // Ditambahkan untuk query yang lebih kompleks
+use Illuminate\Support\Facades\DB; 
 
 // IMPORT UNTUK EXCEL
 use App\Exports\ReservationsExport;
@@ -101,6 +101,19 @@ class ReservationController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Reservasi berhasil dikirim! Menunggu konfirmasi admin.');
+    }
+
+    // --- USER: LIHAT RIWAYAT (INI YANG SEBELUMNYA HILANG/ERROR) ---
+    public function history()
+    {
+        // Ambil data reservasi milik user yang sedang login
+        $reservations = Reservation::where('user_id', Auth::id())
+            ->with(['service', 'barber']) // Load relasi biar nama service/barber muncul
+            ->latest() // Urutkan dari yang terbaru
+            ->get();
+
+        // Pastikan kamu punya file: resources/views/user/history.blade.php
+        return view('user.history', compact('reservations'));
     }
 
     // --- ADMIN: LIHAT DATA ---
